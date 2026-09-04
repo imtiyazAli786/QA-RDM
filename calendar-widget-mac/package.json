@@ -1,0 +1,14 @@
+{
+  "name": "mac-calendar-widget",
+  "version": "1.0.0",
+  "description": "Floating Always-on-Top Calendar & Clock Widget for macOS",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:mac": "bash build.sh",
+    "run:mac": "bash run.sh"
+  },
+  "keywords": ["calendar", "clock", "widget", "macos", "floating"],
+  "author": "Imtiyaz Ali",
+  "license": "MIT"
+}

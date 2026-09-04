@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar & Clock Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="widget-container" id="widgetContainer">
+    <!-- Main Circular Dial Section -->
+    <div class="clock-wrap" id="clockWrap" title="Click date for calendar • Drag clock to move">
+      <div class="clock" id="clockFace">
+        <!-- 1. Analog Clock SVG -->
+        <svg class="clock-svg" id="clockSvg" viewBox="0 0 100 100">
+          <text x="50" y="12">12</text>
+          <text x="69" y="17.1">1</text>
+          <text x="82.9" y="31">2</text>
+          <text x="88" y="50">3</text>
+          <text x="82.9" y="69">4</text>
+          <text x="69" y="82.9">5</text>
+          <text x="50" y="88">6</text>
+          <text x="31" y="82.9">7</text>
+          <text x="17.1" y="69">8</text>
+          <text x="12" y="50">9</text>
+          <text x="17.1" y="31">10</text>
+          <text x="31" y="17.1">11</text>
+          <line id="clkHour" class="hour" x1="50" y1="50" x2="50" y2="30" stroke-width="4"/>
+          <line id="clkMin" class="min" x1="50" y1="50" x2="50" y2="20" stroke-width="3"/>
+          <line id="clkSec" class="sec" x1="50" y1="50" x2="50" y2="16" stroke-width="1.5"/>
+          <circle class="dot" cx="50" cy="50" r="2.5"/>
+        </svg>
+
+        <!-- Live Clock Target Days Badge -->
+        <div class="clock-target-badge" id="clockTargetBadge" title="Target: 31 Dec 2026">119d</div>
+
+        <!-- 2. Pomodoro Circular SVG Progress Ring -->
+        <svg class="pomo-ring-svg hidden" id="pomoRingSvg" viewBox="0 0 100 100">
+          <circle class="pomo-ring-bg" cx="50" cy="50" r="44"/>
+          <circle class="pomo-ring-fill" id="pomoRingFill" cx="50" cy="50" r="44"/>
+        </svg>
+
+        <!-- 3. Pomodoro Digital Readout Overlay -->
+        <div class="pomo-display hidden" id="pomoDisplay">
+          <span class="pomo-label" id="pomoLabel">FOCUS</span>
+          <span class="pomo-digits" id="pomoDigits">25:00</span>
+        </div>
+
+        <!-- 4. Stopwatch Digital Readout Overlay -->
+        <div class="sw-display hidden" id="swDisplay">
+          <span class="sw-label">STOPWATCH</span>
+          <div class="sw-digits-wrap">
+            <span class="sw-main" id="swMain">00:00</span><span class="sw-ms" id="swMs">.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MODE 1: CLOCK CONTROLS ==================== -->
+      <div class="mode-view" id="clockModeView">
+        <!-- Hero Date Badge Button -->
+        <button class="clock-date" id="clockDate" title="Click to view full calendar" aria-label="Toggle calendar">
+          <span class="clock-prefix">—</span>
+          <span class="clock-day">—</span>
+          <span class="clock-suffix">—</span>
+        </button>
+
+        <!-- Calendar Popover -->
+        <div class="calendar-popover" id="calendarPopover">
+          <div class="cal-header">
+            <span class="cal-month-title" id="calMonthTitle">AUGUST 2026</span>
+            <div class="cal-header-actions">
+              <button class="cal-nav-btn" id="calPrevBtn" title="Previous month">‹</button>
+              <button class="cal-nav-btn" id="calNextBtn" title="Next month">›</button>
+              <button class="cal-close-btn" id="calCloseBtn" title="Close calendar">✕</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          
+          <!-- Live 2-Pill Day Countdown Display (Stacked: 1st Month, 2nd Dec) -->
+          <div class="cal-countdown-pills" id="calCountdownPills">
+            <div class="countdown-pill month-pill" id="monthPill" title="Days left in month">
+              <span class="pill-icon">⏳</span>
+              <span class="pill-text" id="monthPillText">27 days left in September</span>
+            </div>
+            <div class="countdown-pill year-pill" id="yearPill" title="Days left to 31 Dec 2026">
+              <span class="pill-icon">🎯</span>
+              <span class="pill-text" id="yearPillText">119 days to 31 Dec 2026</span>
+              <button class="countdown-pin-btn hidden" id="countdownPinBtn" title="Reset Target">✕</button>
+            </div>
+          </div>
+
+          <div class="cal-footer">
+            <span class="cal-footer-text">Today: <b id="calTodayDate" style="color:var(--teal-text);font-weight:700;">—</b></span>
+            <button class="cal-today-btn" id="calTodayBtn">Jump to Today</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MODE 2: POMODORO CONTROLS ==================== -->
+      <div class="mode-view hidden" id="pomoModeView">
+        <!-- Preset Selector Pills -->
+        <div class="pomo-presets">
+          <button class="pomo-pill active" data-mins="25" data-type="Focus" id="pomoPreset25" title="25m Focus Session">25m</button>
+          <button class="pomo-pill" data-mins="5" data-type="Short Break" id="pomoPreset5" title="5m Short Break">5m</button>
+          <button class="pomo-pill" data-mins="15" data-type="Long Break" id="pomoPreset15" title="15m Long Break">15m</button>
+        </div>
+
+        <!-- Action Control Buttons (Icons Only) -->
+        <div class="tool-actions">
+          <button class="action-btn primary" id="pomoToggleBtn" title="Start / Pause (Click or Tap dial)" aria-label="Start / Pause">▶</button>
+          <button class="action-btn" id="pomoResetBtn" title="Reset Timer" aria-label="Reset">↺</button>
+          <button class="action-btn icon-only" id="chimeToggleBtn" title="Toggle Hourly Chime" aria-label="Toggle Hourly Chime">🔔</button>
+        </div>
+      </div>
+
+      <!-- ==================== MODE 3: STOPWATCH CONTROLS ==================== -->
+      <div class="mode-view hidden" id="swModeView">
+        <!-- Action Control Buttons (Icons Only) -->
+        <div class="tool-actions">
+          <button class="action-btn primary" id="swToggleBtn" title="Start / Pause (Click or Tap dial)" aria-label="Start / Pause">▶</button>
+          <button class="action-btn" id="swLapBtn" title="Record Lap Split" aria-label="Record Lap" disabled>🏁</button>
+          <button class="action-btn" id="swResetBtn" title="Reset Stopwatch" aria-label="Reset">↺</button>
+        </div>
+
+        <!-- Scrollable Lap Splits List -->
+        <div class="lap-container hidden" id="lapContainer">
+          <div class="lap-header">
+            <span>Lap</span>
+            <span>Split</span>
+            <span>Total</span>
+          </div>
+          <div class="lap-list" id="lapList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="widget.js"></script>
+</body>
+</html>
