@@ -4370,7 +4370,7 @@ document.getElementById("saveQBtn").addEventListener("click", async () => {
   else if (keyIdea) answer = keyIdea;
   else if (eli5) answer = `ELI5: ${eli5}`;
 
-  const id = "CU-" + Date.now().toString(36).toUpperCase();
+  const id = "CU-" + Date.now().toString(36).toUpperCase() + "_" + Math.random().toString(36).substring(2, 6);
   customQuestions.push({ id, text, answer, createdAt: new Date().toLocaleString() });
   await saveCustom();
   rebuildFlat();
@@ -4825,8 +4825,9 @@ try {
   const urlParams = new URLSearchParams(window.location.search);
   const paramKey = urlParams.get("sync") || urlParams.get("key") || urlParams.get("sync_id");
   if (paramKey && paramKey.trim()) {
-    syncUserId = paramKey.trim();
+    syncUserId = paramKey.trim().replace(/[^a-zA-Z0-9_\-\.]/g, "");
     localStorage.setItem("qa_tracker_sync_id", syncUserId);
+    localStorage.setItem("qa_tracker_paired", "1");
     const cleanUrl = window.location.origin + window.location.pathname;
     window.history.replaceState({}, document.title, cleanUrl);
   }
@@ -4849,7 +4850,7 @@ function updateSyncStatusUI(status) {
     if (icon) icon.textContent = "☁️";
     if (text) text.textContent = "Live Synced";
     if (msg) {
-      msg.textContent = "🟢 Live real-time sync connected";
+      msg.textContent = "🟢 Live real-time sync connected · Code: " + syncUserId;
       msg.style.color = "var(--teal-text)";
     }
   } else if (status === "syncing") {
@@ -4869,6 +4870,98 @@ function updateSyncStatusUI(status) {
   }
 }
 
+// Smart non-destructive custom questions merger
+function mergeCustomQuestions(localList, cloudList) {
+  const map = new Map();
+  const getDedupeKey = (q) => {
+    if (!q) return "";
+    const cleanText = (q.text || "").trim().toLowerCase().replace(/[^\w\s]/g, "");
+    return cleanText || (q.id || "");
+  };
+
+  (cloudList || []).forEach(q => {
+    if (!q || !q.text) return;
+    const key = getDedupeKey(q);
+    if (key) map.set(key, {
+      id: q.id || ("CU-" + Date.now().toString(36).toUpperCase() + "_" + Math.random().toString(36).substring(2, 5)),
+      text: q.text,
+      answer: q.answer || null,
+      createdAt: q.createdAt || new Date().toLocaleString()
+    });
+  });
+
+  let hasNewLocal = false;
+  (localList || []).forEach(q => {
+    if (!q || !q.text) return;
+    const key = getDedupeKey(q);
+    if (!key) return;
+    if (!map.has(key)) {
+      map.set(key, {
+        id: q.id || ("CU-" + Date.now().toString(36).toUpperCase() + "_" + Math.random().toString(36).substring(2, 5)),
+        text: q.text,
+        answer: q.answer || null,
+        createdAt: q.createdAt || new Date().toLocaleString()
+      });
+      hasNewLocal = true;
+    } else {
+      const existing = map.get(key);
+      const longerAnswer = (q.answer && q.answer.length > (existing.answer || "").length) ? q.answer : (existing.answer || q.answer);
+      map.set(key, {
+        id: existing.id || q.id,
+        text: existing.text || q.text,
+        answer: longerAnswer,
+        createdAt: existing.createdAt || q.createdAt || new Date().toLocaleString()
+      });
+    }
+  });
+
+  return { merged: Array.from(map.values()), hasNewLocal };
+}
+
+// Smart non-destructive study progress & notes merger
+function mergeStates(localState, cloudState) {
+  const merged = Object.assign({}, cloudState || {});
+  let hasNewLocal = false;
+
+  for (const [qId, localObj] of Object.entries(localState || {})) {
+    if (!localObj) continue;
+    if (!merged[qId]) {
+      merged[qId] = Object.assign({}, localObj);
+      if (localObj.status !== "notstarted" || (localObj.note && localObj.note.trim())) {
+        hasNewLocal = true;
+      }
+    } else {
+      const cloudObj = merged[qId];
+      const status = (cloudObj.status && cloudObj.status !== "notstarted") 
+        ? cloudObj.status 
+        : (localObj.status || "notstarted");
+      
+      let note = cloudObj.note || "";
+      if (localObj.note && localObj.note.trim()) {
+        if (!note.trim()) {
+          note = localObj.note;
+          hasNewLocal = true;
+        } else if (note !== localObj.note && !note.includes(localObj.note)) {
+          note = note + "\n\n" + localObj.note;
+          hasNewLocal = true;
+        }
+      }
+
+      const reviewCount = Math.max(Number(localObj.reviewCount) || 0, Number(cloudObj.reviewCount) || 0);
+      const updatedAt = cloudObj.updatedAt || localObj.updatedAt || "";
+
+      merged[qId] = {
+        status: status,
+        note: note,
+        updatedAt: updatedAt,
+        reviewCount: reviewCount,
+        nextReviewDate: cloudObj.nextReviewDate || localObj.nextReviewDate || null
+      };
+    }
+  }
+  return { merged, hasNewLocal };
+}
+
 function initFirestoreLiveListener() {
   if (!firestoreDb || !syncUserId) return;
   if (firestoreUnsubscribe) {
@@ -4883,6 +4976,8 @@ function initFirestoreLiveListener() {
 
       let stateChanged = false;
       let customChanged = false;
+      let mustSyncBackCustom = false;
+      let mustSyncBackState = false;
 
       snapshot.docChanges().forEach((change) => {
         // Skip changes initiated locally
@@ -4897,20 +4992,27 @@ function initFirestoreLiveListener() {
           if (cloudPayload && typeof cloudPayload === "object") {
             const cloudState = cloudPayload.state || {};
             const cloudMeta = cloudPayload.meta || {};
-            state = Object.assign({}, state, cloudState);
-            meta = Object.assign({}, meta, cloudMeta);
+            const { merged: mergedState, hasNewLocal } = mergeStates(state, cloudState);
+            state = mergedState;
+            meta = {
+              streak: Math.max(meta.streak || 0, cloudMeta.streak || 0),
+              lastStudyDate: cloudMeta.lastStudyDate || meta.lastStudyDate || null,
+              roadmapNotes: (cloudMeta.roadmapNotes || "").length > (meta.roadmapNotes || "").length ? cloudMeta.roadmapNotes : (meta.roadmapNotes || cloudMeta.roadmapNotes || "")
+            };
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ state, meta }));
             stateChanged = true;
+            if (hasNewLocal) mustSyncBackState = true;
           }
         } else if (docId === CUSTOM_KEY) {
           const cloudCustom = data.payload;
           if (Array.isArray(cloudCustom)) {
-            customQuestions = cloudCustom;
+            const { merged: mergedCustom, hasNewLocal } = mergeCustomQuestions(customQuestions, cloudCustom);
+            customQuestions = mergedCustom;
             localStorage.setItem(CUSTOM_KEY, JSON.stringify(customQuestions));
             customChanged = true;
+            if (hasNewLocal) mustSyncBackCustom = true;
           }
         } else {
-          // Sync state for background subjects
           if (Array.isArray(data.payload) || typeof data.payload === "object") {
             localStorage.setItem(docId, JSON.stringify(data.payload));
           }
@@ -4929,6 +5031,13 @@ function initFirestoreLiveListener() {
           renderActiveView();
         }
         setTimeout(() => { isRemoteUpdating = false; }, 300);
+
+        if (mustSyncBackCustom) {
+          syncToFirebase(CUSTOM_KEY, customQuestions);
+        }
+        if (mustSyncBackState) {
+          syncToFirebase(STORAGE_KEY, { state, meta });
+        }
       }
 
       updateSyncStatusUI("synced");
@@ -4966,6 +5075,9 @@ function initFirebaseSync() {
   const syncLinkInput = document.getElementById("syncLinkInput");
   const linkBtn = document.getElementById("linkSyncKeyBtn");
   const restoreInput = document.getElementById("restoreSyncKeyInput");
+  const customCodeInput = document.getElementById("customCodeInput");
+  const setCustomCodeBtn = document.getElementById("setCustomCodeBtn");
+  const qrImg = document.getElementById("syncQrImg");
 
   function getShareUrl() {
     return `${window.location.origin}${window.location.pathname}?sync=${encodeURIComponent(syncUserId)}`;
@@ -4973,7 +5085,12 @@ function initFirebaseSync() {
 
   function refreshModalFields() {
     if (myKeyInput) myKeyInput.value = syncUserId;
-    if (syncLinkInput) syncLinkInput.value = getShareUrl();
+    const shareUrl = getShareUrl();
+    if (syncLinkInput) syncLinkInput.value = shareUrl;
+    if (customCodeInput) customCodeInput.value = syncUserId;
+    if (qrImg) {
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(shareUrl)}&margin=6`;
+    }
   }
 
   refreshModalFields();
@@ -4995,8 +5112,8 @@ function initFirebaseSync() {
   if (copyBtn && myKeyInput) {
     copyBtn.onclick = () => {
       navigator.clipboard.writeText(syncUserId).then(() => {
-        copyBtn.textContent = "✓ Copied Key!";
-        setTimeout(() => { copyBtn.textContent = "📋 Copy Key"; }, 2000);
+        copyBtn.textContent = "✓ Copied Code!";
+        setTimeout(() => { copyBtn.textContent = "📋 Copy Code"; }, 2000);
       });
     };
   }
@@ -5008,6 +5125,28 @@ function initFirebaseSync() {
       });
     };
   }
+
+  // Set / Change to a Custom Sync Code (e.g. 'imtiyaz' or 'my-notes')
+  if (setCustomCodeBtn && customCodeInput) {
+    setCustomCodeBtn.onclick = async () => {
+      let code = customCodeInput.value.trim().replace(/[^a-zA-Z0-9_\-\.]/g, "");
+      if (!code) return;
+      setCustomCodeBtn.textContent = "Connecting…";
+      syncUserId = code;
+      localStorage.setItem("qa_tracker_sync_id", syncUserId);
+      localStorage.setItem("qa_tracker_paired", "1");
+      refreshModalFields();
+      initFirestoreLiveListener();
+      await fetchCloudDataAndMerge();
+      setCustomCodeBtn.textContent = "✓ Active!";
+      setTimeout(() => {
+        setCustomCodeBtn.textContent = "Set Sync Code";
+        if (modal) modal.classList.add("hidden");
+      }, 1000);
+    };
+  }
+
+  // Connect to another device / paste link or key
   if (linkBtn && restoreInput) {
     linkBtn.onclick = async () => {
       let key = restoreInput.value.trim();
@@ -5021,15 +5160,18 @@ function initFirebaseSync() {
           if (match) key = decodeURIComponent(match[1]);
         }
       }
+      key = key.replace(/[^a-zA-Z0-9_\-\.]/g, "");
+      if (!key) return;
       syncUserId = key;
       localStorage.setItem("qa_tracker_sync_id", syncUserId);
+      localStorage.setItem("qa_tracker_paired", "1");
       refreshModalFields();
-      linkBtn.textContent = "Connecting…";
+      linkBtn.textContent = "Connecting & Merging…";
       initFirestoreLiveListener();
       await fetchCloudDataAndMerge();
-      linkBtn.textContent = "✓ Linked!";
+      linkBtn.textContent = "✓ All Synced & Merged!";
       setTimeout(() => {
-        linkBtn.textContent = "🔗 Connect & Sync";
+        linkBtn.textContent = "🔗 Connect & Merge";
         if (modal) modal.classList.add("hidden");
       }, 1200);
     };
@@ -5058,6 +5200,11 @@ async function fetchCloudDataAndMerge() {
     const collectionRef = firestoreDb.collection("user_progress").doc(syncUserId).collection("data");
     const snapshot = await collectionRef.get();
     
+    let foundStorage = false;
+    let foundCustom = false;
+    let needsPushState = false;
+    let needsPushCustom = false;
+
     if (!snapshot.empty) {
       snapshot.forEach(doc => {
         const docId = doc.id;
@@ -5065,16 +5212,29 @@ async function fetchCloudDataAndMerge() {
         if (!data || data.payload === undefined) return;
 
         if (docId === STORAGE_KEY) {
-          const cloudData = data.payload;
-          if (cloudData && typeof cloudData === "object") {
-            state = Object.assign({}, state, cloudData.state || {});
-            meta = Object.assign({}, meta, cloudData.meta || {});
+          foundStorage = true;
+          const cloudPayload = data.payload;
+          if (cloudPayload && typeof cloudPayload === "object") {
+            const cloudState = cloudPayload.state || {};
+            const cloudMeta = cloudPayload.meta || {};
+            const { merged: mergedState, hasNewLocal } = mergeStates(state, cloudState);
+            state = mergedState;
+            meta = {
+              streak: Math.max(meta.streak || 0, cloudMeta.streak || 0),
+              lastStudyDate: cloudMeta.lastStudyDate || meta.lastStudyDate || null,
+              roadmapNotes: (cloudMeta.roadmapNotes || "").length > (meta.roadmapNotes || "").length ? cloudMeta.roadmapNotes : (meta.roadmapNotes || cloudMeta.roadmapNotes || "")
+            };
             localStorage.setItem(STORAGE_KEY, JSON.stringify({ state, meta }));
+            if (hasNewLocal) needsPushState = true;
           }
         } else if (docId === CUSTOM_KEY) {
-          if (Array.isArray(data.payload)) {
-            customQuestions = data.payload;
+          foundCustom = true;
+          const cloudCustom = data.payload;
+          if (Array.isArray(cloudCustom)) {
+            const { merged: mergedCustom, hasNewLocal } = mergeCustomQuestions(customQuestions, cloudCustom);
+            customQuestions = mergedCustom;
             localStorage.setItem(CUSTOM_KEY, JSON.stringify(customQuestions));
+            if (hasNewLocal) needsPushCustom = true;
           }
         } else {
           if (Array.isArray(data.payload) || typeof data.payload === "object") {
@@ -5087,77 +5247,174 @@ async function fetchCloudDataAndMerge() {
       updateOverview();
       renderActiveView();
     }
+
+    // Push local data if cloud was missing it or if local had new questions/notes
+    if (!foundStorage || needsPushState) {
+      if (Object.keys(state).length > 0) {
+        syncToFirebase(STORAGE_KEY, { state, meta });
+      }
+    }
+    if (!foundCustom || needsPushCustom) {
+      if (customQuestions.length > 0) {
+        syncToFirebase(CUSTOM_KEY, customQuestions);
+      }
+    }
+
     updateSyncStatusUI("synced");
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "☁️ synced · " + new Date().toLocaleTimeString();
   } catch (e) {
     console.warn("fetchCloudDataAndMerge note:", e);
     updateSyncStatusUI("offline");
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "offline mode · " + new Date().toLocaleTimeString();
   }
 }
 
 (async function init() {
-  setupA11yControls();
-  setupSubjectSwitcher();
-  await loadState();
-  await loadCustom();
-  rebuildFlat();
-  updateOverview();
-  renderFocus();
-  renderBrowse();
-  renderRoadmap();
-  setupCalendarEvents();
-  setupDraggableClock();
+  try {
+    setupA11yControls();
+    setupSubjectSwitcher();
+    await loadState();
+    await loadCustom();
+    rebuildFlat();
+    updateOverview();
+    renderFocus();
+    renderBrowse();
+    renderRoadmap();
+    setupCalendarEvents();
+    setupDraggableClock();
 
-  // Connect cloud sync and pull latest changes
-  initFirebaseSync();
-  await fetchCloudDataAndMerge();
+    // Connect cloud sync and pull latest changes
+    initFirebaseSync();
+    await fetchCloudDataAndMerge();
+
+    // Show device-pairing prompt if this is a fresh device with no progress
+    const hasNoProgress = Object.keys(state).every(k => state[k].status === "notstarted");
+    const hasNoCustom = customQuestions.length === 0;
+    const neverPaired = !localStorage.getItem("qa_tracker_paired");
+    if (hasNoProgress && hasNoCustom && neverPaired) {
+      showDevicePairingBanner();
+    }
+  } catch (e) {
+    console.warn("Init error:", e);
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "ready · " + new Date().toLocaleTimeString();
+  }
 })();
+
+function showDevicePairingBanner() {
+  if (sessionStorage.getItem("qa_pairing_dismissed")) return;
+
+  const banner = document.createElement("div");
+  banner.id = "pairingBanner";
+  banner.setAttribute("style",
+    "position:fixed; bottom:60px; left:50%; transform:translateX(-50%); z-index:9999; " +
+    "background:linear-gradient(135deg,#0d9488,#14b8a6); color:#fff; " +
+    "padding:14px 20px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.25); " +
+    "display:flex; align-items:center; gap:12px; max-width:440px; width:90%; " +
+    "font-family:'DM Sans','Segoe UI',system-ui,sans-serif; animation:slideUp .4s ease;"
+  );
+  banner.innerHTML =
+    '<div style="font-size:28px;">📱</div>' +
+    '<div style="flex:1">' +
+      '<div style="font-weight:700; font-size:14px; margin-bottom:2px;">Already using this app on another device?</div>' +
+      '<div style="font-size:12px; opacity:0.9;">Tap ☁️ Cloud Sync to pair devices & merge your questions!</div>' +
+    '</div>' +
+    '<button id="dismissPairingBtn" style="background:rgba(255,255,255,0.2); border:none; color:#fff; ' +
+      'border-radius:8px; padding:6px 12px; font-size:12px; cursor:pointer; font-weight:600; white-space:nowrap;">Got it</button>';
+
+  document.body.appendChild(banner);
+
+  const style = document.createElement("style");
+  style.textContent = "@keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(30px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }";
+  document.head.appendChild(style);
+
+  document.getElementById("dismissPairingBtn").onclick = () => {
+    banner.remove();
+    sessionStorage.setItem("qa_pairing_dismissed", "1");
+  };
+
+  const syncBtn = document.getElementById("cloudSyncBtn");
+  if (syncBtn) {
+    const origClick = syncBtn.onclick;
+    syncBtn.onclick = (e) => {
+      banner.remove();
+      sessionStorage.setItem("qa_pairing_dismissed", "1");
+      localStorage.setItem("qa_tracker_paired", "1");
+      if (origClick) origClick(e);
+    };
+  }
+
+  setTimeout(() => {
+    if (document.getElementById("pairingBanner")) {
+      banner.style.transition = "opacity .3s ease";
+      banner.style.opacity = "0";
+      setTimeout(() => banner.remove(), 300);
+    }
+  }, 15000);
+}
 </script>
 
 <!-- Cloud Sync Settings Modal -->
 <div class="modal-overlay hidden" id="cloudSyncModal">
-  <div class="modal-card" style="max-width: 520px;">
+  <div class="modal-card" style="max-width: 540px; max-height: 90vh; overflow-y: auto;">
     <div class="modal-head">
       <div class="modal-title" style="display:flex; align-items:center; gap:8px;">
         <span>☁️</span>
-        <span>Firebase Real-Time Cloud Sync</span>
+        <span>Real-Time Cloud Sync & Device Pairing</span>
       </div>
       <button class="modal-close-btn" id="closeSyncModalBtn">✕</button>
     </div>
     <div class="modal-body">
       <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.55;">
-        Any changes (custom answers, review statuses, notes, and streak) sync <b>instantly across all devices in real time</b>.
+        Any custom questions, answers, notes, review statuses, and streak sync <b>instantly across all your devices</b> in real time.
       </p>
 
-      <!-- 1-Click Pairing Link Section -->
-      <div style="background:var(--teal-soft); border:1.5px solid var(--teal-border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-          <label class="studio-label" style="color:var(--teal-text); font-weight:700; margin:0;">✨ 1-Click Pairing Link (Fastest for Mobile)</label>
-          <span style="font-size:10.5px; font-family:'IBM Plex Mono',monospace; color:var(--teal-text); background:rgba(255,255,255,0.7); padding:1px 6px; border-radius:4px;">Recommended</span>
+      <!-- Option 1: Live QR Code (Fastest for Mobile to Laptop) -->
+      <div style="background:var(--teal-soft); border:1.5px solid var(--teal-border); border-radius:var(--radius-md); padding:16px; margin-bottom:14px; text-align:center;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+          <label class="studio-label" style="color:var(--teal-text); font-weight:700; margin:0; text-align:left;">📱 Option 1: Scan with Mobile Camera</label>
+          <span style="font-size:10.5px; font-family:'IBM Plex Mono',monospace; color:var(--teal-text); background:rgba(255,255,255,0.7); padding:1px 6px; border-radius:4px; font-weight:700;">Fastest</span>
         </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:8px; margin: 8px 0;">
+          <img id="syncQrImg" src="" alt="Pairing QR Code" style="width:150px; height:150px; border-radius:10px; border:2px solid var(--teal-border); background:#ffffff; padding:6px; box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+          <div style="font-size:12px; color:var(--text-secondary); max-width:320px; line-height:1.4;">
+            Point your iPhone or Android camera at this QR code to connect and merge your data instantly!
+          </div>
+        </div>
+      </div>
+
+      <!-- Option 2: Custom Sync Name / Room Code -->
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
+        <label class="studio-label" style="display:block; margin-bottom:4px; font-weight:700;">🏷️ Option 2: Sync Code / Room Name</label>
         <p style="font-size:12px; color:var(--text-secondary); margin:0 0 8px;">
-          Send this link to your phone via WhatsApp, iMessage, or email. Opening it pairs your devices automatically in 1 tap!
+          Use any custom code (e.g. <code>imtiyaz</code>). Enter the same code on all devices to share data.
         </p>
         <div class="sync-key-row">
-          <input type="text" id="syncLinkInput" readonly class="studio-search-input" style="font-family:'IBM Plex Mono',monospace; font-size:11px; background:var(--surface); color:var(--text-main);">
-          <button class="fa-btn confident" id="copySyncLinkBtn" style="flex:none; padding:7px 14px; font-size:12px; min-height:36px; white-space:nowrap;">🔗 Copy 1-Click Link</button>
+          <input type="text" id="customCodeInput" placeholder="e.g. imtiyaz" class="studio-search-input" style="font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:700; background:var(--surface);">
+          <button class="fa-btn confident" id="setCustomCodeBtn" style="flex:none; padding:7px 14px; font-size:12px; min-height:36px; white-space:nowrap;">Set Code</button>
         </div>
       </div>
 
-      <!-- Sync Key Section -->
-      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px 14px; margin-bottom:14px;">
-        <label class="studio-label" style="display:block; margin-bottom:6px;">Or Copy Device Sync Key Manually</label>
+      <!-- Option 3: 1-Click Link -->
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px; margin-bottom:14px;">
+        <label class="studio-label" style="display:block; margin-bottom:4px; font-weight:700;">🔗 Option 3: Share 1-Click Link</label>
         <div class="sync-key-row">
-          <input type="text" id="mySyncKeyInput" readonly class="studio-search-input" style="font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; background:var(--surface);">
-          <button class="fa-btn reviewing" id="copySyncKeyBtn" style="flex:none; padding:6px 14px; font-size:12px; min-height:34px; white-space:nowrap;">📋 Copy Key</button>
+          <input type="text" id="syncLinkInput" readonly class="studio-search-input" style="font-family:'IBM Plex Mono',monospace; font-size:11px; background:var(--surface);">
+          <button class="fa-btn reviewing" id="copySyncLinkBtn" style="flex:none; padding:7px 14px; font-size:12px; min-height:36px; white-space:nowrap;">📋 Copy Link</button>
         </div>
       </div>
 
-      <!-- Link Another Device Section -->
-      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px 14px;">
-        <label class="studio-label" style="display:block; margin-bottom:6px;">Connect / Restore from Existing Key</label>
+      <!-- Option 4: Connect / Link Existing Code or URL -->
+      <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:var(--radius-md); padding:14px;">
+        <label class="studio-label" style="display:block; margin-bottom:4px; font-weight:700;">🔄 Connect & Merge Existing Device</label>
+        <p style="font-size:12px; color:var(--text-secondary); margin:0 0 8px;">
+          Paste a link or code from your other device. Questions and notes from both devices will merge safely.
+        </p>
         <div class="sync-key-row">
-          <input type="text" id="restoreSyncKeyInput" placeholder="Paste Sync Key or Link here…" class="studio-search-input" style="font-family:'IBM Plex Mono',monospace; font-size:12px;">
-          <button class="fa-btn confident" id="linkSyncKeyBtn" style="flex:none; padding:6px 14px; font-size:12px; min-height:34px; white-space:nowrap;">🔗 Connect & Sync</button>
+          <input type="text" id="restoreSyncKeyInput" placeholder="Paste Sync Link or Code here…" class="studio-search-input" style="font-family:'IBM Plex Mono',monospace; font-size:12px;">
+          <button class="fa-btn confident" id="linkSyncKeyBtn" style="flex:none; padding:7px 14px; font-size:12px; min-height:36px; white-space:nowrap;">🔗 Connect & Merge</button>
         </div>
       </div>
 
