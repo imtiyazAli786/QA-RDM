@@ -4827,6 +4827,7 @@ try {
   if (paramKey && paramKey.trim()) {
     syncUserId = paramKey.trim();
     localStorage.setItem("qa_tracker_sync_id", syncUserId);
+    localStorage.setItem("qa_tracker_paired", "1");
     const cleanUrl = window.location.origin + window.location.pathname;
     window.history.replaceState({}, document.title, cleanUrl);
   }
@@ -5023,6 +5024,7 @@ function initFirebaseSync() {
       }
       syncUserId = key;
       localStorage.setItem("qa_tracker_sync_id", syncUserId);
+      localStorage.setItem("qa_tracker_paired", "1");
       refreshModalFields();
       linkBtn.textContent = "Connecting…";
       initFirestoreLiveListener();
@@ -5058,11 +5060,13 @@ async function fetchCloudDataAndMerge() {
     const collectionRef = firestoreDb.collection("user_progress").doc(syncUserId).collection("data");
     const snapshot = await collectionRef.get();
     
+    let foundData = false;
     if (!snapshot.empty) {
       snapshot.forEach(doc => {
         const docId = doc.id;
         const data = doc.data();
         if (!data || data.payload === undefined) return;
+        foundData = true;
 
         if (docId === STORAGE_KEY) {
           const cloudData = data.payload;
@@ -5087,30 +5091,118 @@ async function fetchCloudDataAndMerge() {
       updateOverview();
       renderActiveView();
     }
+
+    // If cloud has no data yet, push local data to bootstrap this sync key
+    if (!foundData) {
+      const hasLocalState = Object.keys(state).length > 0;
+      const hasLocalCustom = customQuestions.length > 0;
+      if (hasLocalState) {
+        syncToFirebase(STORAGE_KEY, { state, meta });
+      }
+      if (hasLocalCustom) {
+        syncToFirebase(CUSTOM_KEY, customQuestions);
+      }
+    }
+
     updateSyncStatusUI("synced");
+    // Update footer to show ready state
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "☁️ synced · " + new Date().toLocaleTimeString();
   } catch (e) {
     console.warn("fetchCloudDataAndMerge note:", e);
     updateSyncStatusUI("offline");
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "offline mode · " + new Date().toLocaleTimeString();
   }
 }
 
 (async function init() {
-  setupA11yControls();
-  setupSubjectSwitcher();
-  await loadState();
-  await loadCustom();
-  rebuildFlat();
-  updateOverview();
-  renderFocus();
-  renderBrowse();
-  renderRoadmap();
-  setupCalendarEvents();
-  setupDraggableClock();
+  try {
+    setupA11yControls();
+    setupSubjectSwitcher();
+    await loadState();
+    await loadCustom();
+    rebuildFlat();
+    updateOverview();
+    renderFocus();
+    renderBrowse();
+    renderRoadmap();
+    setupCalendarEvents();
+    setupDraggableClock();
 
-  // Connect cloud sync and pull latest changes
-  initFirebaseSync();
-  await fetchCloudDataAndMerge();
+    // Connect cloud sync and pull latest changes
+    initFirebaseSync();
+    await fetchCloudDataAndMerge();
+
+    // Show device-pairing prompt if this is a fresh device with no progress
+    const hasNoProgress = Object.keys(state).every(k => state[k].status === "notstarted");
+    const hasNoCustom = customQuestions.length === 0;
+    const neverPaired = !localStorage.getItem("qa_tracker_paired");
+    if (hasNoProgress && hasNoCustom && neverPaired) {
+      showDevicePairingBanner();
+    }
+  } catch (e) {
+    console.warn("Init error:", e);
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "ready · " + new Date().toLocaleTimeString();
+  }
 })();
+
+function showDevicePairingBanner() {
+  // Don't show if user already dismissed it
+  if (sessionStorage.getItem("qa_pairing_dismissed")) return;
+
+  const banner = document.createElement("div");
+  banner.id = "pairingBanner";
+  banner.setAttribute("style",
+    "position:fixed; bottom:60px; left:50%; transform:translateX(-50%); z-index:9999; " +
+    "background:linear-gradient(135deg,#0d9488,#14b8a6); color:#fff; " +
+    "padding:14px 20px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.25); " +
+    "display:flex; align-items:center; gap:12px; max-width:440px; width:90%; " +
+    "font-family:'DM Sans','Segoe UI',system-ui,sans-serif; animation:slideUp .4s ease;"
+  );
+  banner.innerHTML =
+    '<div style="font-size:28px;">📱</div>' +
+    '<div style="flex:1">' +
+      '<div style="font-weight:700; font-size:14px; margin-bottom:2px;">Already using this app on another device?</div>' +
+      '<div style="font-size:12px; opacity:0.9;">Tap the ☁️ Cloud Sync button to pair and resume your progress.</div>' +
+    '</div>' +
+    '<button id="dismissPairingBtn" style="background:rgba(255,255,255,0.2); border:none; color:#fff; ' +
+      'border-radius:8px; padding:6px 12px; font-size:12px; cursor:pointer; font-weight:600; white-space:nowrap;">Got it</button>';
+
+  document.body.appendChild(banner);
+
+  // Add slide-up animation
+  const style = document.createElement("style");
+  style.textContent = "@keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(30px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }";
+  document.head.appendChild(style);
+
+  document.getElementById("dismissPairingBtn").onclick = () => {
+    banner.remove();
+    sessionStorage.setItem("qa_pairing_dismissed", "1");
+  };
+
+  // Also dismiss when they open the sync modal
+  const syncBtn = document.getElementById("cloudSyncBtn");
+  if (syncBtn) {
+    const origClick = syncBtn.onclick;
+    syncBtn.onclick = (e) => {
+      banner.remove();
+      sessionStorage.setItem("qa_pairing_dismissed", "1");
+      localStorage.setItem("qa_tracker_paired", "1");
+      if (origClick) origClick(e);
+    };
+  }
+
+  // Auto-dismiss after 15 seconds
+  setTimeout(() => {
+    if (document.getElementById("pairingBanner")) {
+      banner.style.transition = "opacity .3s ease";
+      banner.style.opacity = "0";
+      setTimeout(() => banner.remove(), 300);
+    }
+  }, 15000);
+}
 </script>
 
 <!-- Cloud Sync Settings Modal -->
