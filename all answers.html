@@ -1062,6 +1062,99 @@
     font-family: 'IBM Plex Sans', sans-serif;
   }
 
+  /* Keyboard shortcut hint badges */
+  .kbd-hint {
+    display: inline-block;
+    padding: 1px 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: inherit;
+    opacity: 0.75;
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  html[data-theme="dark"] .kbd-hint {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Star / Bookmark Buttons (Focus & Studio) */
+  .focus-star-btn,
+  .studio-star-pill-btn {
+    height: 28px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--surface-subtle);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .focus-star-btn:hover,
+  .studio-star-pill-btn:hover {
+    background: var(--surface-highlight);
+    border-color: var(--amber);
+    color: var(--amber-dark);
+  }
+  .focus-star-btn.starred,
+  .studio-star-pill-btn.starred {
+    background: var(--amber-soft);
+    border-color: var(--amber-border);
+    color: var(--amber-text);
+  }
+  .studio-starred-star {
+    color: var(--amber);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  /* Focus Shuffle Button */
+  .focus-shuffle-btn {
+    height: 28px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--surface-subtle);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .focus-shuffle-btn:hover {
+    background: var(--surface-highlight);
+    border-color: var(--border-strong);
+    color: var(--text-main);
+  }
+  .focus-shuffle-btn.active {
+    background: var(--indigo-soft);
+    border-color: var(--indigo-border);
+    color: var(--indigo-text);
+  }
+
   .focus-empty {
     padding: 48px 24px;
     text-align: center;
@@ -2624,7 +2717,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
-<div class="clock-wrap" id="clockWrap" title="Click date for calendar • Drag clock to move anywhere">
+<div class="clock-wrap hidden" id="clockWrap" title="Click date for calendar • Drag clock to move anywhere">
   <div class="clock">
     <svg class="clock-svg" viewBox="0 0 100 100">
       <text x="50" y="12">12</text>
@@ -2721,6 +2814,9 @@
           </button>
         </div>
         <div class="a11y-bar">
+          <button class="a11y-btn" id="calendarToggleBtn" title="Toggle Clock &amp; Calendar" aria-label="Toggle Clock &amp; Calendar">
+            <span class="a11y-icon">📅</span>
+          </button>
           <button class="a11y-btn" id="fontScaleBtn" title="Change Text Size (Normal / Large / Extra Large)" aria-label="Change Text Size">
             <span class="a11y-icon">Aa</span>
             <span id="fontScaleLabel" class="sr-only">Size: Normal</span>
@@ -2763,6 +2859,7 @@
 
           <select class="studio-select" id="studioStatusSelect">
             <option value="all">All Statuses</option>
+            <option value="starred">⭐ Starred Questions</option>
             <option value="notstarted">○ Not Started</option>
             <option value="reviewing">↻ Still Learning</option>
             <option value="confident">✓ Confident</option>
@@ -4321,6 +4418,7 @@ const STAGES = [
 ];
 let focusStage = 0;
 let focusScope = localStorage.getItem("qa_focus_scope") || "all";
+let focusShuffle = localStorage.getItem("qa_focus_shuffle") === "true";
 let currentFocusQId = initialRoute.routeQId || null;
 
 function isDueForReview(q) {
@@ -4333,6 +4431,9 @@ function pickFocusQuestion(preferredQId = null) {
   if (focusScope === "custom") {
     pool = FLAT.filter(q => q.isCustom);
     if (pool.length === 0) pool = FLAT;
+  } else if (focusScope === "starred") {
+    pool = FLAT.filter(q => state[q.id] && state[q.id].bookmarked);
+    if (pool.length === 0) pool = FLAT;
   } else if (focusScope && focusScope !== "all") {
     pool = FLAT.filter(q => q.tier === focusScope);
     if (pool.length === 0) pool = FLAT;
@@ -4342,6 +4443,16 @@ function pickFocusQuestion(preferredQId = null) {
   if (preferredQId) {
     const direct = pool.find(q => q.id === preferredQId) || FLAT.find(q => q.id === preferredQId);
     if (direct) return { q: direct, isReview: isDueForReview(direct) };
+  }
+
+  // 1.5 Random Shuffle mode if enabled
+  if (focusShuffle) {
+    const unmastered = pool.filter(q => state[q.id] && state[q.id].status !== "confident");
+    const candidates = unmastered.length > 0 ? unmastered : pool;
+    if (candidates.length > 0) {
+      const randQ = candidates[Math.floor(Math.random() * candidates.length)];
+      return { q: randQ, isReview: isDueForReview(randQ) };
+    }
   }
 
   // 2. Intelligent Resume: if last studied is unfinished in current pool, resume it
@@ -4468,11 +4579,14 @@ function renderFocus(targetQId = null, animClass = "") {
           <span class="due-tag" style="background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);">Q#${qIndex + 1} of ${totalQuestions}</span>
           ${isReview ? `<span class="due-tag">🔁 Spaced Review</span>` : `<span class="tier-tag">${q.tier} · ${q.tierTitle}</span>`}
           ${q.isCustom ? `<span class="tier-tag" style="background:var(--amber-soft);color:var(--amber-text);border-color:var(--amber-border);">⭐ My Question</span>` : ""}
+          <button class="focus-star-btn ${s.bookmarked ? 'starred' : ''}" id="focusStarBtn" title="${s.bookmarked ? 'Remove bookmark' : 'Bookmark this question'}">${s.bookmarked ? '★ Starred' : '☆ Star'}</button>
         </div>
         <div class="focus-scope-wrap">
+          <button class="focus-shuffle-btn ${focusShuffle ? 'active' : ''}" id="focusShuffleBtn" title="Toggle random question shuffle">🎲 ${focusShuffle ? 'Shuffle On' : 'Shuffle'}</button>
           <select class="focus-scope-select" id="focusTierSelect" title="Filter Study Scope">
             <option value="all" ${focusScope === 'all' ? 'selected' : ''}>Scope: All (${totalQuestions})</option>
-            <option value="custom" ${focusScope === 'custom' ? 'selected' : ''}>⭐ My Custom (${customQuestions.length})</option>
+            <option value="starred" ${focusScope === 'starred' ? 'selected' : ''}>⭐ Starred (${allQuestions.filter(item => state[item.id] && state[item.id].bookmarked).length})</option>
+            <option value="custom" ${focusScope === 'custom' ? 'selected' : ''}>My Custom (${customQuestions.length})</option>
             ${tierOpts}
           </select>
         </div>
@@ -4488,7 +4602,7 @@ function renderFocus(targetQId = null, animClass = "") {
         <div class="focus-notes-meta" id="focusNotesMeta">${s.updatedAt ? "Saved " + formatUpdatedTime(s.updatedAt) : "Auto-saved as you type"}</div>
       </div>
 
-      <button class="reveal-btn" id="revealBtn">👁 Reveal Key Points &amp; ELI5 Analogy</button>
+      <button class="reveal-btn" id="revealBtn">👁 Reveal Key Points &amp; ELI5 Analogy <kbd class="kbd-hint">Space</kbd></button>
 
       <div class="focus-quick-actions" id="focusQuickActions">
         <button class="quick-action-link" id="quickConfidentBtn">Already confident? Mark ✓</button>
@@ -4506,9 +4620,9 @@ function renderFocus(targetQId = null, animClass = "") {
       </div>
 
       <div class="focus-nav-arrows">
-        <button class="focus-arrow-btn" id="focusPrevBtn" title="Previous Question">← Prev</button>
+        <button class="focus-arrow-btn" id="focusPrevBtn" title="Previous Question"><kbd class="kbd-hint">←</kbd> Prev</button>
         <div class="focus-arrow-hint">Swipe or arrow keys to navigate</div>
-        <button class="focus-arrow-btn" id="focusNextBtn" title="Next Question">Next →</button>
+        <button class="focus-arrow-btn" id="focusNextBtn" title="Next Question">Next <kbd class="kbd-hint">→</kbd></button>
       </div>
     </div>
   `;
@@ -4598,6 +4712,26 @@ function renderFocus(targetQId = null, animClass = "") {
   if (prevBtn) prevBtn.onclick = () => focusPrevQuestion();
   const nextBtn = document.getElementById("focusNextBtn");
   if (nextBtn) nextBtn.onclick = () => focusNextQuestion(q.id);
+
+  const starBtn = document.getElementById("focusStarBtn");
+  if (starBtn) {
+    starBtn.onclick = async () => {
+      state[q.id].bookmarked = !state[q.id].bookmarked;
+      state[q.id].updatedAt = Date.now();
+      await saveState();
+      renderFocus(q.id);
+    };
+  }
+
+  const shufBtn = document.getElementById("focusShuffleBtn");
+  if (shufBtn) {
+    shufBtn.onclick = () => {
+      focusShuffle = !focusShuffle;
+      localStorage.setItem("qa_focus_shuffle", focusShuffle ? "true" : "false");
+      currentFocusQId = null;
+      renderFocus(null, "swipe-in-right");
+    };
+  }
 
   if (!window._focusKeyBound) {
     window._focusKeyBound = true;
@@ -4817,7 +4951,8 @@ let studioStatusFilter = localStorage.getItem("qa_studio_status_" + currentSubje
 function getFilteredStudioQs() {
   return getMasterQuestions().filter(q => {
     const matchesTrack = studioTrackFilter === "all" || q.tier === studioTrackFilter;
-    const matchesStatus = studioStatusFilter === "all" || (state[q.id] && state[q.id].status === studioStatusFilter);
+    const matchesStatus = studioStatusFilter === "all" || 
+      (studioStatusFilter === "starred" ? Boolean(state[q.id] && state[q.id].bookmarked) : (state[q.id] && state[q.id].status === studioStatusFilter));
     const matchesSearch = !studioSearchTerm || 
       q.text.toLowerCase().includes(studioSearchTerm) || 
       (q.answer && q.answer.toLowerCase().includes(studioSearchTerm)) ||
@@ -4857,15 +4992,17 @@ function renderStudio() {
     listEl.innerHTML = `<div class="no-results" style="padding:24px 8px;font-size:12px;">No matching questions found.</div>`;
   } else {
     listEl.innerHTML = filtered.map(q => {
-      const s = state[q.id] || { status: "notstarted", note: "" };
+      const s = state[q.id] || { status: "notstarted", note: "", bookmarked: false };
       const isAct = q.id === selectedStudioQId;
       const statusIcon = s.status === "confident" ? "✓" : (s.status === "reviewing" ? "↻" : "○");
       const hasNotes = s.note && s.note.trim().length > 0;
+      const isStarred = Boolean(s.bookmarked);
 
       return `
         <div class="studio-q-item ${isAct ? 'active' : ''}" data-studio-id="${q.id}">
           <div class="studio-q-text">${escapeHtml(q.text)}</div>
           <div class="studio-q-meta-right">
+            ${isStarred ? '<span class="studio-starred-star" title="Bookmarked">★</span>' : ''}
             ${hasNotes ? '<span class="studio-has-notes-dot" title="Has personal notes">📝</span>' : ''}
             <span class="studio-q-status-badge ${s.status}">${statusIcon}</span>
           </div>
@@ -4920,6 +5057,7 @@ function renderStudioDetail() {
           <option value="reviewing" ${s.status === "reviewing" ? "selected" : ""}>↻ Still Learning</option>
           <option value="confident" ${s.status === "confident" ? "selected" : ""}>✓ Confident</option>
         </select>
+        <button class="studio-star-pill-btn ${s.bookmarked ? 'starred' : ''}" id="studioStarBtn" title="${s.bookmarked ? 'Remove bookmark' : 'Bookmark this question'}">${s.bookmarked ? '★ Starred' : '☆ Star'}</button>
 
         ${q.isCustom ? `
           <button class="studio-edit-pill-btn" id="studioEditBtn" title="Edit custom question & answer">✏️ Edit</button>
@@ -5010,6 +5148,16 @@ function renderStudioDetail() {
       if (val !== "notstarted") bumpStreak();
       await saveState();
       updateOverview();
+      renderStudio();
+    });
+  }
+
+  const starBtn = document.getElementById("studioStarBtn");
+  if (starBtn) {
+    starBtn.addEventListener("click", async () => {
+      state[q.id].bookmarked = !state[q.id].bookmarked;
+      state[q.id].updatedAt = Date.now();
+      await saveState();
       renderStudio();
     });
   }
@@ -5628,6 +5776,24 @@ function setupDraggableClock() {
   const clockWrap = document.getElementById("clockWrap");
   const clockEl = document.querySelector(".clock");
   if (!clockWrap) return;
+
+  const calToggleBtn = document.getElementById("calendarToggleBtn");
+  if (calToggleBtn) {
+    calToggleBtn.onclick = () => {
+      const isHidden = clockWrap.classList.toggle("hidden");
+      localStorage.setItem("qa_clock_visible", isHidden ? "false" : "true");
+      calToggleBtn.classList.toggle("active", !isHidden);
+    };
+  }
+
+  const savedClockVis = localStorage.getItem("qa_clock_visible");
+  if (savedClockVis === "true") {
+    clockWrap.classList.remove("hidden");
+    if (calToggleBtn) calToggleBtn.classList.add("active");
+  } else {
+    clockWrap.classList.add("hidden");
+    if (calToggleBtn) calToggleBtn.classList.remove("active");
+  }
 
   try {
     const saved = JSON.parse(localStorage.getItem("qa_clock_pos") || "null");
