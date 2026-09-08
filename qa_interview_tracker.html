@@ -2093,11 +2093,283 @@
     color: var(--text-main);
     border-color: var(--border-strong);
   }
+    /* Live dot & Room sync indicator */
+  .sync-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    box-shadow: 0 0 6px #10b981;
+    margin-left: 5px;
+    vertical-align: middle;
+    animation: pulseDot 2s infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.75); }
+  }
+
+  /* Resume Hero Banner in Focus View */
+  .resume-hero-banner {
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.09), rgba(20, 184, 166, 0.16));
+    border: 1.5px solid var(--teal-border);
+    border-radius: var(--radius-md);
+    padding: 13px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    animation: bannerIn .3s ease;
+  }
+  @keyframes bannerIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rh-left {
+    flex: 1;
+    min-width: 0;
+  }
+  .rh-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teal-text);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(13, 148, 136, 0.12);
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .rh-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rh-meta {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+  }
+  .rh-btn {
+    background: var(--teal);
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2);
+  }
+  .rh-btn:hover {
+    background: var(--teal-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13,148,136,0.3);
+  }
+  @media (max-width: 640px) {
+    .resume-hero-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 12px 14px;
+    }
+    .rh-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Cross-Subject Resume Banner (uses indigo accent to distinguish from same-subject teal banner) */
+  .cross-subject-banner {
+    background: linear-gradient(135deg, rgba(90, 105, 184, 0.09), rgba(90, 105, 184, 0.16));
+    border: 1.5px solid var(--indigo-border);
+    border-radius: var(--radius-md);
+    padding: 13px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    animation: bannerIn .3s ease;
+  }
+  .cross-subject-banner .rh-badge {
+    background: rgba(90, 105, 184, 0.12);
+    color: var(--indigo-text);
+  }
+  .cross-subject-banner .rh-btn {
+    background: var(--indigo);
+    box-shadow: 0 2px 6px rgba(90, 105, 184, 0.2);
+  }
+  .cross-subject-banner .rh-btn:hover {
+    background: var(--indigo-dark);
+  }
+  @media (max-width: 640px) {
+    .cross-subject-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 12px 14px;
+    }
+  }
+
+  /* Focus Scope Filter Bar */
+  .focus-scope-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .focus-scope-lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .scope-pill {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    padding: 3px 11px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .scope-pill.active {
+    background: var(--teal-soft);
+    border-color: var(--teal-border);
+    color: var(--teal-text);
+  }
+  .scope-select {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+    font-size: 11px;
+    outline: none;
+    cursor: pointer;
+  }
+
   .sync-key-row {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 6px;
+  }
+
+  /* First-Launch Pairing Overlay */
+  .pairing-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+    animation: pairingFadeIn .35s ease;
+  }
+  @keyframes pairingFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .pairing-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px 24px;
+    max-width: 460px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: pairingSlideUp .35s ease;
+    max-height: 90vh; overflow-y: auto;
+  }
+  @keyframes pairingSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .pairing-title {
+    font-size: 20px; font-weight: 700; color: var(--text-main);
+    text-align: center; margin: 0 0 4px;
+  }
+  .pairing-subtitle {
+    font-size: 13px; color: var(--text-secondary);
+    text-align: center; margin: 0 0 20px; line-height: 1.5;
+  }
+  .pairing-section {
+    border: 1.5px solid var(--border); border-radius: var(--radius-md);
+    padding: 16px; margin-bottom: 14px;
+    cursor: pointer; transition: border-color .2s, box-shadow .2s;
+  }
+  .pairing-section:hover { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+  .pairing-section.active-section { border-color: var(--teal); background: var(--teal-soft); }
+  .pairing-section-title {
+    font-size: 15px; font-weight: 700; color: var(--text-main); margin: 0 0 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pairing-section-desc {
+    font-size: 12.5px; color: var(--text-secondary); margin: 0; line-height: 1.45;
+  }
+  .pairing-expand {
+    display: none; margin-top: 14px;
+    padding-top: 14px; border-top: 1px solid var(--border);
+  }
+  .pairing-section.active-section .pairing-expand { display: block; }
+  .pairing-code-display {
+    font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700;
+    color: var(--teal-text); text-align: center; padding: 12px;
+    background: var(--surface); border: 2px dashed var(--teal-border);
+    border-radius: var(--radius-md); margin: 10px 0; letter-spacing: 2px;
+    user-select: all;
+  }
+  .pairing-qr-wrap {
+    text-align: center; margin: 10px 0;
+  }
+  .pairing-qr-wrap img {
+    width: 140px; height: 140px; border-radius: 10px;
+    border: 2px solid var(--teal-border); background: #fff; padding: 4px;
+  }
+  .pairing-input-row {
+    display: flex; gap: 8px; margin-top: 10px;
+  }
+  .pairing-input {
+    flex: 1; font-family: 'IBM Plex Mono', monospace; font-size: 14px;
+    padding: 10px 12px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); background: var(--surface);
+    color: var(--text-main); outline: none;
+  }
+  .pairing-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-soft); }
+  .pairing-btn {
+    padding: 10px 18px; border: none; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: background .2s, transform .1s;
+  }
+  .pairing-btn:active { transform: scale(0.97); }
+  .pairing-btn-primary {
+    background: var(--teal); color: #fff;
+  }
+  .pairing-btn-primary:hover { background: var(--teal-dark); }
+  .pairing-actions {
+    display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .pairing-or {
+    text-align: center; font-size: 11px; color: var(--text-muted);
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    margin: 2px 0;
+  }
+  .pairing-status {
+    font-size: 12px; font-family: 'IBM Plex Mono', monospace;
+    color: var(--teal-text); text-align: center; margin-top: 10px;
+    min-height: 18px;
   }
 </style>
   <!-- Firebase App & Cloud Firestore SDKs -->
@@ -2977,7 +3249,154 @@ const SUBJECTS = {
   }
 };
 
-let currentSubjectId = localStorage.getItem("qa_active_subject") || "qa";
+// ==========================================
+// TIER 2: PERSISTENT SAFE STORAGE (INDEXEDDB BACKUP)
+// ==========================================
+const DB_NAME = "qa_tracker_db";
+const STORE_NAME = "keyval";
+let _dbPromise = null;
+
+function getIndexedDb() {
+  if (!_dbPromise) {
+    _dbPromise = new Promise((resolve) => {
+      if (typeof indexedDB === "undefined") return resolve(null);
+      try {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = () => {
+          try { req.result.createObjectStore(STORE_NAME); } catch (e) {}
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+      } catch (e) { resolve(null); }
+    });
+  }
+  return _dbPromise;
+}
+
+const safeStorage = {
+  async get(key) {
+    try {
+      const val = localStorage.getItem(key);
+      if (val !== null && val !== undefined) return val;
+    } catch (e) {}
+    const db = await getIndexedDb();
+    if (!db) return null;
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(STORE_NAME, "readonly");
+        const req = tx.objectStore(STORE_NAME).get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      } catch (e) { resolve(null); }
+    });
+  },
+  async set(key, val) {
+    try {
+      localStorage.setItem(key, val);
+    } catch (e) {
+      console.warn("localStorage quota/restriction, utilizing IndexedDB fallback:", e);
+    }
+    const db = await getIndexedDb();
+    if (!db) return;
+    try {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).put(val, key);
+    } catch (e) {}
+  },
+  async remove(key) {
+    try { localStorage.removeItem(key); } catch (e) {}
+    const db = await getIndexedDb();
+    if (!db) return;
+    try {
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      tx.objectStore(STORE_NAME).delete(key);
+    } catch (e) {}
+  }
+};
+
+// ==========================================
+// ROUTE & SYNC PARSING (Zero-Lost-Sync Architecture)
+// ==========================================
+function parseRouteFromUrl() {
+  let hash = (typeof window !== "undefined" && window.location.hash) ? window.location.hash.replace(/^#\/?/, '').trim() : '';
+  const searchParams = (typeof window !== "undefined" && window.location.search) ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  
+  let routeSubject = searchParams.get("subject") || null;
+  let routeView = searchParams.get("view") || null;
+  let routeQId = searchParams.get("q") || searchParams.get("qid") || null;
+  let routeSync = searchParams.get("sync") || searchParams.get("key") || searchParams.get("sync_id") || null;
+
+  if (hash) {
+    let hashPath = hash;
+    if (hash.includes("?")) {
+      const [path, qs] = hash.split("?");
+      hashPath = path;
+      const hashParams = new URLSearchParams(qs);
+      if (hashParams.get("sync")) routeSync = hashParams.get("sync");
+      if (hashParams.get("key")) routeSync = hashParams.get("key");
+      if (hashParams.get("sync_id")) routeSync = hashParams.get("sync_id");
+      if (hashParams.get("subject")) routeSubject = hashParams.get("subject");
+      if (hashParams.get("view")) routeView = hashParams.get("view");
+      if (hashParams.get("q") || hashParams.get("qid")) routeQId = hashParams.get("q") || hashParams.get("qid");
+    }
+
+    const segments = hashPath.split("/").map(s => decodeURIComponent(s).trim()).filter(Boolean);
+    
+    // Check if first segment is a direct sync key specification (e.g. #sync=code or #sync/code)
+    if (segments.length > 0 && segments[0].startsWith("sync=")) {
+      routeSync = segments[0].split("=")[1];
+      segments.shift();
+    }
+
+    // Check if first segment is a known subject (e.g. qa or english)
+    if (segments.length > 0 && typeof SUBJECTS !== "undefined" && SUBJECTS[segments[0]]) {
+      routeSubject = segments[0];
+      segments.shift();
+    }
+    
+    // Check if next segment is a view
+    const validViews = ["focus", "browse", "roadmap", "resume", "all-questions"];
+    if (segments.length > 0) {
+      const seg = segments[0].toLowerCase();
+      if (validViews.includes(seg)) {
+        if (seg === "resume") routeView = "focus";
+        else if (seg === "all-questions") routeView = "browse";
+        else routeView = seg;
+        segments.shift();
+      }
+    }
+    
+    // Any remaining segment is question ID
+    if (segments.length > 0 && !routeQId) {
+      routeQId = segments[0];
+    }
+  }
+
+  return { routeSubject, routeView, routeQId, routeSync };
+}
+
+const initialRoute = parseRouteFromUrl();
+
+// Auto-detect & persist Sync Key from URL, localStorage, or generate new
+let syncUserId = null;
+try {
+  if (initialRoute.routeSync && initialRoute.routeSync.trim()) {
+    syncUserId = initialRoute.routeSync.trim().replace(/[^a-zA-Z0-9_\-\.]/g, "");
+    safeStorage.set("qa_tracker_sync_id", syncUserId);
+    safeStorage.set("qa_tracker_paired", "1");
+  } else {
+    syncUserId = localStorage.getItem("qa_tracker_sync_id");
+  }
+} catch (e) {}
+
+if (!syncUserId) {
+  syncUserId = "qa_" + Math.random().toString(36).substring(2, 7) + "_" + Date.now().toString(36).substring(4);
+  safeStorage.set("qa_tracker_sync_id", syncUserId);
+}
+
+let currentSubjectId = (initialRoute.routeSubject && SUBJECTS[initialRoute.routeSubject]) 
+  ? initialRoute.routeSubject 
+  : (localStorage.getItem("qa_active_subject") || "qa");
 if (!SUBJECTS[currentSubjectId]) currentSubjectId = "qa";
 
 function getActiveSubject() {
@@ -2989,8 +3408,9 @@ let ROADMAP = getActiveSubject().roadmap;
 let STORAGE_KEY = getActiveSubject().storageKey;
 let CUSTOM_KEY = getActiveSubject().customKey;
 
-
-
+// ==========================================
+// ANSWER PARSER & AUDIO ENGINE
+// ==========================================
 function parseAnswer(raw) {
   if (!raw) return null;
   const parts = raw.split("\n\n");
@@ -3012,13 +3432,11 @@ function parseAnswer(raw) {
   return out;
 }
 
-
 let currentLang = localStorage.getItem("qa_pref_lang") || "en";
-let speechRate = 0.95; // Natural conversational cadence
+let speechRate = parseFloat(localStorage.getItem("qa_speech_rate")) || 0.95;
 let isSpeaking = false;
 let availableVoices = [];
 
-// Pre-load and cache voices
 function loadVoices() {
   if (typeof window !== "undefined" && window.speechSynthesis) {
     availableVoices = window.speechSynthesis.getVoices() || [];
@@ -3030,13 +3448,9 @@ if (typeof window !== "undefined" && window.speechSynthesis) {
 }
 
 function getBestVoice(lang) {
-  if (!availableVoices || availableVoices.length === 0) {
-    loadVoices();
-  }
+  if (!availableVoices || availableVoices.length === 0) loadVoices();
 
-  // Voice priority lists for ultra-natural human tone (Siri, Enhanced, Neural)
   if (lang === "hi") {
-    // For Hinglish: Prioritize Indian English / Hindi natural & enhanced voices
     const hiPriorities = [
       "Rishi (Enhanced)", "Veena (Enhanced)", "Lekha", "Neerja", "Madhav",
       "Rishi", "Veena", "Google हिन्दी", "Google UK English Female",
@@ -3049,203 +3463,128 @@ function getBestVoice(lang) {
     const anyInVoice = availableVoices.find(voice => voice.lang.includes("IN") || voice.lang.includes("hi"));
     if (anyInVoice) return anyInVoice;
   } else {
-    // For English: Prioritize Siri, Enhanced, and Neural voices
     const enPriorities = [
-      "Siri", "Samantha (Enhanced)", "Rishi (Enhanced)", "Veena (Enhanced)",
-      "Karen (Enhanced)", "Daniel (Enhanced)", "Serena (Enhanced)", "Oliver (Enhanced)",
-      "Google US English", "Google UK English Female", "Samantha", "Karen", "Daniel", "Tessa", "Moira"
+      "Daniel (Enhanced)", "Oliver (Enhanced)", "Arthur", "Serena (Enhanced)",
+      "Samantha (Enhanced)", "Google UK English Male", "Google US English",
+      "Daniel", "Samantha", "Alex"
     ];
     for (const name of enPriorities) {
       const v = availableVoices.find(voice => voice.name.includes(name));
       if (v) return v;
     }
-    const anyEnVoice = availableVoices.find(voice => voice.lang.startsWith("en"));
-    if (anyEnVoice) return anyEnVoice;
+    const anyEn = availableVoices.find(voice => voice.lang.startsWith("en"));
+    if (anyEn) return anyEn;
   }
-
   return availableVoices[0] || null;
 }
 
 function setAppLanguage(lang) {
+  if (lang !== "en" && lang !== "hi") lang = "en";
   currentLang = lang;
   localStorage.setItem("qa_pref_lang", lang);
   stopAudio();
-  
-  // Re-render answer box in focus view if open
-  const focusAnswerBox = document.getElementById("answerBox");
-  if (focusAnswerBox && focusAnswerBox.classList.contains("open")) {
-    const picked = pickFocusQuestion();
-    if (picked) {
-      focusAnswerBox.innerHTML = buildAnswerContentHTML(picked.q);
+
+  if (currentView === "focus") {
+    const picked = pickFocusQuestion(currentFocusQId);
+    if (picked && picked.q) {
+      const box = document.getElementById("answerBox");
+      if (box) box.innerHTML = buildAnswerContentHTML(picked.q);
       attachAnswerEventListeners(picked.q, "focus");
     }
-  }
-
-  // Re-render studio detail if active
-  if (selectedStudioQId) {
+  } else if (currentView === "browse" && selectedStudioQId) {
     renderStudioDetail();
   }
-}
-
-function stopAudio() {
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-  }
-  isSpeaking = false;
-  updateAudioButtonsState(false);
 }
 
 function toggleAudioSpeed() {
   if (speechRate <= 0.95) speechRate = 1.15;
   else if (speechRate === 1.15) speechRate = 1.35;
   else speechRate = 0.95;
+  localStorage.setItem("qa_speech_rate", speechRate.toString());
   
   const speedBtns = document.querySelectorAll(".speed-btn");
   speedBtns.forEach(btn => btn.textContent = (speechRate === 0.95 ? "1x" : speechRate + "x"));
-  
-  if (isSpeaking) {
-    stopAudio();
+
+  if (isSpeaking && currentUtteranceQueue.length > 0) {
+    playAnswerAudio(currentPlayingText, currentPlayingLang);
   }
+}
+
+let currentUtteranceQueue = [];
+let currentPlayingText = "";
+let currentPlayingLang = "";
+
+function stopAudio() {
+  if (typeof window !== "undefined" && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  isSpeaking = false;
+  currentUtteranceQueue = [];
+  updateAudioButtonsState(false);
 }
 
 function updateAudioButtonsState(playing) {
-  const audioBtns = document.querySelectorAll(".audio-btn");
-  audioBtns.forEach(btn => {
-    if (playing) {
-      btn.classList.add("playing");
-      btn.innerHTML = '<span class="audio-icon">⏸</span><span>Stop Audio</span>';
-    } else {
-      btn.classList.remove("playing");
-      btn.innerHTML = '<span class="audio-icon">🔊</span><span>Listen</span>';
-    }
+  const btns = document.querySelectorAll(".audio-btn");
+  btns.forEach(btn => {
+    btn.classList.toggle("playing", playing);
+    const icon = btn.querySelector(".audio-icon");
+    const text = btn.querySelector("span:not(.audio-icon)");
+    if (icon) icon.textContent = playing ? "⏸" : "🔊";
+    if (text) text.textContent = playing ? "Stop" : "Listen";
   });
 }
 
-function formatTextForNaturalSpeech(raw) {
-  if (!raw) return "";
+function playAnswerAudio(text, lang) {
+  if (!text || typeof window === "undefined" || !window.speechSynthesis) return;
 
-  let text = raw
-    // Expand section labels with natural conversational pauses
-    .replace(/^📌\s*Key idea\s*:?/gim, "Key takeaway: ")
-    .replace(/^💬\s*Example\s*:?/gim, ". For example, ")
-    .replace(/^⚠️\s*Common mistake\s*:?/gim, ". Common mistake to avoid: ")
-    .replace(/^🎯\s*Why it's asked\s*:?/gim, ". Why interviewers ask this: ")
-    .replace(/^🎯\s*Why:\s*/gim, ". Why it matters: ")
-    .replace(/ELI5:\s*/gim, ". In simple everyday terms: ")
-    .replace(/Example:\s*/gim, ". For example, ")
-    .replace(/Common mistake:\s*/gim, ". Watch out for this trap: ")
-    .replace(/Why it'?s asked:\s*/gim, ". Why interviewers ask this: ")
-    .replace(/Why it matters:\s*/gim, ". Why it matters: ")
-    .replace(/Why:\s*/gim, ". Why: ")
-    
-    // Natural acronym pronunciation for tech terms
-    .replace(/\bQA\b/g, "Q A")
-    .replace(/\bQC\b/g, "Q C")
-    .replace(/\bUAT\b/g, "U A T")
-    .replace(/\bSTLC\b/g, "S T L C")
-    .replace(/\bSDLC\b/g, "S D L C")
-    .replace(/\bAPI\b/g, "A P I")
-    .replace(/\bAPIs\b/g, "A P Is")
-    .replace(/\bSQL\b/g, "S Q L")
-    .replace(/\bDB\b/g, "database")
-    .replace(/\bDBs\b/g, "databases")
-    .replace(/\bUI\b/g, "U I")
-    .replace(/\bUX\b/g, "U X")
-    .replace(/\bKPI\b/g, "K P I")
-    .replace(/\bKPIs\b/g, "K P Is")
-    .replace(/\bDRE\b/g, "D R E")
-    .replace(/\bRCA\b/g, "R C A")
-    .replace(/\bRTM\b/g, "R T M")
-    .replace(/\bECP\b/g, "E C P")
-    .replace(/\bBVA\b/g, "B V A")
-    .replace(/\bCI\/CD\b/g, "C I, C D")
-    .replace(/\bJWT\b/g, "J W T")
-    .replace(/\bOWASP\b/g, "O WASP")
-    .replace(/\bGDPR\b/g, "G D P R")
-    .replace(/\bHIPAA\b/g, "HIPAA")
-    .replace(/\bPCI-DSS\b/g, "P C I, D S S")
-    .replace(/\bLLM\b/g, "L L M")
-    .replace(/\bvs\.?\b/gi, "versus")
-    .replace(/\be\.g\.,?\b/gi, "for example,")
-    .replace(/\bi\.e\.,?\b/gi, "that is,")
-    .replace(/→/g, ", then ")
-    .replace(/\b1\)\s*/g, "First, ")
-    .replace(/\b2\)\s*/g, "Second, ")
-    .replace(/\b3\)\s*/g, "Third, ")
-    .replace(/\b4\)\s*/g, "Fourth, ")
-    .replace(/\b5\)\s*/g, "Fifth, ")
-    .replace(/\b6\)\s*/g, "Sixth, ")
-    .replace(/\b7\)\s*/g, "Seventh, ")
-    .replace(/[📌💬⚠️🎯🧒💡―•]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return text;
-}
-
-function playAnswerAudio(q) {
-  if (!window.speechSynthesis) {
-    alert("Speech Synthesis is not supported on this browser.");
-    return;
-  }
-
-  if (isSpeaking) {
+  if (isSpeaking && currentPlayingText === text) {
     stopAudio();
     return;
   }
 
   stopAudio();
+  currentPlayingText = text;
+  currentPlayingLang = lang;
 
-  const raw = currentLang === "hi" ? (q.hinglish || q.answer) : q.answer;
-  if (!raw) return;
+  let clean = text
+    .replace(/^📌\s*Key idea\s*\/\s*Pitch:?/gim, "")
+    .replace(/^💬\s*Real-World Example:?/gim, "Example: ")
+    .replace(/^⚠️\s*Common Trap\s*\/\s*Mistake:?/gim, "Common trap: ")
+    .replace(/^🎯\s*Why Interviewers Ask This:?/gim, "Why interviewers ask this: ")
+    .replace(/^🧒\s*ELI5 Analogy:?/gim, "In simple terms: ")
+    .replace(/[*_#`]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
-  const spokenText = formatTextForNaturalSpeech(raw);
-  if (!spokenText) return;
+  const sentences = clean.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [clean];
+  currentUtteranceQueue = sentences.map(s => s.trim()).filter(s => s.length > 0);
 
-  // Split into natural sentences for flawless, non-robotic playback in Safari iOS
-  const sentences = spokenText.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [spokenText];
-  const voice = getBestVoice(currentLang);
+  if (currentUtteranceQueue.length === 0) return;
 
-  let sentenceIndex = 0;
+  const voice = getBestVoice(lang);
 
   function speakNextSentence() {
-    if (sentenceIndex >= sentences.length || !isSpeaking) {
-      isSpeaking = false;
-      updateAudioButtonsState(false);
+    if (currentUtteranceQueue.length === 0) {
+      stopAudio();
       return;
     }
 
-    const currentSentence = sentences[sentenceIndex].trim();
-    if (!currentSentence) {
-      sentenceIndex++;
-      speakNextSentence();
-      return;
-    }
+    const chunk = currentUtteranceQueue.shift();
+    const utt = new SpeechSynthesisUtterance(chunk);
+    if (voice) utt.voice = voice;
+    utt.rate = speechRate;
+    utt.pitch = lang === "hi" ? 1.05 : 1.0;
 
-    const utterance = new SpeechSynthesisUtterance(currentSentence);
-    if (voice) utterance.voice = voice;
-    utterance.rate = speechRate;
-    utterance.pitch = 1.02; // Warm, natural human pitch
-
-    if (currentLang === "hi") {
-      utterance.lang = (voice && voice.lang) ? voice.lang : "hi-IN";
-    } else {
-      utterance.lang = (voice && voice.lang) ? voice.lang : "en-US";
-    }
-
-    utterance.onend = () => {
-      sentenceIndex++;
-      // Brief human-like pause between sentences
-      setTimeout(speakNextSentence, 60);
+    utt.onend = () => {
+      if (isSpeaking) speakNextSentence();
     };
 
-    utterance.onerror = (e) => {
-      console.warn("Speech synthesis notice:", e);
-      sentenceIndex++;
-      speakNextSentence();
+    utt.onerror = (e) => {
+      console.warn("SpeechSynthesis chunk note:", e);
+      if (isSpeaking) speakNextSentence();
     };
 
-    window.speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(utt);
   }
 
   isSpeaking = true;
@@ -3299,7 +3638,8 @@ function attachAnswerEventListeners(q, context) {
   if (playBtn) {
     playBtn.onclick = (e) => {
       e.stopPropagation();
-      playAnswerAudio(q);
+      const raw = currentLang === "hi" ? (q.hinglish || q.answer) : q.answer;
+      playAnswerAudio(raw, currentLang);
     };
   }
 
@@ -3312,8 +3652,9 @@ function attachAnswerEventListeners(q, context) {
   }
 }
 
-
-
+// ==========================================
+// SUBJECT SWITCHER
+// ==========================================
 function setupSubjectSwitcher() {
   updateSubjectHeaderUI();
   populateStudioTrackFilter();
@@ -3347,7 +3688,7 @@ function setupSubjectSwitcher() {
   });
 }
 
-async function switchSubject(subjectId) {
+async function switchSubject(subjectId, pushHistory = true) {
   if (!SUBJECTS[subjectId]) return;
   stopAudio();
   currentSubjectId = subjectId;
@@ -3359,25 +3700,37 @@ async function switchSubject(subjectId) {
   STORAGE_KEY = subj.storageKey;
   CUSTOM_KEY = subj.customKey;
 
-  selectedStudioQId = null;
-  studioTrackFilter = "all";
+  studioTrackFilter = localStorage.getItem("qa_studio_track_" + currentSubjectId) || "all";
+  studioStatusFilter = localStorage.getItem("qa_studio_status_" + currentSubjectId) || "all";
   studioSearchTerm = "";
-  studioStatusFilter = "all";
+  const searchInput = document.getElementById("studioSearchInput");
+  if (searchInput) searchInput.value = "";
+
+  selectedStudioQId = localStorage.getItem("qa_selected_studio_qid_" + currentSubjectId) || null;
 
   updateSubjectHeaderUI();
   populateStudioTrackFilter();
+  const statusSel = document.getElementById("studioStatusSelect");
+  if (statusSel) statusSel.value = studioStatusFilter;
 
   await loadCustom();
   await loadState();
   rebuildFlat();
-
   updateOverview();
-  if (currentView === "focus") renderFocus();
-  else if (currentView === "browse") renderStudio();
-  else if (currentView === "roadmap") renderRoadmap();
+
+  // Validate selectedStudioQId in new subject questions
+  if (selectedStudioQId && !FLAT.some(q => q.id === selectedStudioQId)) {
+    selectedStudioQId = null;
+  }
+
+  renderActiveView();
+  updateUrlHash(!pushHistory);
 
   const dd = document.getElementById("subjectDropdown");
   if (dd) dd.classList.add("hidden");
+
+  // Sync cloud updates for the newly active subject
+  fetchCloudDataAndMerge();
 }
 
 function updateSubjectHeaderUI() {
@@ -3410,10 +3763,24 @@ function populateStudioTrackFilter() {
   trackSel.value = studioTrackFilter;
 }
 
+// ==========================================
+// STATE & DATA LAYER
+// ==========================================
 let state = {};
-let meta = { streak: 0, lastStudyDate: null };
+let meta = {
+  streak: 0,
+  lastStudyDate: null,
+  roadmapNotes: "",
+  lastStudiedQId: null,
+  lastStudiedSubject: "qa",
+  lastStudiedAt: null,
+  lastStudiedTitle: "",
+  lastStudiedStatus: ""
+};
+
 let currentFilter = "all";
-let currentView = "focus";
+let currentView = initialRoute.routeView || localStorage.getItem("qa_active_view") || "focus";
+if (!["focus", "browse", "roadmap"].includes(currentView)) currentView = "focus";
 let searchTerm = "";
 
 function buildIds() {
@@ -3429,20 +3796,20 @@ function buildIds() {
         tier: tier.tier, tierTitle: tier.title, why: tier.why, apply: tier.apply,
         text: isObj ? q.text : q,
         answer: isObj ? q.answer : null,
-        hinglish: isObj ? q.hinglish : null
+        hinglish: isObj ? q.hinglish : null,
+        isCustom: false
       });
       n++;
     });
   });
   return flat;
 }
-let customQuestions = []; // { id, text, answer, createdAt }
-// CUSTOM_KEY is dynamically assigned per subject
+let customQuestions = [];
 
 function customToFlat() {
   return (customQuestions || []).map(c => ({
     id: c.id, tier: "Custom", tierTitle: "My Additions",
-    why: "Added by you — outside the original 58, just as fair game in an interview.",
+    why: "Added by you — custom question & answer saved directly to your account.",
     apply: null, text: c.text, answer: c.answer, isCustom: true
   }));
 }
@@ -3460,66 +3827,73 @@ function rebuildFlat() {
 
 function ensureStateDefaults() {
   FLAT.forEach(q => {
-    if (!state[q.id]) state[q.id] = { status: "notstarted", note: "", updatedAt: "", reviewCount: 0, nextReviewDate: null };
+    if (!state[q.id]) state[q.id] = { status: "notstarted", note: "", updatedAt: 0, reviewCount: 0, nextReviewDate: null };
   });
+}
+
+function recordStudyInteraction(qId, status = null) {
+  if (!qId) return;
+  const q = FLAT.find(item => item.id === qId);
+  meta.lastStudiedQId = qId;
+  meta.lastStudiedSubject = currentSubjectId;
+  meta.lastStudiedAt = Date.now();
+  if (q) meta.lastStudiedTitle = q.text;
+  if (status) meta.lastStudiedStatus = status;
+  else if (state[qId]) meta.lastStudiedStatus = state[qId].status || "notstarted";
 }
 
 async function loadCustom() {
   try {
-    if (typeof window !== "undefined" && window.storage && window.storage.get) {
-      const res = await window.storage.get(CUSTOM_KEY, false);
-      if (res && res.value) { customQuestions = JSON.parse(res.value); return; }
+    const val = await safeStorage.get(CUSTOM_KEY);
+    if (val) {
+      customQuestions = JSON.parse(val);
+      return;
     }
-    const val = localStorage.getItem(CUSTOM_KEY);
-    if (val) customQuestions = JSON.parse(val);
-  } catch (e) { customQuestions = []; }
+  } catch (e) {
+    console.warn("loadCustom error:", e);
+  }
+  customQuestions = [];
 }
 
 async function saveCustom() {
   try {
     const str = JSON.stringify(customQuestions);
-    if (typeof window !== "undefined" && window.storage && window.storage.set) {
-      await window.storage.set(CUSTOM_KEY, str, false);
-    }
-    localStorage.setItem(CUSTOM_KEY, str);
+    await safeStorage.set(CUSTOM_KEY, str);
     syncToFirebase(CUSTOM_KEY, customQuestions);
   } catch (e) {
-    document.getElementById("footStatus").textContent = "couldn't save custom question";
+    const footEl = document.getElementById("footStatus");
+    if (footEl) footEl.textContent = "couldn't save custom question";
   }
 }
 
 async function loadState() {
   state = {};
-  meta = { streak: 0, lastStudyDate: null, roadmapNotes: "" };
+  meta = {
+    streak: 0,
+    lastStudyDate: null,
+    roadmapNotes: "",
+    lastStudiedQId: null,
+    lastStudiedSubject: currentSubjectId,
+    lastStudiedAt: null,
+    lastStudiedTitle: "",
+    lastStudiedStatus: ""
+  };
   try {
-    if (typeof window !== "undefined" && window.storage && window.storage.get) {
-      const res = await window.storage.get(STORAGE_KEY, false);
-      if (res && res.value) {
-        const parsed = JSON.parse(res.value);
-        state = parsed.state || {};
-        meta = Object.assign({ streak: 0, lastStudyDate: null, roadmapNotes: "" }, parsed.meta || {});
-        return;
-      }
-    }
-    const val = localStorage.getItem(STORAGE_KEY);
+    const val = await safeStorage.get(STORAGE_KEY);
     if (val) {
       const parsed = JSON.parse(val);
       state = parsed.state || {};
-      meta = Object.assign({ streak: 0, lastStudyDate: null, roadmapNotes: "" }, parsed.meta || {});
+      meta = Object.assign(meta, parsed.meta || {});
     }
   } catch (e) {
-    state = {};
-    meta = { streak: 0, lastStudyDate: null, roadmapNotes: "" };
+    console.warn("loadState error:", e);
   }
 }
 
 async function saveState() {
   try {
     const str = JSON.stringify({ state, meta });
-    if (typeof window !== "undefined" && window.storage && window.storage.set) {
-      await window.storage.set(STORAGE_KEY, str, false);
-    }
-    localStorage.setItem(STORAGE_KEY, str);
+    await safeStorage.set(STORAGE_KEY, str);
     syncToFirebase(STORAGE_KEY, { state, meta });
     const footEl = document.getElementById("footStatus");
     if (footEl) footEl.textContent = "progress saved · " + new Date().toLocaleTimeString();
@@ -3573,7 +3947,142 @@ function updateOverview() {
   }
 }
 
-// ---- FOCUS VIEW: staged active-recall flow + spaced repetition ----
+// ==========================================
+// DEBOUNCED AUTO-SAVE FOR MOBILE TYPING
+// ==========================================
+let noteAutoSaveTimer = null;
+function setupNoteAutoSave(textarea, qId, metaEl = null) {
+  if (!textarea || !qId) return;
+
+  async function doSave() {
+    const val = textarea.value;
+    if (!state[qId]) state[qId] = { status: "notstarted", note: "", reviewCount: 0, nextReviewDate: null };
+    if (state[qId].note === val) return;
+    state[qId].note = val;
+    state[qId].updatedAt = Date.now();
+    recordStudyInteraction(qId);
+    await saveState();
+    if (metaEl) {
+      metaEl.textContent = "Auto-saved " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+  }
+
+  textarea.addEventListener("input", () => {
+    clearTimeout(noteAutoSaveTimer);
+    noteAutoSaveTimer = setTimeout(doSave, 350);
+  });
+
+  textarea.addEventListener("blur", () => {
+    clearTimeout(noteAutoSaveTimer);
+    doSave();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      clearTimeout(noteAutoSaveTimer);
+      doSave();
+    }
+  });
+
+  window.addEventListener("pagehide", () => {
+    clearTimeout(noteAutoSaveTimer);
+    doSave();
+  });
+}
+
+function formatTimeAgo(timestamp) {
+  if (!timestamp) return "recently";
+  const diff = Date.now() - Number(timestamp);
+  if (diff < 60000) return "just now";
+  if (diff < 3600000) return Math.floor(diff / 60000) + "m ago";
+  if (diff < 86400000) return Math.floor(diff / 3600000) + "h ago";
+  return Math.floor(diff / 86400000) + "d ago";
+}
+
+function formatUpdatedTime(timestamp) {
+  if (!timestamp) return "";
+  const d = new Date(Number(timestamp) || timestamp);
+  return isNaN(d.getTime()) ? String(timestamp) : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function buildResumeHeroBannerHTML(currentQId) {
+  if (!meta.lastStudiedQId) return "";
+  const lastQ = FLAT.find(q => q.id === meta.lastStudiedQId);
+  if (!lastQ) return "";
+  if (currentQId === meta.lastStudiedQId) return "";
+
+  const timeAgoStr = meta.lastStudiedAt ? formatTimeAgo(meta.lastStudiedAt) : "recently";
+  const st = (state[lastQ.id] && state[lastQ.id].status) ? state[lastQ.id].status : "notstarted";
+  const stLabel = st === "confident" ? "✓ Confident" : (st === "reviewing" ? "↻ Still Learning" : "Not Started");
+
+  return `
+    <div class="resume-hero-banner" id="resumeHeroBanner">
+      <div class="rh-left">
+        <span class="rh-badge">📍 WHERE YOU LEFT OFF</span>
+        <div class="rh-title">${escapeHtml(lastQ.text)}</div>
+        <div class="rh-meta">Studied ${timeAgoStr} · Track: <b>${lastQ.tier}</b> · Status: <b>${stLabel}</b></div>
+      </div>
+      <div class="rh-actions">
+        <button class="rh-btn primary" id="rhContinueBtn" data-qid="${lastQ.id}">▶ Resume This Question</button>
+      </div>
+    </div>
+  `;
+}
+
+function buildCrossSubjectResumeBanner() {
+  if (!meta.lastStudiedSubject || meta.lastStudiedSubject === currentSubjectId) return "";
+  if (!meta.lastStudiedAt) return "";
+  const ageMs = Date.now() - Number(meta.lastStudiedAt);
+  if (ageMs > 86400000) return ""; // Only show if within 24h
+
+  const otherSubj = SUBJECTS[meta.lastStudiedSubject];
+  if (!otherSubj) return "";
+
+  const timeAgoStr = formatTimeAgo(meta.lastStudiedAt);
+  const titleStr = meta.lastStudiedTitle ? escapeHtml(meta.lastStudiedTitle) : "your last question";
+
+  return `
+    <div class="cross-subject-banner" id="crossSubjectBanner">
+      <div class="rh-left">
+        <span class="rh-badge">📱 FROM ANOTHER DEVICE</span>
+        <div class="rh-title">${otherSubj.icon} ${otherSubj.name}: ${titleStr}</div>
+        <div class="rh-meta">Studied ${timeAgoStr} · Tap to switch & continue</div>
+      </div>
+      <div class="rh-actions">
+        <button class="rh-btn primary" id="crossSubjectResumeBtn" data-subject="${meta.lastStudiedSubject}">▶ Resume ${otherSubj.shortName || otherSubj.name}</button>
+      </div>
+    </div>
+  `;
+}
+
+function buildFocusScopeBarHTML() {
+  const subj = getActiveSubject();
+  let tierOpts = "";
+  subj.tiers.forEach(t => {
+    tierOpts += `<option value="${t.tier}" ${focusScope === t.tier ? "selected" : ""}>${t.tier}: ${t.title}</option>`;
+  });
+
+  return `
+    <div class="focus-scope-bar">
+      <span class="focus-scope-lbl">Study Scope:</span>
+      <button class="scope-pill ${focusScope === 'all' ? 'active' : ''}" data-scope="all">All Questions</button>
+      <button class="scope-pill ${focusScope === 'custom' ? 'active' : ''}" data-scope="custom">⭐ My Custom (${customQuestions.length})</button>
+      <select class="scope-select" id="focusTierSelect">
+        <option value="all" ${focusScope === 'all' ? 'selected' : ''}>Filter by Tier…</option>
+        ${tierOpts}
+      </select>
+    </div>
+  `;
+}
+
+// ==========================================
+// FOCUS / ACTIVE RECALL VIEW
+// ==========================================
 const REVIEW_INTERVALS_DAYS = [1, 3, 7, 14, 30];
 const STAGES = [
   { label: "1 Preview", text: "📖 Preview — Read the question and understand the context. Don't answer yet." },
@@ -3582,19 +4091,57 @@ const STAGES = [
   { label: "4 Decide", text: "✅ Decide — Honestly assess if you knew it without peeking." }
 ];
 let focusStage = 0;
+let focusScope = localStorage.getItem("qa_focus_scope") || "all";
+let currentFocusQId = initialRoute.routeQId || null;
 
 function isDueForReview(q) {
   const s = state[q.id];
   return s && s.status === "confident" && s.nextReviewDate && new Date(s.nextReviewDate) <= new Date();
 }
 
-function pickFocusQuestion() {
+function pickFocusQuestion(preferredQId = null) {
+  let pool = FLAT;
+  if (focusScope === "custom") {
+    pool = FLAT.filter(q => q.isCustom);
+    if (pool.length === 0) pool = FLAT;
+  } else if (focusScope && focusScope !== "all") {
+    pool = FLAT.filter(q => q.tier === focusScope);
+    if (pool.length === 0) pool = FLAT;
+  }
+
+  // 1. Explicit question preferred (e.g. from URL or click)
+  if (preferredQId) {
+    const direct = pool.find(q => q.id === preferredQId) || FLAT.find(q => q.id === preferredQId);
+    if (direct) return { q: direct, isReview: isDueForReview(direct) };
+  }
+
+  // 2. Intelligent Resume: if last studied is unfinished in current pool, resume it
+  if (meta.lastStudiedQId && (!focusScope || focusScope === "all" || pool.some(q => q.id === meta.lastStudiedQId))) {
+    const lastIdx = pool.findIndex(q => q.id === meta.lastStudiedQId);
+    if (lastIdx !== -1) {
+      const lastQ = pool[lastIdx];
+      if (state[lastQ.id] && state[lastQ.id].status !== "confident") {
+        return { q: lastQ, isReview: isDueForReview(lastQ) };
+      }
+      for (let i = lastIdx + 1; i < pool.length; i++) {
+        const candidate = pool[i];
+        if (state[candidate.id] && (state[candidate.id].status === "notstarted" || state[candidate.id].status === "reviewing")) {
+          return { q: candidate, isReview: false };
+        }
+      }
+    }
+  }
+
+  // 3. First notstarted or reviewing in pool
   for (const status of ["notstarted", "reviewing"]) {
-    const q = FLAT.find(q => state[q.id] && state[q.id].status === status);
+    const q = pool.find(q => state[q.id] && state[q.id].status === status);
     if (q) return { q, isReview: false };
   }
-  const dueQ = FLAT.find(q => isDueForReview(q));
+
+  // 4. Spaced review due
+  const dueQ = pool.find(q => isDueForReview(q));
   if (dueQ) return { q: dueQ, isReview: true };
+
   return null;
 }
 
@@ -3612,16 +4159,13 @@ function focusPrevQuestion() {
     const prevId = focusHistory.pop();
     const idx = FLAT.findIndex(q => q.id === prevId);
     if (idx !== -1) {
-      const [item] = FLAT.splice(idx, 1);
-      FLAT.unshift(item);
-      renderFocus("swipe-in-left");
+      renderFocus(prevId, "swipe-in-left");
       return;
     }
   }
-  if (FLAT.length > 1) {
-    const item = FLAT.pop();
-    FLAT.unshift(item);
-    renderFocus("swipe-in-left");
+  const currentIndex = FLAT.findIndex(q => q.id === currentFocusQId);
+  if (currentIndex > 0) {
+    renderFocus(FLAT[currentIndex - 1].id, "swipe-in-left");
   }
 }
 
@@ -3637,34 +4181,49 @@ function remainingCount() {
   return FLAT.filter(q => !state[q.id] || state[q.id].status !== "confident").length;
 }
 
-function renderFocus(animClass = "") {
+function renderFocus(targetQId = null, animClass = "") {
   const el = document.getElementById("focusView");
-  const picked = pickFocusQuestion();
+  const picked = pickFocusQuestion(targetQId || currentFocusQId);
   if (!picked) {
+    currentFocusQId = null;
     const upcoming = nextUpcomingReview();
     el.innerHTML = `
+      ${buildFocusScopeBarHTML()}
       <div class="focus-card focus-empty">
-        <div class="celebrate">🎉 Everything's confident and none are due for review yet.
+        <div class="celebrate">🎉 Everything's confident in this scope and none are due for review yet.
         ${upcoming ? `<br><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);margin-top:6px;display:inline-block;">Next spaced review unlocks ${upcoming.toLocaleDateString()}.</span>` : ""}
-        <br><span style="color:var(--text-muted);font-size:13px;margin-top:8px;display:inline-block;">Switch to <b>All Questions</b> any time to revisit questions early.</span></div>
+        <br><span style="color:var(--text-muted);font-size:13px;margin-top:8px;display:inline-block;">Switch scope or switch to <b>All Questions</b> to revisit questions any time.</span></div>
       </div>`;
+    attachFocusScopeListeners();
     return;
   }
 
   const { q, isReview } = picked;
-  const s = state[q.id];
+  currentFocusQId = q.id;
+  recordStudyInteraction(q.id);
+  updateUrlHash(false);
+
+  const s = state[q.id] || { note: "", status: "notstarted" };
   focusStage = 0;
 
   const allQuestions = getMasterQuestions();
   const qIndex = allQuestions.findIndex(item => item.id === q.id);
   const totalQuestions = allQuestions.length;
 
+  const resumeBannerHtml = buildResumeHeroBannerHTML(q.id);
+  const crossSubjBannerHtml = buildCrossSubjectResumeBanner();
+  const scopeBarHtml = buildFocusScopeBarHTML();
+
   el.innerHTML = `
+    ${crossSubjBannerHtml}
+    ${resumeBannerHtml}
+    ${scopeBarHtml}
     <div class="focus-card ${animClass}" id="currentFocusCard">
       <div class="focus-top-meta">
         <div class="focus-badge-group">
           <span class="due-tag" style="background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);">Q#${qIndex + 1} of ${totalQuestions}</span>
           ${isReview ? `<span class="due-tag">🔁 Spaced Review</span>` : `<span class="tier-tag">${q.tier} · ${q.tierTitle}</span>`}
+          ${q.isCustom ? `<span class="tier-tag" style="background:var(--amber-soft);color:var(--amber-text);border-color:var(--amber-border);">⭐ My Question</span>` : ""}
         </div>
         <span class="queue-pill">${remainingCount()} left to confident</span>
       </div>
@@ -3678,16 +4237,17 @@ function renderFocus(animClass = "") {
 
       <div class="focus-hero">
         ${q.why ? `<p class="focus-why" style="margin-bottom: 12px;">${q.why}</p>` : ""}
-        <h2 class="focus-q">${q.text}</h2>
+        <h2 class="focus-q">${escapeHtml(q.text)}</h2>
       </div>
 
       <div class="focus-note-wrap">
         <textarea class="focus-note" id="focusNote" placeholder="Try answering out loud first, then write your key takeaway here…">${s.note || ""}</textarea>
+        <div class="studio-notes-meta" id="focusNotesMeta">${s.updatedAt ? "Last saved: " + formatUpdatedTime(s.updatedAt) : "Auto-saved as you type"}</div>
       </div>
 
       <button class="reveal-btn" id="revealBtn">👁 Reveal Key Points &amp; ELI5 Analogy</button>
       <div class="answer-box" id="answerBox">${buildAnswerContentHTML(q)}</div>
-      <div class="answer-missing" id="answerMissing">${q.isCustom ? "You didn't add an answer for this one — edit it in Browse to fill it in." : "Answer + ELI5 not added yet for this tier — say \"add answers for Tier X\" and I'll fill it in."}</div>
+      <div class="answer-missing" id="answerMissing">${q.isCustom ? "No predefined answer for this custom question — edit it in All Questions to fill it in." : "Answer + ELI5 not added yet for this tier."}</div>
 
       <div class="focus-actions">
         <button class="fa-btn confident" id="btnConfident">✓ Confident</button>
@@ -3697,23 +4257,57 @@ function renderFocus(animClass = "") {
 
       ${q.apply ? `<div class="apply-tip"><b>💡 Apply it:</b> ${q.apply}</div>` : ""}
 
-
+      <div class="focus-nav-arrows">
+        <button class="focus-arrow-btn" id="focusPrevBtn" title="Previous Question">← Prev</button>
+        <div class="focus-arrow-hint">Swipe left/right or use buttons to navigate</div>
+        <button class="focus-arrow-btn" id="focusNextBtn" title="Next Question">Next →</button>
+      </div>
     </div>
   `;
 
   renderStage();
+  attachFocusScopeListeners();
+
+  const crossSubjBtn = document.getElementById("crossSubjectResumeBtn");
+  if (crossSubjBtn) {
+    crossSubjBtn.onclick = async () => {
+      const targetSubject = crossSubjBtn.getAttribute("data-subject");
+      if (targetSubject && SUBJECTS[targetSubject]) {
+        await switchSubject(targetSubject);
+      }
+    };
+  }
+
+  const contBtn = document.getElementById("rhContinueBtn");
+  if (contBtn) {
+    contBtn.onclick = () => {
+      const qid = contBtn.getAttribute("data-qid");
+      if (qid) renderFocus(qid, "swipe-in-right");
+    };
+  }
 
   const cardEl = document.getElementById("currentFocusCard");
   if (cardEl) {
     attachFocusSwipeGestures(cardEl, q.id);
   }
 
-  document.getElementById("focusNote").addEventListener("input", () => {
-    if (focusStage < 1) setStage(1);
-  });
+  const noteEl = document.getElementById("focusNote");
+  if (noteEl) {
+    noteEl.addEventListener("input", () => {
+      if (focusStage < 1) setStage(1);
+    });
+    setupNoteAutoSave(noteEl, q.id, document.getElementById("focusNotesMeta"));
+  }
+
   document.getElementById("btnConfident").onclick = () => resolveFocus(q.id, "confident");
   document.getElementById("btnReviewing").onclick = () => resolveFocus(q.id, "reviewing");
   document.getElementById("btnSkip").onclick = () => focusNextQuestion(q.id);
+  
+  const prevBtn = document.getElementById("focusPrevBtn");
+  if (prevBtn) prevBtn.onclick = () => focusPrevQuestion();
+  const nextBtn = document.getElementById("focusNextBtn");
+  if (nextBtn) nextBtn.onclick = () => focusNextQuestion(q.id);
+
   document.getElementById("revealBtn").onclick = () => {
     setStage(2);
     if (q.answer) {
@@ -3726,12 +4320,24 @@ function renderFocus(animClass = "") {
     }
     setTimeout(() => setStage(3), 400);
   };
-  document.getElementById("focusNote").addEventListener("blur", async (e) => {
-    if (!state[q.id]) state[q.id] = { note: "", status: "notstarted" };
-    state[q.id].note = e.target.value;
-    state[q.id].updatedAt = new Date().toLocaleString();
-    await saveState();
+}
+
+function attachFocusScopeListeners() {
+  document.querySelectorAll(".scope-pill").forEach(btn => {
+    btn.onclick = () => {
+      focusScope = btn.dataset.scope || "all";
+      localStorage.setItem("qa_focus_scope", focusScope);
+      renderFocus(null, "swipe-in-right");
+    };
   });
+  const tierSel = document.getElementById("focusTierSelect");
+  if (tierSel) {
+    tierSel.onchange = (e) => {
+      focusScope = e.target.value;
+      localStorage.setItem("qa_focus_scope", focusScope);
+      renderFocus(null, "swipe-in-right");
+    };
+  }
 }
 
 function attachFocusSwipeGestures(card, qId) {
@@ -3743,28 +4349,16 @@ function attachFocusSwipeGestures(card, qId) {
 
   card.addEventListener("touchstart", (e) => {
     if (e.touches.length !== 1) return;
-
     const target = e.target;
     if (
-      target.tagName === "TEXTAREA" ||
-      target.tagName === "INPUT" ||
-      target.tagName === "SELECT" ||
-      target.closest("button") ||
-      target.closest("a") ||
-      target.closest(".audio-control-wrap") ||
-      target.closest(".lang-btn") ||
-      target.closest(".speed-btn") ||
-      target.closest(".audio-btn") ||
-      target.closest(".step-dot") ||
-      target.closest(".subject-opt") ||
-      target.closest("#subjectToggleBtn")
+      target.tagName === "TEXTAREA" || target.tagName === "INPUT" || target.tagName === "SELECT" ||
+      target.closest("button") || target.closest("a") || target.closest(".audio-control-wrap")
     ) {
       return;
     }
 
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     startTime = Date.now();
     isTouching = true;
     isSwiping = false;
@@ -3776,118 +4370,113 @@ function attachFocusSwipeGestures(card, qId) {
   card.addEventListener("touchmove", (e) => {
     if (!isTouching || e.touches.length !== 1) return;
 
-    const touch = e.touches[0];
-    const dx = touch.clientX - startX;
-    const dy = touch.clientY - startY;
-    const absX = Math.abs(dx);
-    const absY = Math.abs(dy);
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - startX;
+    const diffY = currentY - startY;
 
     if (!hasLockedDirection) {
-      if (Math.hypot(dx, dy) < 10) return;
-
-      hasLockedDirection = true;
-      if (absY >= absX) {
-        // Native vertical scrolling — allow untouched
+      if (Math.abs(diffY) > 8 && Math.abs(diffY) >= Math.abs(diffX)) {
         isVerticalScroll = true;
-        isSwiping = false;
+        hasLockedDirection = true;
         return;
-      } else {
-        // Horizontal swipe gesture
+      } else if (Math.abs(diffX) > 8 && Math.abs(diffX) > Math.abs(diffY)) {
         isSwiping = true;
-        isVerticalScroll = false;
+        hasLockedDirection = true;
       }
     }
 
     if (isVerticalScroll) return;
 
     if (isSwiping) {
-      if (e.cancelable) e.preventDefault();
-
-      const rotate = (dx * 0.04).toFixed(2);
-      const opacity = Math.max(0.55, 1 - (absX / 380)).toFixed(2);
-      card.style.transform = `translate3d(${dx}px, 0, 0) rotate(${rotate}deg)`;
-      card.style.opacity = opacity;
-      card.classList.add("is-swiping");
+      card.style.transform = `translateX(${diffX}px) rotate(${diffX * 0.04}deg)`;
+      card.style.opacity = Math.max(0.4, 1 - Math.abs(diffX) / 320);
     }
-  }, { passive: false });
+  }, { passive: true });
 
-  const finishSwipe = (e) => {
-    if (!isTouching) return;
+  card.addEventListener("touchend", (e) => {
+    if (!isTouching || isVerticalScroll || !isSwiping) {
+      isTouching = false;
+      card.style.transition = "";
+      card.style.transform = "";
+      card.style.opacity = "";
+      return;
+    }
+
     isTouching = false;
-    card.classList.remove("is-swiping");
+    const diffX = e.changedTouches[0].clientX - startX;
+    const timeTaken = Date.now() - startTime;
+    const velocity = Math.abs(diffX) / timeTaken;
 
-    if (!isSwiping || isVerticalScroll) {
-      resetCard();
-      return;
-    }
-    isSwiping = false;
+    const isSwipeLeft = diffX < -65 || (diffX < -30 && velocity > 0.45);
+    const isSwipeRight = diffX > 65 || (diffX > 30 && velocity > 0.45);
 
-    const touch = e.changedTouches ? e.changedTouches[0] : null;
-    if (!touch) {
-      resetCard();
-      return;
-    }
-
-    const dx = touch.clientX - startX;
-    const dt = Math.max(Date.now() - startTime, 1);
-    const vx = dx / dt;
-    const absX = Math.abs(dx);
-
-    const cardWidth = card.offsetWidth || 320;
-    const distThreshold = Math.min(cardWidth * 0.22, 85);
-    const isSwipeLeft = (dx < -distThreshold) || (vx < -0.35 && dx < -30);
-    const isSwipeRight = (dx > distThreshold) || (vx > 0.35 && dx > 30);
+    card.style.transition = "transform 0.22s ease-out, opacity 0.22s ease-out";
 
     if (isSwipeLeft) {
-      card.style.transition = "transform 0.18s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.16s ease-out";
-      card.style.transform = "translate3d(-120%, 0, 0) rotate(-6deg)";
+      card.style.transform = "translateX(-115%) rotate(-12deg)";
       card.style.opacity = "0";
-      card.classList.add("swipe-out-left");
-      setTimeout(() => focusNextQuestion(qId), 150);
+      setTimeout(() => {
+        focusNextQuestion(qId);
+      }, 160);
     } else if (isSwipeRight) {
-      card.style.transition = "transform 0.18s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.16s ease-out";
-      card.style.transform = "translate3d(120%, 0, 0) rotate(6deg)";
+      card.style.transform = "translateX(115%) rotate(12deg)";
       card.style.opacity = "0";
-      card.classList.add("swipe-out-right");
-      setTimeout(() => focusPrevQuestion(), 150);
+      setTimeout(() => {
+        focusPrevQuestion();
+      }, 160);
     } else {
-      resetCard();
+      card.style.transform = "translateX(0) rotate(0)";
+      card.style.opacity = "1";
     }
-  };
-
-  function resetCard() {
-    card.classList.remove("is-swiping", "swipe-out-left", "swipe-out-right", "swipe-out-down");
-    card.style.transition = "transform 0.24s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.2s ease-out";
-    card.style.transform = "translate3d(0, 0, 0) rotate(0deg)";
-    card.style.opacity = "1";
-  }
-
-  card.addEventListener("touchend", finishSwipe, { passive: true });
-  card.addEventListener("touchcancel", resetCard, { passive: true });
+  }, { passive: true });
 }
 
 function setStage(idx) {
-  focusStage = idx;
+  focusStage = Math.max(focusStage, idx);
   renderStage();
 }
 
 function renderStage() {
   const strip = document.getElementById("stageStrip");
-  const instr = document.getElementById("stageInstruction");
-  if (!strip) return;
-  strip.innerHTML = STAGES.map((st, i) => {
-    const cls = i === focusStage ? "active" : (i < focusStage ? "done" : "");
-    return `<span class="step-dot ${cls}">${st.label}</span>`;
+  const textEl = document.getElementById("stageInstruction");
+  if (!strip || !textEl) return;
+
+  strip.innerHTML = STAGES.map((s, i) => {
+    const isDone = i < focusStage;
+    const isCurr = i === focusStage;
+    return `<div class="step-dot ${isCurr ? 'current' : ''} ${isDone ? 'done' : ''}" data-step="${i}">
+      <span class="dot-num">${isDone ? '✓' : i + 1}</span>
+      <span class="dot-label">${s.label.split(' ')[1]}</span>
+    </div>`;
   }).join("");
-  instr.textContent = STAGES[focusStage].text;
+
+  textEl.textContent = STAGES[focusStage].text;
+
+  strip.querySelectorAll(".step-dot").forEach(d => {
+    d.onclick = () => {
+      const idx = Number(d.dataset.step);
+      focusStage = idx;
+      renderStage();
+      if (idx >= 2) {
+        const picked = pickFocusQuestion(currentFocusQId);
+        if (picked && picked.q && picked.q.answer) {
+          const box = document.getElementById("answerBox");
+          box.innerHTML = buildAnswerContentHTML(picked.q);
+          box.classList.add("open");
+          attachAnswerEventListeners(picked.q, "focus");
+        }
+      }
+    };
+  });
 }
 
 async function resolveFocus(id, status) {
-  const noteEl = document.getElementById("focusNote");
   if (!state[id]) state[id] = { note: "", status: "notstarted" };
-  state[id].note = noteEl ? noteEl.value : "";
+  const noteEl = document.getElementById("focusNote");
+  if (noteEl) state[id].note = noteEl.value;
   state[id].status = status;
-  state[id].updatedAt = new Date().toLocaleString();
+  state[id].updatedAt = Date.now();
 
   if (status === "confident") {
     const interval = REVIEW_INTERVALS_DAYS[Math.min(state[id].reviewCount || 0, REVIEW_INTERVALS_DAYS.length - 1)];
@@ -3899,10 +4488,11 @@ async function resolveFocus(id, status) {
     state[id].nextReviewDate = null;
   }
 
+  recordStudyInteraction(id, status);
   bumpStreak();
   await saveState();
   updateOverview();
-  renderFocus("swipe-in-right");
+  renderFocus(null, "swipe-in-right");
 }
 
 function skipFocus(id, animClass = "swipe-in-right") {
@@ -3911,14 +4501,17 @@ function skipFocus(id, animClass = "swipe-in-right") {
     const [item] = FLAT.splice(idx, 1);
     FLAT.push(item);
   }
-  renderFocus(animClass);
+  recordStudyInteraction(id);
+  renderFocus(null, animClass);
 }
 
-// ---- ALL QUESTIONS / STUDIO VIEW ----
-let selectedStudioQId = null;
-let studioTrackFilter = "all";
+// ==========================================
+// ALL QUESTIONS / STUDIO VIEW
+// ==========================================
+let selectedStudioQId = initialRoute.routeQId || localStorage.getItem("qa_selected_studio_qid_" + currentSubjectId) || null;
+let studioTrackFilter = localStorage.getItem("qa_studio_track_" + currentSubjectId) || "all";
 let studioSearchTerm = "";
-let studioStatusFilter = "all";
+let studioStatusFilter = localStorage.getItem("qa_studio_status_" + currentSubjectId) || "all";
 
 function getFilteredStudioQs() {
   return getMasterQuestions().filter(q => {
@@ -3938,37 +4531,51 @@ function renderBrowse() {
 
 function renderStudio() {
   const listEl = document.getElementById("studioQList");
-  const mainEl = document.getElementById("studioMain");
-  if (!listEl || !mainEl) return;
+  const countEl = document.getElementById("studioMatchCount");
+  if (!listEl) return;
 
   const filtered = getFilteredStudioQs();
 
-  if (!selectedStudioQId || !filtered.some(q => q.id === selectedStudioQId)) {
-    if (filtered.length > 0) selectedStudioQId = filtered[0].id;
-    else selectedStudioQId = null;
+  if (countEl) {
+    countEl.textContent = `${filtered.length} of ${getMasterQuestions().length} questions`;
   }
 
-  // Render Sidebar Questions List
+  if (filtered.length > 0) {
+    if (!selectedStudioQId || !filtered.some(q => q.id === selectedStudioQId)) {
+      selectedStudioQId = filtered[0].id;
+    }
+  } else {
+    selectedStudioQId = null;
+  }
+
+  if (selectedStudioQId) {
+    localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
+  }
+
   if (filtered.length === 0) {
     listEl.innerHTML = `<div class="no-results" style="padding:24px 8px;font-size:12px;">No matching questions found.</div>`;
   } else {
-    listEl.innerHTML = filtered.map((q, idx) => {
-      const s = state[q.id] || { status: "notstarted" };
-      const isActive = q.id === selectedStudioQId;
+    listEl.innerHTML = filtered.map(q => {
+      const s = state[q.id] || { status: "notstarted", note: "" };
+      const isAct = q.id === selectedStudioQId;
+      const statusIcon = s.status === "confident" ? "✓" : (s.status === "reviewing" ? "↻" : "○");
+      const hasNotes = s.note && s.note.trim().length > 0;
+
       return `
-        <div class="studio-q-item ${isActive ? "active" : ""}" data-studio-id="${q.id}">
-          <span class="studio-q-num">#${idx + 1}</span>
-          <div class="studio-q-info">
-            <div class="studio-q-title-preview">${q.text}</div>
-            ${q.isCustom ? `<div class="studio-q-sub"><span class="custom-badge" style="margin-left:0;">mine</span></div>` : ""}
+        <div class="studio-q-item ${isAct ? 'active' : ''}" data-studio-id="${q.id}">
+          <div class="studio-q-header">
+            <span class="studio-q-tier-tag ${q.isCustom ? 'custom' : ''}">${q.tier}</span>
+            <div style="display:flex;align-items:center;gap:4px;">
+              ${hasNotes ? '<span class="studio-has-notes-dot" title="Has personal notes">📝</span>' : ''}
+              <span class="studio-q-status-badge ${s.status}">${statusIcon}</span>
+            </div>
           </div>
-          <span class="studio-status-dot ${s.status}"></span>
+          <div class="studio-q-text">${escapeHtml(q.text)}</div>
         </div>
       `;
     }).join("");
   }
 
-  // Render Right Detail Pane
   renderStudioDetail();
 }
 
@@ -3976,52 +4583,58 @@ function renderStudioDetail() {
   const mainEl = document.getElementById("studioMain");
   if (!mainEl) return;
 
-  const filtered = getFilteredStudioQs();
-  if (!selectedStudioQId || filtered.length === 0) {
+  if (!selectedStudioQId) {
     mainEl.innerHTML = `
-      <div class="focus-card focus-empty" style="border:none;box-shadow:none;padding:48px 16px;">
-        <div class="celebrate">Select a question from the list to view its direct answer and notes.</div>
+      <div class="studio-empty-state">
+        <div style="font-size: 32px; margin-bottom: 8px;">👈</div>
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Select a question to inspect</div>
+        <div style="color: var(--text-muted); font-size: 12.5px;">Choose from the question list on the left to read answers, takeaways, and write notes.</div>
       </div>
     `;
     return;
   }
 
-  const q = FLAT.find(item => item.id === selectedStudioQId);
-  if (!q) return;
+  const q = getMasterQuestions().find(item => item.id === selectedStudioQId);
+  if (!q) {
+    selectedStudioQId = null;
+    renderStudio();
+    return;
+  }
+
+  recordStudyInteraction(q.id);
+  updateUrlHash(false);
 
   const s = state[q.id] || { status: "notstarted", note: "", updatedAt: "" };
+  const raw = currentLang === "hi" ? (q.hinglish || q.answer) : q.answer;
+  const parsed = parseAnswer(raw);
+
+  const filtered = getFilteredStudioQs();
   const currentIndex = filtered.findIndex(item => item.id === q.id);
   const totalInFilter = filtered.length;
 
-  const raw = currentLang === "hi" ? (q.hinglish || q.answer) : q.answer;
-  const parsed = raw ? parseAnswer(raw) : null;
-
   mainEl.innerHTML = `
-    <button class="studio-mobile-back" id="studioMobileBack">← Back to questions</button>
-
-        <div class="studio-main-top">
-      <div class="focus-badge-group">
-        <span class="due-tag" style="background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);">Q#${currentIndex + 1} of ${totalInFilter}</span>
-        <span class="tier-tag">${q.tier} · ${q.tierTitle}</span>
-        ${s.nextReviewDate ? `<span class="due-tag" style="font-size:11px;">🔁 Due ${new Date(s.nextReviewDate).toLocaleDateString()}</span>` : ""}
-      </div>
-
+    <div class="studio-detail-topbar">
+      <button class="studio-mobile-back" id="studioMobileBack">← Back to List</button>
       <div class="studio-nav-group">
-        <select class="studio-detail-status ${s.status}" id="studioDetailStatus" data-id="${q.id}">
+        <span class="due-tag" style="font-size:11px;background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);">Q#${currentIndex + 1} of ${totalInFilter}</span>
+        <select class="studio-status-select" id="studioDetailStatus">
           <option value="notstarted" ${s.status === "notstarted" ? "selected" : ""}>○ Not Started</option>
           <option value="reviewing" ${s.status === "reviewing" ? "selected" : ""}>↻ Still Learning</option>
           <option value="confident" ${s.status === "confident" ? "selected" : ""}>✓ Confident</option>
         </select>
-
         <button class="studio-nav-btn" id="studioPrevBtn" ${currentIndex <= 0 ? "disabled style='opacity:0.4;cursor:default;'" : ""}>‹ Prev</button>
         <button class="studio-nav-btn" id="studioNextBtn" ${currentIndex >= totalInFilter - 1 ? "disabled style='opacity:0.4;cursor:default;'" : ""}>Next ›</button>
         <button class="studio-nav-btn" id="studioRandBtn" title="Jump to a random question">🎲 Random</button>
+        <button class="studio-nav-btn" id="studioStudyFocusBtn" title="Study this question in Resume / Focus view" style="margin-left:auto;color:var(--teal-text);border-color:var(--teal-border);background:var(--teal-soft);font-weight:600;font-size:11px;padding:3px 9px;">🎯 Study in Resume</button>
 
-        ${q.isCustom ? `<button class="delete-q-btn" id="studioDeleteBtn" data-delete="${q.id}" style="margin-left:4px;font-size:12px;color:var(--red);" title="Delete custom question">🗑</button>` : ""}
+        ${q.isCustom ? `
+          <button class="studio-nav-btn" id="studioEditBtn" style="font-size:11px;color:var(--teal-text);padding:3px 8px;" title="Edit custom question & answer">✏️ Edit</button>
+          <button class="delete-q-btn" id="studioDeleteBtn" data-delete="${q.id}" style="margin-left:4px;font-size:12px;color:var(--red);" title="Delete custom question">🗑</button>
+        ` : ""}
       </div>
     </div>
 
-    <h1 class="studio-q-hero-title">${q.text}</h1>
+    <h1 class="studio-q-hero-title">${escapeHtml(q.text)}</h1>
 
     <div class="answer-top-bar" style="margin-top: 4px; margin-bottom: 14px;">
       <div class="lang-toggle">
@@ -4076,7 +4689,7 @@ function renderStudioDetail() {
       <div class="studio-card" style="background:var(--surface-subtle);">
         <div class="studio-card-header">💡 ANSWER OVERVIEW</div>
         <div class="studio-card-body" style="color:var(--text-secondary);">
-          ${q.isCustom ? "No predefined answer provided for this custom question." : "Answer notes for this tier will be filled in during deep-dive preparation."}
+          ${q.isCustom ? "No predefined answer provided for this custom question — tap '✏️ Edit' above to add one." : "Answer notes for this tier will be filled in during deep-dive preparation."}
         </div>
       </div>
     ` : ""}
@@ -4088,17 +4701,17 @@ function renderStudioDetail() {
     <div class="studio-notes-wrap">
       <label class="studio-label" style="display:block;margin-bottom:6px;">📝 My Personal Notes & Takeaways</label>
       <textarea class="studio-notes-textarea" id="studioNotesInput" placeholder="Write your thoughts, personal project examples, or interview speaking points here…">${s.note || ""}</textarea>
-      <div class="studio-notes-meta" id="studioNotesMeta">${s.updatedAt ? "Last edited: " + s.updatedAt : "Notes are auto-saved"}</div>
+      <div class="studio-notes-meta" id="studioNotesMeta">${s.updatedAt ? "Last saved: " + formatUpdatedTime(s.updatedAt) : "Auto-saved as you type"}</div>
     </div>
   `;
 
-  // Attach Detail Event Listeners
   const statusSel = document.getElementById("studioDetailStatus");
   if (statusSel) {
     statusSel.addEventListener("change", async (e) => {
       const val = e.target.value;
       state[q.id].status = val;
-      state[q.id].updatedAt = new Date().toLocaleString();
+      state[q.id].updatedAt = Date.now();
+      recordStudyInteraction(q.id, val);
       if (val !== "notstarted") bumpStreak();
       await saveState();
       updateOverview();
@@ -4110,7 +4723,10 @@ function renderStudioDetail() {
   if (prevBtn && currentIndex > 0) {
     prevBtn.addEventListener("click", () => {
       selectedStudioQId = filtered[currentIndex - 1].id;
+      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
       renderStudio();
+      updateUrlHash(false);
+      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
     });
   }
 
@@ -4118,7 +4734,10 @@ function renderStudioDetail() {
   if (nextBtn && currentIndex < totalInFilter - 1) {
     nextBtn.addEventListener("click", () => {
       selectedStudioQId = filtered[currentIndex + 1].id;
+      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
       renderStudio();
+      updateUrlHash(false);
+      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
     });
   }
 
@@ -4128,8 +4747,25 @@ function renderStudioDetail() {
       let randIdx = Math.floor(Math.random() * totalInFilter);
       if (randIdx === currentIndex) randIdx = (randIdx + 1) % totalInFilter;
       selectedStudioQId = filtered[randIdx].id;
+      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
       renderStudio();
+      updateUrlHash(false);
+      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
     });
+  }
+
+  const studyFocusBtn = document.getElementById("studioStudyFocusBtn");
+  if (studyFocusBtn) {
+    studyFocusBtn.onclick = () => {
+      switchView("focus", q.id, true);
+    };
+  }
+
+  const editBtn = document.getElementById("studioEditBtn");
+  if (editBtn) {
+    editBtn.onclick = () => {
+      openEditCustomModal(q);
+    };
   }
 
   const mobileBack = document.getElementById("studioMobileBack");
@@ -4145,13 +4781,7 @@ function renderStudioDetail() {
 
   const notesInput = document.getElementById("studioNotesInput");
   if (notesInput) {
-    notesInput.addEventListener("blur", async (e) => {
-      state[q.id].note = e.target.value;
-      state[q.id].updatedAt = new Date().toLocaleString();
-      await saveState();
-      const metaEl = document.getElementById("studioNotesMeta");
-      if (metaEl) metaEl.textContent = "Last edited: " + state[q.id].updatedAt;
-    });
+    setupNoteAutoSave(notesInput, q.id, document.getElementById("studioNotesMeta"));
   }
 
   const delBtn = document.getElementById("studioDeleteBtn");
@@ -4165,9 +4795,72 @@ function renderStudioDetail() {
       rebuildFlat();
       updateOverview();
       selectedStudioQId = null;
+      localStorage.removeItem("qa_selected_studio_qid_" + currentSubjectId);
       renderStudio();
+      updateUrlHash(true);
     });
   }
+}
+
+function openEditCustomModal(q) {
+  const modal = document.getElementById("editQModal");
+  if (!modal) return;
+
+  const textInput = document.getElementById("editQText");
+  const ansInput = document.getElementById("editQAnswer");
+  const eli5Input = document.getElementById("editQEli5");
+
+  textInput.value = q.text || "";
+  
+  let keyIdea = q.answer || "";
+  let eli5 = "";
+  if (keyIdea.includes("\n\nELI5:")) {
+    const parts = keyIdea.split("\n\nELI5:");
+    keyIdea = parts[0].trim();
+    eli5 = (parts[1] || "").trim();
+  } else if (keyIdea.startsWith("ELI5:")) {
+    eli5 = keyIdea.replace(/^ELI5:\s*/i, "").trim();
+    keyIdea = "";
+  }
+
+  ansInput.value = keyIdea;
+  eli5Input.value = eli5;
+
+  modal.classList.remove("hidden");
+
+  document.getElementById("cancelEditQBtn").onclick = () => modal.classList.add("hidden");
+  document.getElementById("closeEditQModalBtn").onclick = () => modal.classList.add("hidden");
+
+  document.getElementById("saveEditQBtn").onclick = async () => {
+    const newText = textInput.value.trim();
+    const newKey = ansInput.value.trim();
+    const newEli5 = eli5Input.value.trim();
+    if (!newText) {
+      textInput.focus();
+      return;
+    }
+
+    let newAnswer = null;
+    if (newKey && newEli5) newAnswer = `${newKey}\n\nELI5: ${newEli5}`;
+    else if (newKey) newAnswer = newKey;
+    else if (newEli5) newAnswer = `ELI5: ${newEli5}`;
+
+    const item = customQuestions.find(c => c.id === q.id);
+    const now = Date.now();
+    if (item) {
+      item.text = newText;
+      item.answer = newAnswer;
+      item.updatedAt = now;
+    }
+
+    await saveCustom();
+    rebuildFlat();
+    recordStudyInteraction(q.id);
+    await saveState();
+    updateOverview();
+    renderStudio();
+    modal.classList.add("hidden");
+  };
 }
 
 function attachStudioDetailSwipeGestures(container, currentIndex, totalInFilter, filtered) {
@@ -4181,145 +4874,99 @@ function attachStudioDetailSwipeGestures(container, currentIndex, totalInFilter,
     if (e.touches.length !== 1) return;
     const target = e.target;
     if (
-      target.tagName === "TEXTAREA" ||
-      target.tagName === "INPUT" ||
-      target.tagName === "SELECT" ||
-      target.closest("button") ||
-      target.closest("a") ||
-      target.closest(".audio-control-wrap") ||
-      target.closest(".lang-btn") ||
-      target.closest(".speed-btn") ||
-      target.closest(".audio-btn")
+      target.tagName === "TEXTAREA" || target.tagName === "INPUT" || target.tagName === "SELECT" ||
+      target.closest("button") || target.closest("a") || target.closest(".audio-control-wrap")
     ) {
       return;
     }
 
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     startTime = Date.now();
     isTouching = true;
     isSwiping = false;
     isVerticalScroll = false;
     hasLockedDirection = false;
-    container.style.transition = "none";
   }, { passive: true });
 
   container.addEventListener("touchmove", (e) => {
     if (!isTouching || e.touches.length !== 1) return;
-    const touch = e.touches[0];
-    const dx = touch.clientX - startX;
-    const dy = touch.clientY - startY;
-    const absX = Math.abs(dx);
-    const absY = Math.abs(dy);
+
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - startX;
+    const diffY = currentY - startY;
 
     if (!hasLockedDirection) {
-      if (Math.hypot(dx, dy) < 10) return;
-      hasLockedDirection = true;
-      if (absY >= absX) {
+      if (Math.abs(diffY) > 8 && Math.abs(diffY) >= Math.abs(diffX)) {
         isVerticalScroll = true;
-        isSwiping = false;
+        hasLockedDirection = true;
         return;
-      } else {
+      } else if (Math.abs(diffX) > 8 && Math.abs(diffX) > Math.abs(diffY)) {
         isSwiping = true;
-        isVerticalScroll = false;
+        hasLockedDirection = true;
       }
     }
+  }, { passive: true });
 
-    if (isVerticalScroll) return;
-
-    if (isSwiping) {
-      if (e.cancelable) e.preventDefault();
-      const rotate = (dx * 0.02).toFixed(2);
-      const opacity = Math.max(0.65, 1 - (absX / 400)).toFixed(2);
-      container.style.transform = `translate3d(${dx}px, 0, 0) rotate(${rotate}deg)`;
-      container.style.opacity = opacity;
-      container.classList.add("is-swiping");
+  container.addEventListener("touchend", (e) => {
+    if (!isTouching || isVerticalScroll || !isSwiping) {
+      isTouching = false;
+      return;
     }
-  }, { passive: false });
 
-  const finishSwipe = (e) => {
-    if (!isTouching) return;
     isTouching = false;
-    container.classList.remove("is-swiping");
+    const diffX = e.changedTouches[0].clientX - startX;
+    const timeTaken = Date.now() - startTime;
+    const velocity = Math.abs(diffX) / timeTaken;
 
-    if (!isSwiping || isVerticalScroll) {
-      resetContainer();
-      return;
-    }
-    isSwiping = false;
-
-    const touch = e.changedTouches ? e.changedTouches[0] : null;
-    if (!touch) {
-      resetContainer();
-      return;
-    }
-
-    const dx = touch.clientX - startX;
-    const dt = Math.max(Date.now() - startTime, 1);
-    const vx = dx / dt;
-    const width = container.offsetWidth || 320;
-    const distThreshold = Math.min(width * 0.22, 85);
-
-    const isSwipeLeft = (dx < -distThreshold) || (vx < -0.35 && dx < -30);
-    const isSwipeRight = (dx > distThreshold) || (vx > 0.35 && dx > 30);
+    const isSwipeLeft = diffX < -65 || (diffX < -30 && velocity > 0.45);
+    const isSwipeRight = diffX > 65 || (diffX > 30 && velocity > 0.45);
 
     if (isSwipeLeft && currentIndex < totalInFilter - 1) {
-      container.style.transition = "transform 0.18s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.16s ease-out";
-      container.style.transform = "translate3d(-110%, 0, 0)";
+      container.style.transition = "opacity 0.15s ease";
       container.style.opacity = "0";
       setTimeout(() => {
         selectedStudioQId = filtered[currentIndex + 1].id;
+        localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
         renderStudio();
+        updateUrlHash(false);
+        setTimeout(scrollSelectedStudioQuestionIntoView, 60);
       }, 150);
     } else if (isSwipeRight) {
       if (currentIndex > 0) {
-        container.style.transition = "transform 0.18s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.16s ease-out";
-        container.style.transform = "translate3d(110%, 0, 0)";
+        container.style.transition = "opacity 0.15s ease";
         container.style.opacity = "0";
         setTimeout(() => {
           selectedStudioQId = filtered[currentIndex - 1].id;
+          localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
           renderStudio();
+          updateUrlHash(false);
+          setTimeout(scrollSelectedStudioQuestionIntoView, 60);
         }, 150);
       } else {
         const layout = document.getElementById("studioLayout");
         if (layout && layout.classList.contains("show-detail")) {
-          container.style.transition = "transform 0.18s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.16s ease-out";
-          container.style.transform = "translate3d(100%, 0, 0)";
-          setTimeout(() => {
-            layout.classList.remove("show-detail");
-            resetContainer();
-          }, 150);
-        } else {
-          resetContainer();
+          layout.classList.remove("show-detail");
         }
       }
-    } else {
-      resetContainer();
     }
-  };
-
-  function resetContainer() {
-    container.classList.remove("is-swiping");
-    container.style.transition = "transform 0.22s cubic-bezier(0.18, 0.9, 0.32, 1), opacity 0.2s ease-out";
-    container.style.transform = "translate3d(0, 0, 0) rotate(0deg)";
-    container.style.opacity = "1";
-  }
-
-  container.addEventListener("touchend", finishSwipe, { passive: true });
-  container.addEventListener("touchcancel", resetContainer, { passive: true });
+  }, { passive: true });
 }
 
-// Studio Sidebar Event Listeners
+// Studio list & filters
 const studioQList = document.getElementById("studioQList");
 if (studioQList) {
   studioQList.addEventListener("click", (e) => {
     const item = e.target.closest(".studio-q-item");
     if (item && item.dataset.studioId) {
       selectedStudioQId = item.dataset.studioId;
+      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
       const layout = document.getElementById("studioLayout");
       if (layout) layout.classList.add("show-detail");
       renderStudio();
+      updateUrlHash(false);
+      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
     }
   });
 }
@@ -4328,6 +4975,7 @@ const trackSel = document.getElementById("studioTrackSelect");
 if (trackSel) {
   trackSel.addEventListener("change", (e) => {
     studioTrackFilter = e.target.value;
+    localStorage.setItem("qa_studio_track_" + currentSubjectId, studioTrackFilter);
     renderStudio();
   });
 }
@@ -4335,7 +4983,7 @@ if (trackSel) {
 const searchInp = document.getElementById("studioSearchInput");
 if (searchInp) {
   searchInp.addEventListener("input", (e) => {
-    studioSearchTerm = e.target.value.toLowerCase().trim();
+    studioSearchTerm = e.target.value.trim().toLowerCase();
     renderStudio();
   });
 }
@@ -4344,19 +4992,24 @@ const statusSel = document.getElementById("studioStatusSelect");
 if (statusSel) {
   statusSel.addEventListener("change", (e) => {
     studioStatusFilter = e.target.value;
+    localStorage.setItem("qa_studio_status_" + currentSubjectId, studioStatusFilter);
     renderStudio();
   });
 }
 
+// Add Custom Question Drawer triggers
 document.getElementById("addQBtn").addEventListener("click", () => {
   document.getElementById("addQForm").classList.toggle("open");
+  document.getElementById("addQText").focus();
 });
+
 document.getElementById("cancelQBtn").addEventListener("click", () => {
   document.getElementById("addQForm").classList.remove("open");
   document.getElementById("addQText").value = "";
   document.getElementById("addQAnswer").value = "";
   document.getElementById("addQEli5").value = "";
 });
+
 document.getElementById("saveQBtn").addEventListener("click", async () => {
   const text = document.getElementById("addQText").value.trim();
   const keyIdea = document.getElementById("addQAnswer").value.trim();
@@ -4371,13 +5024,18 @@ document.getElementById("saveQBtn").addEventListener("click", async () => {
   else if (eli5) answer = `ELI5: ${eli5}`;
 
   const id = "CU-" + Date.now().toString(36).toUpperCase() + "_" + Math.random().toString(36).substring(2, 6);
-  customQuestions.push({ id, text, answer, createdAt: new Date().toLocaleString() });
+  const now = Date.now();
+  customQuestions.push({ id, text, answer, createdAt: new Date(now).toLocaleString(), updatedAt: now });
   await saveCustom();
   rebuildFlat();
+  state[id] = { status: "notstarted", note: "", updatedAt: now, reviewCount: 0, nextReviewDate: null };
+  recordStudyInteraction(id, "notstarted");
   await saveState();
   updateOverview();
   selectedStudioQId = id;
+  localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
   renderStudio();
+  updateUrlHash(false);
 
   document.getElementById("addQText").value = "";
   document.getElementById("addQAnswer").value = "";
@@ -4387,15 +5045,16 @@ document.getElementById("saveQBtn").addEventListener("click", async () => {
 
 document.getElementById("resetBtn").addEventListener("click", async () => {
   if (!confirm("Reset all progress and notes? This can't be undone. Your custom questions themselves will NOT be deleted, only their progress.")) return;
-  FLAT.forEach(q => { state[q.id] = { status: "notstarted", note: "", updatedAt: "", reviewCount: 0, nextReviewDate: null }; });
-  meta = { streak: 0, lastStudyDate: null };
+  FLAT.forEach(q => { state[q.id] = { status: "notstarted", note: "", updatedAt: Date.now(), reviewCount: 0, nextReviewDate: null }; });
+  meta = { streak: 0, lastStudyDate: null, roadmapNotes: "", lastStudiedQId: null, lastStudiedSubject: currentSubjectId, lastStudiedAt: null, lastStudiedTitle: "", lastStudiedStatus: "" };
   await saveState();
   updateOverview();
-  renderStudio();
-  renderFocus();
+  renderActiveView();
 });
 
-// ---- ROADMAP VIEW ----
+// ==========================================
+// ROADMAP VIEW
+// ==========================================
 function renderRoadmap() {
   const el = document.getElementById("roadmapView");
   const subj = getActiveSubject();
@@ -4463,25 +5122,174 @@ function renderRoadmap() {
   }
 }
 
-// ---- VIEW SWITCH ----
+// ==========================================
+// VIEW SWITCH & ROUTING (Sync-Preserving URLs)
+// ==========================================
+function updateUrlHash(replace = false) {
+  const subj = currentSubjectId || "qa";
+  const view = currentView || "focus";
+  
+  let hash = `#${subj}/${view}`;
+  if (view === "browse" && selectedStudioQId) {
+    hash += `/${encodeURIComponent(selectedStudioQId)}`;
+  } else if (view === "focus" && currentFocusQId) {
+    hash += `/${encodeURIComponent(currentFocusQId)}`;
+  }
+
+  // Preserve sync key in hash so mobile reload, bookmarks, or sharing NEVER drop the pairing room
+  if (syncUserId) {
+    hash += `?sync=${encodeURIComponent(syncUserId)}`;
+  }
+
+  if (window.location.hash !== hash) {
+    if (replace) {
+      window.history.replaceState(null, document.title, window.location.pathname + window.location.search + hash);
+    } else {
+      window.location.hash = hash;
+    }
+  }
+}
+
+function getShareUrl(includeCurrentQuestion = true) {
+  const origin = (window.location.origin && window.location.origin !== "null") ? window.location.origin : "https://qa-roadmap-progress-app.web.app";
+  const pathname = (window.location.pathname && window.location.pathname !== "/") ? window.location.pathname : "/";
+  const subj = currentSubjectId || "qa";
+  const view = currentView || "focus";
+  let hash = `#${subj}/${view}`;
+  if (includeCurrentQuestion) {
+    const activeQId = (view === "browse" ? selectedStudioQId : (currentFocusQId || meta.lastStudiedQId));
+    if (activeQId) hash += `/${encodeURIComponent(activeQId)}`;
+  }
+  hash += `?sync=${encodeURIComponent(syncUserId)}`;
+  return `${origin}${pathname}${hash}`;
+}
+
+function switchView(viewName, qId = null, pushHistory = true) {
+  if (!["focus", "browse", "roadmap"].includes(viewName)) viewName = "focus";
+  currentView = viewName;
+  localStorage.setItem("qa_active_view", currentView);
+  
+  if (qId) {
+    if (viewName === "browse") {
+      selectedStudioQId = qId;
+      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, qId);
+    } else if (viewName === "focus") {
+      currentFocusQId = qId;
+    }
+    recordStudyInteraction(qId);
+  }
+
+  renderActiveView();
+  updateUrlHash(!pushHistory);
+}
+
+function scrollSelectedStudioQuestionIntoView() {
+  const listEl = document.getElementById("studioQList");
+  const activeItem = document.querySelector(".studio-q-item.active");
+  if (listEl && activeItem) {
+    const listRect = listEl.getBoundingClientRect();
+    const itemRect = activeItem.getBoundingClientRect();
+    if (itemRect.top < listRect.top || itemRect.bottom > listRect.bottom) {
+      activeItem.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }
+}
+
 function renderActiveView() {
-  document.getElementById("focusView").classList.toggle("hidden", currentView !== "focus");
-  document.getElementById("browseView").classList.toggle("hidden", currentView !== "browse");
-  document.getElementById("roadmapView").classList.toggle("hidden", currentView !== "roadmap");
-  if (currentView === "focus") renderFocus();
-  else if (currentView === "browse") renderStudio();
-  else if (currentView === "roadmap") renderRoadmap();
+  document.querySelectorAll(".view-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.view === currentView);
+  });
+
+  const focusEl = document.getElementById("focusView");
+  const browseEl = document.getElementById("browseView");
+  const roadmapEl = document.getElementById("roadmapView");
+
+  if (focusEl) focusEl.classList.toggle("hidden", currentView !== "focus");
+  if (browseEl) browseEl.classList.toggle("hidden", currentView !== "browse");
+  if (roadmapEl) roadmapEl.classList.toggle("hidden", currentView !== "roadmap");
+
+  localStorage.setItem("qa_active_view", currentView);
+
+  if (currentView === "focus") {
+    renderFocus(currentFocusQId);
+  } else if (currentView === "browse") {
+    renderStudio();
+    if (selectedStudioQId) {
+      const layout = document.getElementById("studioLayout");
+      if (layout && window.innerWidth <= 768) {
+        layout.classList.add("show-detail");
+      }
+    }
+    setTimeout(scrollSelectedStudioQuestionIntoView, 60);
+  } else if (currentView === "roadmap") {
+    renderRoadmap();
+  }
 }
 
 document.querySelectorAll(".view-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentView = btn.dataset.view;
-    renderActiveView();
+    const targetView = btn.dataset.view;
+    if (targetView) {
+      switchView(targetView, null, true);
+    }
   });
 });
 
+function setupPopstateRouter() {
+  async function handleRouteChange() {
+    const route = parseRouteFromUrl();
+    let needRender = false;
+    
+    // Sync key change
+    if (route.routeSync && route.routeSync !== syncUserId) {
+      syncUserId = route.routeSync;
+      safeStorage.set("qa_tracker_sync_id", syncUserId);
+      safeStorage.set("qa_tracker_paired", "1");
+      initFirestoreLiveListener();
+      fetchCloudDataAndMerge();
+    }
+
+    if (route.routeSubject && route.routeSubject !== currentSubjectId && SUBJECTS[route.routeSubject]) {
+      await switchSubject(route.routeSubject, false);
+      return;
+    }
+    
+    if (route.routeView && route.routeView !== currentView) {
+      currentView = route.routeView;
+      localStorage.setItem("qa_active_view", currentView);
+      if (route.routeQId) {
+        if (currentView === "browse") {
+          selectedStudioQId = route.routeQId;
+          localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
+        } else if (currentView === "focus") {
+          currentFocusQId = route.routeQId;
+        }
+      }
+      needRender = true;
+    } else if (route.routeQId) {
+      if (currentView === "browse" && route.routeQId !== selectedStudioQId) {
+        selectedStudioQId = route.routeQId;
+        localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
+        renderStudio();
+        setTimeout(scrollSelectedStudioQuestionIntoView, 60);
+      } else if (currentView === "focus" && route.routeQId !== currentFocusQId) {
+        currentFocusQId = route.routeQId;
+        renderFocus(currentFocusQId);
+      }
+    }
+
+    if (needRender) {
+      renderActiveView();
+    }
+  }
+
+  window.addEventListener("popstate", handleRouteChange);
+  window.addEventListener("hashchange", handleRouteChange);
+}
+
+// ==========================================
+// CALENDAR & DRAGGABLE CLOCK
+// ==========================================
 let calViewDate = new Date();
 
 function renderCalendar() {
@@ -4503,23 +5311,19 @@ function renderCalendar() {
   const gridEl = document.getElementById("calGrid");
   if (!gridEl) return;
 
-  // Monday-first index: 0 = Mon, 1 = Tue, ..., 6 = Sun
   const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
   const lastDayCurrentMonth = new Date(year, month + 1, 0).getDate();
 
   const today = new Date();
   const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
 
-  // Day labels starting on Monday: M, T, W, T, F, S, S
   const dayLabels = ["M", "T", "W", "T", "F", "S", "S"];
   let html = dayLabels.map(d => `<div class="cal-day-label">${d}</div>`).join("");
 
-  // Leading empty cells
   for (let i = 0; i < firstDayIndex; i++) {
     html += `<div class="cal-cell empty"></div>`;
   }
 
-  // Current month days
   for (let d = 1; d <= lastDayCurrentMonth; d++) {
     const cellDate = new Date(year, month, d).getTime();
     const isToday = cellDate === todayZero;
@@ -4540,7 +5344,6 @@ function adjustPopoverPosition() {
   const popover = document.getElementById("calendarPopover");
   if (!popover || !popover.classList.contains("open")) return;
 
-  // Reset positioning for calculation
   popover.style.left = "50%";
   popover.style.right = "auto";
   popover.style.top = "calc(100% + 8px)";
@@ -4549,7 +5352,6 @@ function adjustPopoverPosition() {
 
   const rect = popover.getBoundingClientRect();
 
-  // Edge detection
   if (rect.right > window.innerWidth - 10) {
     popover.style.left = "auto";
     popover.style.right = "0px";
@@ -4560,7 +5362,6 @@ function adjustPopoverPosition() {
     popover.style.transform = "none";
   }
 
-  // Flip upward if overflowing bottom
   const updatedRect = popover.getBoundingClientRect();
   if (updatedRect.bottom > window.innerHeight - 10) {
     popover.style.top = "auto";
@@ -4573,7 +5374,6 @@ function setupDraggableClock() {
   const clockEl = document.querySelector(".clock");
   if (!clockWrap) return;
 
-  // Restore saved position if available
   try {
     const saved = JSON.parse(localStorage.getItem("qa_clock_pos") || "null");
     if (saved && typeof saved.left === "number" && typeof saved.top === "number") {
@@ -4590,11 +5390,9 @@ function setupDraggableClock() {
   let initLeft = 0, initTop = 0;
   let hasMoved = false;
 
-  // Listen on the clock face or non-button areas of clockWrap
   const dragTarget = clockEl || clockWrap;
 
   dragTarget.addEventListener("pointerdown", (e) => {
-    // Ignore clicks on date button or inside calendar
     if (e.target.closest("#clockDate") || e.target.closest("#calendarPopover")) return;
     if (e.button !== 0) return;
 
@@ -4654,7 +5452,6 @@ function setupDraggableClock() {
   window.addEventListener("pointerup", endDrag);
   window.addEventListener("pointercancel", endDrag);
 
-  // Keep inside viewport on window resize
   window.addEventListener("resize", () => {
     if (clockWrap.style.left) {
       const curLeft = parseFloat(clockWrap.style.left);
@@ -4753,7 +5550,9 @@ function setupCalendarEvents() {
   setTimeout(tickClock, 1000);
 })();
 
-// ---- ACCESSIBILITY CONTROLS (Font Scaling & High-Contrast Dark Theme) ----
+// ==========================================
+// ACCESSIBILITY CONTROLS
+// ==========================================
 let currentTheme = localStorage.getItem("qa_a11y_theme") || "light";
 let currentFontSize = localStorage.getItem("qa_a11y_fontsize") || "normal";
 
@@ -4803,8 +5602,9 @@ function setupA11yControls() {
   if (fontBtn) fontBtn.addEventListener("click", toggleFontSize);
 }
 
-
-// Firebase Configuration & Real-Time Cloud Sync Engine
+// ==========================================
+// FIREBASE REAL-TIME CLOUD SYNC ENGINE
+// ==========================================
 const firebaseConfig = {
   projectId: "qa-roadmap-progress-app",
   appId: "1:576264043736:web:3074d7ecf09f6ee7126bad",
@@ -4819,25 +5619,6 @@ let firestoreDb = null;
 let firestoreUnsubscribe = null;
 let isRemoteUpdating = false;
 
-// Auto-detect Sync Key from URL (?sync=... or ?key=...)
-let syncUserId = localStorage.getItem("qa_tracker_sync_id");
-try {
-  const urlParams = new URLSearchParams(window.location.search);
-  const paramKey = urlParams.get("sync") || urlParams.get("key") || urlParams.get("sync_id");
-  if (paramKey && paramKey.trim()) {
-    syncUserId = paramKey.trim().replace(/[^a-zA-Z0-9_\-\.]/g, "");
-    localStorage.setItem("qa_tracker_sync_id", syncUserId);
-    localStorage.setItem("qa_tracker_paired", "1");
-    const cleanUrl = window.location.origin + window.location.pathname;
-    window.history.replaceState({}, document.title, cleanUrl);
-  }
-} catch (e) {}
-
-if (!syncUserId) {
-  syncUserId = "qa_" + Math.random().toString(36).substring(2, 7) + "_" + Date.now().toString(36).substring(4);
-  localStorage.setItem("qa_tracker_sync_id", syncUserId);
-}
-
 function updateSyncStatusUI(status) {
   const pill = document.getElementById("cloudSyncBtn");
   const icon = document.getElementById("cloudSyncIcon");
@@ -4846,9 +5627,11 @@ function updateSyncStatusUI(status) {
   if (!pill) return;
 
   pill.className = "stat-pill cloud-pill " + status;
+  const shortName = syncUserId ? (syncUserId.length > 11 ? syncUserId.substring(0, 10) + "…" : syncUserId) : "Sync";
+
   if (status === "synced") {
     if (icon) icon.textContent = "☁️";
-    if (text) text.textContent = "Live Synced";
+    if (text) text.innerHTML = `Room: <b>${escapeHtml(shortName)}</b><span class="sync-live-dot"></span>`;
     if (msg) {
       msg.textContent = "🟢 Live real-time sync connected · Code: " + syncUserId;
       msg.style.color = "var(--teal-text)";
@@ -4862,12 +5645,19 @@ function updateSyncStatusUI(status) {
     }
   } else {
     if (icon) icon.textContent = "☁️";
-    if (text) text.textContent = "Cloud Sync";
+    if (text) text.innerHTML = `Room: <b>${escapeHtml(shortName)}</b>`;
     if (msg) {
       msg.textContent = "⚪ Local storage active (Offline ready)";
       msg.style.color = "var(--text-muted)";
     }
   }
+}
+
+function getEpoch(val) {
+  if (!val) return 0;
+  if (typeof val === "number") return val;
+  const parsed = Date.parse(val);
+  return isNaN(parsed) ? 0 : parsed;
 }
 
 // Smart non-destructive custom questions merger
@@ -4886,7 +5676,8 @@ function mergeCustomQuestions(localList, cloudList) {
       id: q.id || ("CU-" + Date.now().toString(36).toUpperCase() + "_" + Math.random().toString(36).substring(2, 5)),
       text: q.text,
       answer: q.answer || null,
-      createdAt: q.createdAt || new Date().toLocaleString()
+      createdAt: q.createdAt || new Date().toLocaleString(),
+      updatedAt: getEpoch(q.updatedAt || q.createdAt)
     });
   });
 
@@ -4900,17 +5691,33 @@ function mergeCustomQuestions(localList, cloudList) {
         id: q.id || ("CU-" + Date.now().toString(36).toUpperCase() + "_" + Math.random().toString(36).substring(2, 5)),
         text: q.text,
         answer: q.answer || null,
-        createdAt: q.createdAt || new Date().toLocaleString()
+        createdAt: q.createdAt || new Date().toLocaleString(),
+        updatedAt: getEpoch(q.updatedAt || q.createdAt)
       });
       hasNewLocal = true;
     } else {
       const existing = map.get(key);
-      const longerAnswer = (q.answer && q.answer.length > (existing.answer || "").length) ? q.answer : (existing.answer || q.answer);
+      const localEpoch = getEpoch(q.updatedAt || q.createdAt);
+      const cloudEpoch = getEpoch(existing.updatedAt || existing.createdAt);
+      
+      let preferredText = existing.text;
+      let preferredAnswer = existing.answer;
+
+      if (localEpoch > cloudEpoch) {
+        preferredText = q.text || existing.text;
+        preferredAnswer = q.answer !== undefined ? q.answer : existing.answer;
+        hasNewLocal = true;
+      } else {
+        const longerAnswer = (q.answer && q.answer.length > (existing.answer || "").length) ? q.answer : (existing.answer || q.answer);
+        preferredAnswer = longerAnswer;
+      }
+
       map.set(key, {
         id: existing.id || q.id,
-        text: existing.text || q.text,
-        answer: longerAnswer,
-        createdAt: existing.createdAt || q.createdAt || new Date().toLocaleString()
+        text: preferredText,
+        answer: preferredAnswer,
+        createdAt: existing.createdAt || q.createdAt || new Date().toLocaleString(),
+        updatedAt: Math.max(localEpoch, cloudEpoch)
       });
     }
   });
@@ -4932,23 +5739,42 @@ function mergeStates(localState, cloudState) {
       }
     } else {
       const cloudObj = merged[qId];
-      const status = (cloudObj.status && cloudObj.status !== "notstarted") 
-        ? cloudObj.status 
-        : (localObj.status || "notstarted");
+      const localEpoch = getEpoch(localObj.updatedAt);
+      const cloudEpoch = getEpoch(cloudObj.updatedAt);
+
+      let status = cloudObj.status || "notstarted";
+      if (localEpoch > cloudEpoch && localObj.status) {
+        status = localObj.status;
+        hasNewLocal = true;
+      } else if (cloudEpoch > localEpoch && cloudObj.status) {
+        status = cloudObj.status;
+      } else {
+        status = (cloudObj.status && cloudObj.status !== "notstarted") ? cloudObj.status : (localObj.status || "notstarted");
+      }
       
       let note = cloudObj.note || "";
-      if (localObj.note && localObj.note.trim()) {
-        if (!note.trim()) {
+      if (localEpoch > cloudEpoch) {
+        if (localObj.note && localObj.note.trim()) {
           note = localObj.note;
           hasNewLocal = true;
-        } else if (note !== localObj.note && !note.includes(localObj.note)) {
-          note = note + "\n\n" + localObj.note;
-          hasNewLocal = true;
+        }
+      } else if (cloudEpoch > localEpoch) {
+        note = cloudObj.note || localObj.note || "";
+      } else {
+        // Timestamps equal or unspecified
+        if (localObj.note && localObj.note.trim()) {
+          if (!note.trim()) {
+            note = localObj.note;
+            hasNewLocal = true;
+          } else if (note !== localObj.note && !note.includes(localObj.note)) {
+            note = note + "\n\n" + localObj.note;
+            hasNewLocal = true;
+          }
         }
       }
 
       const reviewCount = Math.max(Number(localObj.reviewCount) || 0, Number(cloudObj.reviewCount) || 0);
-      const updatedAt = cloudObj.updatedAt || localObj.updatedAt || "";
+      const updatedAt = Math.max(localEpoch, cloudEpoch) || cloudObj.updatedAt || localObj.updatedAt || "";
 
       merged[qId] = {
         status: status,
@@ -4980,7 +5806,6 @@ function initFirestoreLiveListener() {
       let mustSyncBackState = false;
 
       snapshot.docChanges().forEach((change) => {
-        // Skip changes initiated locally
         if (change.doc.metadata && change.doc.metadata.hasPendingWrites) return;
 
         const docId = change.doc.id;
@@ -4994,12 +5819,35 @@ function initFirestoreLiveListener() {
             const cloudMeta = cloudPayload.meta || {};
             const { merged: mergedState, hasNewLocal } = mergeStates(state, cloudState);
             state = mergedState;
+            
+            const localStudiedEpoch = getEpoch(meta.lastStudiedAt);
+            const cloudStudiedEpoch = getEpoch(cloudMeta.lastStudiedAt);
+            let mergedLastStudiedQId = meta.lastStudiedQId;
+            let mergedLastStudiedSubject = meta.lastStudiedSubject || currentSubjectId;
+            let mergedLastStudiedAt = meta.lastStudiedAt;
+            let mergedLastStudiedTitle = meta.lastStudiedTitle;
+            let mergedLastStudiedStatus = meta.lastStudiedStatus;
+
+            if (cloudStudiedEpoch > localStudiedEpoch && cloudMeta.lastStudiedQId) {
+              mergedLastStudiedQId = cloudMeta.lastStudiedQId;
+              mergedLastStudiedSubject = cloudMeta.lastStudiedSubject || currentSubjectId;
+              mergedLastStudiedAt = cloudMeta.lastStudiedAt;
+              mergedLastStudiedTitle = cloudMeta.lastStudiedTitle || "";
+              mergedLastStudiedStatus = cloudMeta.lastStudiedStatus || "";
+            }
+
             meta = {
               streak: Math.max(meta.streak || 0, cloudMeta.streak || 0),
               lastStudyDate: cloudMeta.lastStudyDate || meta.lastStudyDate || null,
-              roadmapNotes: (cloudMeta.roadmapNotes || "").length > (meta.roadmapNotes || "").length ? cloudMeta.roadmapNotes : (meta.roadmapNotes || cloudMeta.roadmapNotes || "")
+              roadmapNotes: (cloudMeta.roadmapNotes || "").length > (meta.roadmapNotes || "").length ? cloudMeta.roadmapNotes : (meta.roadmapNotes || cloudMeta.roadmapNotes || ""),
+              lastStudiedQId: mergedLastStudiedQId,
+              lastStudiedSubject: mergedLastStudiedSubject,
+              lastStudiedAt: mergedLastStudiedAt,
+              lastStudiedTitle: mergedLastStudiedTitle,
+              lastStudiedStatus: mergedLastStudiedStatus
             };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ state, meta }));
+
+            safeStorage.set(STORAGE_KEY, JSON.stringify({ state, meta }));
             stateChanged = true;
             if (hasNewLocal) mustSyncBackState = true;
           }
@@ -5008,13 +5856,24 @@ function initFirestoreLiveListener() {
           if (Array.isArray(cloudCustom)) {
             const { merged: mergedCustom, hasNewLocal } = mergeCustomQuestions(customQuestions, cloudCustom);
             customQuestions = mergedCustom;
-            localStorage.setItem(CUSTOM_KEY, JSON.stringify(customQuestions));
+            safeStorage.set(CUSTOM_KEY, JSON.stringify(customQuestions));
             customChanged = true;
             if (hasNewLocal) mustSyncBackCustom = true;
           }
         } else {
           if (Array.isArray(data.payload) || typeof data.payload === "object") {
-            localStorage.setItem(docId, JSON.stringify(data.payload));
+            safeStorage.set(docId, JSON.stringify(data.payload));
+            if (data.payload && data.payload.meta && data.payload.meta.lastStudiedAt) {
+              const otherMeta = data.payload.meta;
+              if (getEpoch(otherMeta.lastStudiedAt) > getEpoch(meta.lastStudiedAt)) {
+                meta.lastStudiedSubject = otherMeta.lastStudiedSubject || (docId.startsWith("english") ? "english" : "qa");
+                meta.lastStudiedAt = otherMeta.lastStudiedAt;
+                meta.lastStudiedTitle = otherMeta.lastStudiedTitle || "";
+                meta.lastStudiedQId = otherMeta.lastStudiedQId || null;
+                meta.lastStudiedStatus = otherMeta.lastStudiedStatus || "";
+                stateChanged = true;
+              }
+            }
           }
         }
       });
@@ -5024,20 +5883,20 @@ function initFirestoreLiveListener() {
         rebuildFlat();
         updateOverview();
 
-        // Avoid disrupting active typing in notes or custom question forms
         const activeEl = document.activeElement;
         const isTyping = activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA");
         if (!isTyping) {
           renderActiveView();
         }
-        setTimeout(() => { isRemoteUpdating = false; }, 300);
 
-        if (mustSyncBackCustom) {
-          syncToFirebase(CUSTOM_KEY, customQuestions);
-        }
-        if (mustSyncBackState) {
-          syncToFirebase(STORAGE_KEY, { state, meta });
-        }
+        // Schedule sync-back AFTER isRemoteUpdating resets, so writes are never blocked
+        const _needsSyncBackCustom = mustSyncBackCustom;
+        const _needsSyncBackState = mustSyncBackState;
+        setTimeout(() => {
+          isRemoteUpdating = false;
+          if (_needsSyncBackCustom) syncToFirebase(CUSTOM_KEY, customQuestions);
+          if (_needsSyncBackState) syncToFirebase(STORAGE_KEY, { state, meta });
+        }, 350);
       }
 
       updateSyncStatusUI("synced");
@@ -5065,7 +5924,6 @@ function initFirebaseSync() {
     updateSyncStatusUI("offline");
   }
 
-  // Setup modal triggers
   const btn = document.getElementById("cloudSyncBtn");
   const modal = document.getElementById("cloudSyncModal");
   const closeBtn = document.getElementById("closeSyncModalBtn");
@@ -5079,13 +5937,9 @@ function initFirebaseSync() {
   const setCustomCodeBtn = document.getElementById("setCustomCodeBtn");
   const qrImg = document.getElementById("syncQrImg");
 
-  function getShareUrl() {
-    return `${window.location.origin}${window.location.pathname}?sync=${encodeURIComponent(syncUserId)}`;
-  }
-
   function refreshModalFields() {
     if (myKeyInput) myKeyInput.value = syncUserId;
-    const shareUrl = getShareUrl();
+    const shareUrl = getShareUrl(true);
     if (syncLinkInput) syncLinkInput.value = shareUrl;
     if (customCodeInput) customCodeInput.value = syncUserId;
     if (qrImg) {
@@ -5119,23 +5973,23 @@ function initFirebaseSync() {
   }
   if (copyLinkBtn) {
     copyLinkBtn.onclick = () => {
-      navigator.clipboard.writeText(getShareUrl()).then(() => {
+      navigator.clipboard.writeText(getShareUrl(true)).then(() => {
         copyLinkBtn.textContent = "✓ Copied Link!";
         setTimeout(() => { copyLinkBtn.textContent = "🔗 Copy 1-Click Link"; }, 2000);
       });
     };
   }
 
-  // Set / Change to a Custom Sync Code (e.g. 'imtiyaz' or 'my-notes')
   if (setCustomCodeBtn && customCodeInput) {
     setCustomCodeBtn.onclick = async () => {
       let code = customCodeInput.value.trim().replace(/[^a-zA-Z0-9_\-\.]/g, "");
       if (!code) return;
       setCustomCodeBtn.textContent = "Connecting…";
       syncUserId = code;
-      localStorage.setItem("qa_tracker_sync_id", syncUserId);
-      localStorage.setItem("qa_tracker_paired", "1");
+      await safeStorage.set("qa_tracker_sync_id", syncUserId);
+      await safeStorage.set("qa_tracker_paired", "1");
       refreshModalFields();
+      updateUrlHash(true);
       initFirestoreLiveListener();
       await fetchCloudDataAndMerge();
       setCustomCodeBtn.textContent = "✓ Active!";
@@ -5146,7 +6000,6 @@ function initFirebaseSync() {
     };
   }
 
-  // Connect to another device / paste link or key
   if (linkBtn && restoreInput) {
     linkBtn.onclick = async () => {
       let key = restoreInput.value.trim();
@@ -5163,9 +6016,10 @@ function initFirebaseSync() {
       key = key.replace(/[^a-zA-Z0-9_\-\.]/g, "");
       if (!key) return;
       syncUserId = key;
-      localStorage.setItem("qa_tracker_sync_id", syncUserId);
-      localStorage.setItem("qa_tracker_paired", "1");
+      await safeStorage.set("qa_tracker_sync_id", syncUserId);
+      await safeStorage.set("qa_tracker_paired", "1");
       refreshModalFields();
+      updateUrlHash(true);
       linkBtn.textContent = "Connecting & Merging…";
       initFirestoreLiveListener();
       await fetchCloudDataAndMerge();
@@ -5178,10 +6032,33 @@ function initFirebaseSync() {
   }
 }
 
+// Write-dedup tracker: prevents feedback loops without blocking legitimate writes
+const _lastPushedHash = {};
+function _quickHash(data) {
+  try { const s = JSON.stringify(data); return s.length + "_" + s.slice(0, 200) + s.slice(-200); } catch (e) { return ""; }
+}
+
+// Pending sync queue: holds writes that arrive while a push is in-flight
+let _syncInFlight = false;
+const _pendingSyncQueue = new Map();
+
 async function syncToFirebase(key, data) {
-  if (!firestoreDb || !syncUserId || isRemoteUpdating) return;
+  if (!firestoreDb || !syncUserId) return;
+
+  // Dedup: skip if data is identical to what we just pushed
+  const hash = _quickHash(data);
+  if (hash && _lastPushedHash[key] === hash) return;
+
+  // If a sync is currently in-flight, queue this write (latest data wins per key)
+  if (_syncInFlight) {
+    _pendingSyncQueue.set(key, data);
+    return;
+  }
+
+  _syncInFlight = true;
   try {
     updateSyncStatusUI("syncing");
+    _lastPushedHash[key] = hash;
     await firestoreDb.collection("user_progress").doc(syncUserId).collection("data").doc(key).set({
       payload: data,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -5189,7 +6066,18 @@ async function syncToFirebase(key, data) {
     updateSyncStatusUI("synced");
   } catch (e) {
     console.warn("Firebase sync error:", e);
+    _lastPushedHash[key] = ""; // Clear hash so next attempt retries
     updateSyncStatusUI("offline");
+  } finally {
+    _syncInFlight = false;
+    // Flush any queued writes that accumulated while we were pushing
+    if (_pendingSyncQueue.size > 0) {
+      const queued = new Map(_pendingSyncQueue);
+      _pendingSyncQueue.clear();
+      for (const [qKey, qData] of queued) {
+        syncToFirebase(qKey, qData);
+      }
+    }
   }
 }
 
@@ -5219,12 +6107,35 @@ async function fetchCloudDataAndMerge() {
             const cloudMeta = cloudPayload.meta || {};
             const { merged: mergedState, hasNewLocal } = mergeStates(state, cloudState);
             state = mergedState;
+
+            const localStudiedEpoch = getEpoch(meta.lastStudiedAt);
+            const cloudStudiedEpoch = getEpoch(cloudMeta.lastStudiedAt);
+            let mergedLastStudiedQId = meta.lastStudiedQId;
+            let mergedLastStudiedSubject = meta.lastStudiedSubject || currentSubjectId;
+            let mergedLastStudiedAt = meta.lastStudiedAt;
+            let mergedLastStudiedTitle = meta.lastStudiedTitle;
+            let mergedLastStudiedStatus = meta.lastStudiedStatus;
+
+            if (cloudStudiedEpoch > localStudiedEpoch && cloudMeta.lastStudiedQId) {
+              mergedLastStudiedQId = cloudMeta.lastStudiedQId;
+              mergedLastStudiedSubject = cloudMeta.lastStudiedSubject || currentSubjectId;
+              mergedLastStudiedAt = cloudMeta.lastStudiedAt;
+              mergedLastStudiedTitle = cloudMeta.lastStudiedTitle || "";
+              mergedLastStudiedStatus = cloudMeta.lastStudiedStatus || "";
+            }
+
             meta = {
               streak: Math.max(meta.streak || 0, cloudMeta.streak || 0),
               lastStudyDate: cloudMeta.lastStudyDate || meta.lastStudyDate || null,
-              roadmapNotes: (cloudMeta.roadmapNotes || "").length > (meta.roadmapNotes || "").length ? cloudMeta.roadmapNotes : (meta.roadmapNotes || cloudMeta.roadmapNotes || "")
+              roadmapNotes: (cloudMeta.roadmapNotes || "").length > (meta.roadmapNotes || "").length ? cloudMeta.roadmapNotes : (meta.roadmapNotes || cloudMeta.roadmapNotes || ""),
+              lastStudiedQId: mergedLastStudiedQId,
+              lastStudiedSubject: mergedLastStudiedSubject,
+              lastStudiedAt: mergedLastStudiedAt,
+              lastStudiedTitle: mergedLastStudiedTitle,
+              lastStudiedStatus: mergedLastStudiedStatus
             };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ state, meta }));
+
+            safeStorage.set(STORAGE_KEY, JSON.stringify({ state, meta }));
             if (hasNewLocal) needsPushState = true;
           }
         } else if (docId === CUSTOM_KEY) {
@@ -5233,12 +6144,22 @@ async function fetchCloudDataAndMerge() {
           if (Array.isArray(cloudCustom)) {
             const { merged: mergedCustom, hasNewLocal } = mergeCustomQuestions(customQuestions, cloudCustom);
             customQuestions = mergedCustom;
-            localStorage.setItem(CUSTOM_KEY, JSON.stringify(customQuestions));
+            safeStorage.set(CUSTOM_KEY, JSON.stringify(customQuestions));
             if (hasNewLocal) needsPushCustom = true;
           }
         } else {
           if (Array.isArray(data.payload) || typeof data.payload === "object") {
-            localStorage.setItem(docId, JSON.stringify(data.payload));
+            safeStorage.set(docId, JSON.stringify(data.payload));
+            if (data.payload && data.payload.meta && data.payload.meta.lastStudiedAt) {
+              const otherMeta = data.payload.meta;
+              if (getEpoch(otherMeta.lastStudiedAt) > getEpoch(meta.lastStudiedAt)) {
+                meta.lastStudiedSubject = otherMeta.lastStudiedSubject || (docId.startsWith("english") ? "english" : "qa");
+                meta.lastStudiedAt = otherMeta.lastStudiedAt;
+                meta.lastStudiedTitle = otherMeta.lastStudiedTitle || "";
+                meta.lastStudiedQId = otherMeta.lastStudiedQId || null;
+                meta.lastStudiedStatus = otherMeta.lastStudiedStatus || "";
+              }
+            }
           }
         }
       });
@@ -5248,7 +6169,6 @@ async function fetchCloudDataAndMerge() {
       renderActiveView();
     }
 
-    // Push local data if cloud was missing it or if local had new questions/notes
     if (!foundStorage || needsPushState) {
       if (Object.keys(state).length > 0) {
         syncToFirebase(STORAGE_KEY, { state, meta });
@@ -5271,6 +6191,9 @@ async function fetchCloudDataAndMerge() {
   }
 }
 
+// ==========================================
+// APPLICATION INITIALIZATION
+// ==========================================
 (async function init() {
   try {
     setupA11yControls();
@@ -5279,22 +6202,36 @@ async function fetchCloudDataAndMerge() {
     await loadCustom();
     rebuildFlat();
     updateOverview();
-    renderFocus();
-    renderBrowse();
-    renderRoadmap();
+
+    if (selectedStudioQId && !FLAT.some(q => q.id === selectedStudioQId)) {
+      selectedStudioQId = null;
+    }
+
+    renderActiveView();
+    updateUrlHash(true);
+
     setupCalendarEvents();
     setupDraggableClock();
+    setupPopstateRouter();
 
-    // Connect cloud sync and pull latest changes
     initFirebaseSync();
     await fetchCloudDataAndMerge();
 
-    // Show device-pairing prompt if this is a fresh device with no progress
-    const hasNoProgress = Object.keys(state).every(k => state[k].status === "notstarted");
-    const hasNoCustom = customQuestions.length === 0;
+    // Re-sync from cloud when tab regains focus (handles sleep/wake, network reconnect)
+    let _lastVisibilitySync = 0;
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && firestoreDb && syncUserId) {
+        const now = Date.now();
+        if (now - _lastVisibilitySync > 5000) { // Throttle: max once per 5s
+          _lastVisibilitySync = now;
+          fetchCloudDataAndMerge();
+        }
+      }
+    });
+
     const neverPaired = !localStorage.getItem("qa_tracker_paired");
-    if (hasNoProgress && hasNoCustom && neverPaired) {
-      showDevicePairingBanner();
+    if (neverPaired && !initialRoute.routeSync) {
+      showPairingOverlay();
     }
   } catch (e) {
     console.warn("Init error:", e);
@@ -5303,56 +6240,125 @@ async function fetchCloudDataAndMerge() {
   }
 })();
 
-function showDevicePairingBanner() {
-  if (sessionStorage.getItem("qa_pairing_dismissed")) return;
+function showPairingOverlay() {
+  const overlay = document.getElementById("pairingOverlay");
+  if (!overlay) return;
+  overlay.classList.remove("hidden");
 
-  const banner = document.createElement("div");
-  banner.id = "pairingBanner";
-  banner.setAttribute("style",
-    "position:fixed; bottom:60px; left:50%; transform:translateX(-50%); z-index:9999; " +
-    "background:linear-gradient(135deg,#0d9488,#14b8a6); color:#fff; " +
-    "padding:14px 20px; border-radius:14px; box-shadow:0 8px 32px rgba(0,0,0,0.25); " +
-    "display:flex; align-items:center; gap:12px; max-width:440px; width:90%; " +
-    "font-family:'DM Sans','Segoe UI',system-ui,sans-serif; animation:slideUp .4s ease;"
-  );
-  banner.innerHTML =
-    '<div style="font-size:28px;">📱</div>' +
-    '<div style="flex:1">' +
-      '<div style="font-weight:700; font-size:14px; margin-bottom:2px;">Already using this app on another device?</div>' +
-      '<div style="font-size:12px; opacity:0.9;">Tap ☁️ Cloud Sync to pair devices & merge your questions!</div>' +
-    '</div>' +
-    '<button id="dismissPairingBtn" style="background:rgba(255,255,255,0.2); border:none; color:#fff; ' +
-      'border-radius:8px; padding:6px 12px; font-size:12px; cursor:pointer; font-weight:600; white-space:nowrap;">Got it</button>';
+  const newSection = document.getElementById("pairNewSection");
+  const existSection = document.getElementById("pairExistingSection");
+  const codeDisplay = document.getElementById("pairNewCode");
+  const qrImg = document.getElementById("pairNewQr");
+  const copyLinkBtn = document.getElementById("pairNewCopyLink");
+  const copyCodeBtn = document.getElementById("pairNewCopyCode");
+  const doneBtn = document.getElementById("pairNewDone");
+  const newStatus = document.getElementById("pairNewStatus");
+  const existInput = document.getElementById("pairExistingInput");
+  const existConnect = document.getElementById("pairExistingConnect");
+  const existStatus = document.getElementById("pairExistingStatus");
 
-  document.body.appendChild(banner);
+  // Populate the "I'm new" section
+  codeDisplay.textContent = syncUserId;
+  const pairUrl = getShareUrl(false);
+  qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(pairUrl)}&margin=6`;
 
-  const style = document.createElement("style");
-  style.textContent = "@keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(30px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }";
-  document.head.appendChild(style);
+  // Section toggle (accordion)
+  function activateSection(activeEl) {
+    [newSection, existSection].forEach(s => s.classList.remove("active-section"));
+    activeEl.classList.add("active-section");
+  }
+  newSection.addEventListener("click", (e) => {
+    if (e.target.closest("button") || e.target.closest("input")) return;
+    activateSection(newSection);
+  });
+  existSection.addEventListener("click", (e) => {
+    if (e.target.closest("button") || e.target.closest("input")) return;
+    activateSection(existSection);
+  });
 
-  document.getElementById("dismissPairingBtn").onclick = () => {
-    banner.remove();
-    sessionStorage.setItem("qa_pairing_dismissed", "1");
+  // Default: expand "I'm new"
+  activateSection(newSection);
+
+  // Copy link
+  copyLinkBtn.onclick = () => {
+    navigator.clipboard.writeText(pairUrl).then(() => {
+      copyLinkBtn.textContent = "✓ Copied!";
+      newStatus.textContent = "Link copied — open it on your other device";
+      setTimeout(() => { copyLinkBtn.textContent = "📋 Copy Pairing Link"; }, 2000);
+    });
   };
 
-  const syncBtn = document.getElementById("cloudSyncBtn");
-  if (syncBtn) {
-    const origClick = syncBtn.onclick;
-    syncBtn.onclick = (e) => {
-      banner.remove();
-      sessionStorage.setItem("qa_pairing_dismissed", "1");
-      localStorage.setItem("qa_tracker_paired", "1");
-      if (origClick) origClick(e);
-    };
-  }
+  // Copy code
+  copyCodeBtn.onclick = () => {
+    navigator.clipboard.writeText(syncUserId).then(() => {
+      copyCodeBtn.textContent = "✓ Copied!";
+      newStatus.textContent = "Code copied — enter it on your other device";
+      setTimeout(() => { copyCodeBtn.textContent = "📋 Copy Code"; }, 2000);
+    });
+  };
 
-  setTimeout(() => {
-    if (document.getElementById("pairingBanner")) {
-      banner.style.transition = "opacity .3s ease";
-      banner.style.opacity = "0";
-      setTimeout(() => banner.remove(), 300);
+  // Done button — close overlay and mark as paired
+  function completePairing() {
+    safeStorage.set("qa_tracker_paired", "1");
+    overlay.classList.add("hidden");
+    updateUrlHash(true);
+    updateSyncStatusUI("synced");
+  }
+  doneBtn.onclick = completePairing;
+
+  // "I have a code" — connect and merge
+  existConnect.onclick = async () => {
+    let code = (existInput.value || "").trim();
+    if (!code) {
+      existStatus.textContent = "Please enter a sync code or paste a link";
+      existStatus.style.color = "var(--red-text)";
+      return;
     }
-  }, 15000);
+
+    // Extract sync code from URL if pasted
+    if (code.includes("?sync=") || code.includes("&sync=")) {
+      try {
+        const parsed = new URL(code);
+        code = parsed.searchParams.get("sync") || code;
+      } catch (e) {
+        const match = code.match(/[?&]sync=([^&#]+)/);
+        if (match) code = decodeURIComponent(match[1]);
+      }
+    }
+    // Also check hash params
+    if (code.includes("#") && code.includes("sync=")) {
+      const match = code.match(/sync=([^&#]+)/);
+      if (match) code = decodeURIComponent(match[1]);
+    }
+    code = code.replace(/[^a-zA-Z0-9_\-\.]/g, "");
+    if (!code) {
+      existStatus.textContent = "Invalid code — please try again";
+      existStatus.style.color = "var(--red-text)";
+      return;
+    }
+
+    existConnect.textContent = "Connecting…";
+    existStatus.textContent = "🔄 Connecting & merging data…";
+    existStatus.style.color = "var(--amber-text)";
+
+    syncUserId = code;
+    await safeStorage.set("qa_tracker_sync_id", syncUserId);
+
+    // Re-initialize Firestore listener with the new sync room
+    initFirestoreLiveListener();
+    await fetchCloudDataAndMerge();
+
+    existConnect.textContent = "✓ Connected!";
+    existStatus.textContent = "🟢 All data merged! Starting…";
+    existStatus.style.color = "var(--teal-text)";
+
+    setTimeout(completePairing, 800);
+  };
+
+  // Allow Enter key in input
+  existInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") existConnect.click();
+  });
 }
 </script>
 
@@ -5422,5 +6428,74 @@ function showDevicePairingBanner() {
     </div>
   </div>
 </div>
+
+<!-- Edit Custom Question Modal -->
+<div class="modal-overlay hidden" id="editQModal">
+  <div class="modal-card" style="max-width: 500px; max-height: 90vh; overflow-y: auto;">
+    <div class="modal-head">
+      <div class="modal-title" style="display:flex; align-items:center; gap:8px;">
+        <span>✏️</span>
+        <span>Edit Question &amp; Answer</span>
+      </div>
+      <button class="modal-close-btn" id="closeEditQModalBtn">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="studio-label" style="display:block; margin-bottom:4px; font-weight:700;">Question Text</label>
+      <input type="text" id="editQText" class="studio-search-input" placeholder="e.g. How do you test microservices?" style="width:100%; margin-bottom:12px; box-sizing:border-box;">
+      
+      <label class="studio-label" style="display:block; margin-bottom:4px; font-weight:700;">Key Idea / Core Answer</label>
+      <textarea id="editQAnswer" class="studio-notes-textarea" placeholder="Core concept, steps, or explanation..." style="min-height:90px; margin-bottom:12px; box-sizing:border-box;"></textarea>
+      
+      <label class="studio-label" style="display:block; margin-bottom:4px; font-weight:700;">ELI5 Analogy (Optional)</label>
+      <input type="text" id="editQEli5" class="studio-search-input" placeholder="Simple real-world analogy..." style="width:100%; margin-bottom:16px; box-sizing:border-box;">
+      
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button class="fa-btn skip" id="cancelEditQBtn" style="padding:6px 14px; font-size:12px;">Cancel</button>
+        <button class="fa-btn confident" id="saveEditQBtn" style="padding:6px 14px; font-size:12px;">✓ Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- First-Launch Pairing Overlay (hidden by default, shown if never paired) -->
+<div class="pairing-overlay hidden" id="pairingOverlay">
+  <div class="pairing-card">
+    <p class="pairing-title">☁️ Set Up Cross-Device Sync</p>
+    <p class="pairing-subtitle">Sync your progress, custom questions, notes &amp; streak across all your devices — phone, laptop, tablet — in real time.</p>
+
+    <div class="pairing-section" id="pairNewSection">
+      <p class="pairing-section-title">🆕 I'm starting fresh on this device</p>
+      <p class="pairing-section-desc">A unique sync code is generated for you. Open the link or enter the code on your other device to pair them.</p>
+      <div class="pairing-expand">
+        <div class="pairing-code-display" id="pairNewCode"></div>
+        <div class="pairing-qr-wrap">
+          <img id="pairNewQr" alt="Pairing QR Code" src="">
+          <div style="font-size:11px; color:var(--text-muted); margin-top:6px;">Scan with your phone camera to pair instantly</div>
+        </div>
+        <div class="pairing-actions">
+          <button class="pairing-btn pairing-btn-primary" id="pairNewCopyLink" style="flex:1;">📋 Copy Pairing Link</button>
+          <button class="pairing-btn pairing-btn-primary" id="pairNewCopyCode" style="flex:1;">📋 Copy Code</button>
+        </div>
+        <div class="pairing-status" id="pairNewStatus"></div>
+        <button class="pairing-btn pairing-btn-primary" id="pairNewDone" style="width:100%; margin-top:10px; padding:12px; font-size:14px;">✓ Done — Start Studying</button>
+      </div>
+    </div>
+
+    <div class="pairing-or">— OR —</div>
+
+    <div class="pairing-section" id="pairExistingSection">
+      <p class="pairing-section-title">🔗 I have a code from another device</p>
+      <p class="pairing-section-desc">Paste the sync code or pairing link from your phone/laptop to connect &amp; merge all data instantly.</p>
+      <div class="pairing-expand">
+        <div class="pairing-input-row">
+          <input type="text" class="pairing-input" id="pairExistingInput" placeholder="Paste code or link here…">
+          <button class="pairing-btn pairing-btn-primary" id="pairExistingConnect">Connect</button>
+        </div>
+        <div class="pairing-status" id="pairExistingStatus"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
