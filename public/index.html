@@ -555,125 +555,89 @@
     color: var(--text-muted);
   }
 
-  /* Active Recall Stepper (Step Tabs) */
-  .stepper-container {
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 10px 14px;
-    margin-bottom: 18px;
-  }
-
-  .stepper-header {
+  /* Focus Top Meta Bar */
+  .focus-top-meta {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 8px;
-  }
-
-  .stepper-dots {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .step-dot {
-    display: inline-flex;
-    align-items: center;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 11.5px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: var(--radius-full);
-    background: var(--surface);
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    transition: all 0.2s ease;
-  }
-
-  .step-dot.active {
-    background: var(--teal-soft);
-    color: var(--teal-text);
-    border-color: var(--teal-border);
-    font-weight: 600;
-    box-shadow: 0 1px 4px rgba(45, 122, 104, 0.1);
-  }
-
-  .step-dot.done {
-    background: var(--surface-subtle);
-    color: var(--text-muted);
-    border-color: var(--border);
-    opacity: 0.85;
-  }
-
-  .stepper-text {
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin: 0;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   /* Focus Question Hero */
   .focus-hero {
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 
   .focus-q {
     font-size: 21px;
-    font-weight: 600;
-    line-height: 1.45;
+    font-weight: 700;
+    line-height: 1.4;
     color: var(--text-main);
-    letter-spacing: -0.01em;
-    margin: 0 0 12px;
+    letter-spacing: -0.015em;
+    margin: 0 0 10px;
   }
 
-  .focus-why {
-    font-size: 13.5px;
+  .focus-why-tip {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--purple-text);
-    line-height: 1.55;
     background: var(--purple-soft);
-    padding: 12px 14px;
-    border-left: 3px solid var(--purple-text);
+    border: 1px solid var(--purple-border);
     border-radius: var(--radius-sm);
-    margin: 0;
+    padding: 5px 10px;
+    line-height: 1.45;
+    margin-bottom: 6px;
   }
 
-  /* Recall Note Area */
+  /* Recall Note Area (Compact & Auto-expanding) */
   .focus-note-wrap {
-    margin-bottom: 18px;
+    margin-bottom: 12px;
+    position: relative;
   }
 
   .focus-note {
     width: 100%;
-    min-height: 110px;
+    min-height: 44px;
+    height: 44px;
     resize: vertical;
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
     color: var(--text-main);
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 15px;
-    padding: 14px 16px;
-    line-height: 1.6;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    font-size: 13.5px;
+    padding: 10px 14px;
+    line-height: 1.5;
+    transition: height 0.2s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
-  .focus-note:focus {
-    outline: none;
+  .focus-note:focus, .focus-note.expanded {
+    height: 84px;
     border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(45, 122, 104, 0.15);
+    box-shadow: 0 0 0 3px rgba(45, 122, 104, 0.12);
   }
 
   .focus-note::placeholder {
     color: var(--text-light);
-    font-size: 14.5px;
+    font-size: 13px;
   }
 
-  /* Soft Reveal Button */
+  .focus-notes-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Soft Reveal Button (Phase 1) */
   .reveal-btn {
     display: inline-flex;
     align-items: center;
@@ -681,24 +645,60 @@
     gap: 8px;
     width: 100%;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 600;
     background: var(--teal-soft);
     border: 1.5px solid var(--teal-border);
     color: var(--teal-text);
-    padding: 11px 18px;
+    padding: 12px 20px;
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.18s ease;
-    margin-bottom: 18px;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 4px;
     min-height: 44px;
+    box-shadow: 0 1px 3px rgba(45, 122, 104, 0.06);
   }
 
   .reveal-btn:hover {
     background: #DCF3E7;
     border-color: #AEE2C8;
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(45, 122, 104, 0.08);
+    box-shadow: 0 3px 10px rgba(45, 122, 104, 0.12);
+  }
+
+  .reveal-btn.hidden {
+    display: none !important;
+  }
+
+  /* Quick Pre-Reveal Skip & Confident Links */
+  .focus-quick-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+
+  .focus-quick-actions.hidden {
+    display: none !important;
+  }
+
+  .quick-action-link {
+    background: none;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    transition: all 0.15s ease;
+  }
+
+  .quick-action-link:hover {
+    color: var(--text-main);
+    background: var(--surface-subtle);
   }
 
   /* Soft Language Toggle Tabs */
@@ -928,7 +928,12 @@
   .focus-actions {
     display: flex;
     gap: 10px;
-    margin-top: 14px;
+    margin-top: 16px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .focus-actions.hidden {
+    display: none !important;
   }
 
   .fa-btn {
@@ -988,20 +993,61 @@
     border-color: var(--border-strong);
   }
 
-  .apply-tip, .focus-apply {
+  .ans-section.apply, .apply-tip, .focus-apply {
     text-align: left;
-    margin-top: 16px;
-    padding: 12px 16px;
+    margin-top: 14px;
+    padding: 12px 14px;
     background: var(--teal-soft);
     border-radius: var(--radius-md);
     border: 1px solid var(--teal-border);
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--text-main);
     line-height: 1.55;
   }
 
-  .apply-tip b, .focus-apply b {
+  .ans-section.apply .ans-label, .apply-tip b, .focus-apply b {
     color: var(--teal-text);
+  }
+
+  /* Clean Single-Row Focus Navigation Footer */
+  .focus-nav-arrows {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .focus-arrow-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .focus-arrow-btn:hover {
+    background: var(--surface-subtle);
+    color: var(--text-main);
+    border-color: var(--border-strong);
+  }
+
+  .focus-arrow-hint {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    text-align: center;
+    flex: 1;
+    font-family: 'IBM Plex Sans', sans-serif;
   }
 
   .focus-empty {
@@ -3618,6 +3664,7 @@ function buildAnswerContentHTML(q) {
   if (p.mistake) html += `<div class="ans-section mistake"><span class="ans-label">⚠️ Common Trap / Mistake</span><div class="ans-body">${p.mistake}</div></div>`;
   if (p.why) html += `<div class="ans-section why"><span class="ans-label">🎯 Why Interviewers Ask This</span><div class="ans-body">${p.why}</div></div>`;
   if (p.eli5) html += `<div class="ans-section eli5 ans-eli5-box"><span class="ans-label ans-eli5-label">🧒 ELI5 Analogy</span><div class="ans-body">${p.eli5}</div></div>`;
+  if (q.apply) html += `<div class="ans-section apply"><span class="ans-label">💡 Action Tip / Apply It</span><div class="ans-body">${escapeHtml(q.apply)}</div></div>`;
 
   return html;
 }
@@ -4228,44 +4275,41 @@ function renderFocus(targetQId = null, animClass = "") {
         <span class="queue-pill">${remainingCount()} left to confident</span>
       </div>
 
-      <div class="stepper-container">
-        <div class="stepper-header">
-          <div class="stepper-dots" id="stageStrip"></div>
-        </div>
-        <p class="stepper-text" id="stageInstruction"></p>
-      </div>
-
       <div class="focus-hero">
-        ${q.why ? `<p class="focus-why" style="margin-bottom: 12px;">${q.why}</p>` : ""}
         <h2 class="focus-q">${escapeHtml(q.text)}</h2>
+        ${q.why ? `<div class="focus-why-tip">💡 ${escapeHtml(q.why)}</div>` : ""}
       </div>
 
       <div class="focus-note-wrap">
-        <textarea class="focus-note" id="focusNote" placeholder="Try answering out loud first, then write your key takeaway here…">${s.note || ""}</textarea>
-        <div class="studio-notes-meta" id="focusNotesMeta">${s.updatedAt ? "Last saved: " + formatUpdatedTime(s.updatedAt) : "Auto-saved as you type"}</div>
+        <textarea class="focus-note" id="focusNote" placeholder="✏️ Type practice thoughts / recall notes here… (optional)">${s.note || ""}</textarea>
+        <div class="focus-notes-meta" id="focusNotesMeta">${s.updatedAt ? "Saved " + formatUpdatedTime(s.updatedAt) : "Auto-saved as you type"}</div>
       </div>
 
       <button class="reveal-btn" id="revealBtn">👁 Reveal Key Points &amp; ELI5 Analogy</button>
-      <div class="answer-box" id="answerBox">${buildAnswerContentHTML(q)}</div>
+
+      <div class="focus-quick-actions" id="focusQuickActions">
+        <button class="quick-action-link" id="quickConfidentBtn">Already confident? Mark ✓</button>
+        <span style="opacity:0.3;font-size:11px;">•</span>
+        <button class="quick-action-link" id="quickSkipBtn">Skip ↷</button>
+      </div>
+
+      <div class="answer-box" id="answerBox"></div>
       <div class="answer-missing" id="answerMissing">${q.isCustom ? "No predefined answer for this custom question — edit it in All Questions to fill it in." : "Answer + ELI5 not added yet for this tier."}</div>
 
-      <div class="focus-actions">
+      <div class="focus-actions hidden" id="focusActions">
         <button class="fa-btn confident" id="btnConfident">✓ Confident</button>
         <button class="fa-btn reviewing" id="btnReviewing">↻ Still Learning</button>
         <button class="fa-btn skip" id="btnSkip">↷ Skip</button>
       </div>
 
-      ${q.apply ? `<div class="apply-tip"><b>💡 Apply it:</b> ${q.apply}</div>` : ""}
-
       <div class="focus-nav-arrows">
         <button class="focus-arrow-btn" id="focusPrevBtn" title="Previous Question">← Prev</button>
-        <div class="focus-arrow-hint">Swipe left/right or use buttons to navigate</div>
+        <div class="focus-arrow-hint">Swipe or arrow keys to navigate</div>
         <button class="focus-arrow-btn" id="focusNextBtn" title="Next Question">Next →</button>
       </div>
     </div>
   `;
 
-  renderStage();
   attachFocusScopeListeners();
 
   const crossSubjBtn = document.getElementById("crossSubjectResumeBtn");
@@ -4293,11 +4337,55 @@ function renderFocus(targetQId = null, animClass = "") {
 
   const noteEl = document.getElementById("focusNote");
   if (noteEl) {
+    if (noteEl.value.trim().length > 0) {
+      noteEl.classList.add("expanded");
+    }
+    noteEl.addEventListener("focus", () => {
+      noteEl.classList.add("expanded");
+    });
+    noteEl.addEventListener("blur", () => {
+      if (!noteEl.value.trim()) {
+        noteEl.classList.remove("expanded");
+      }
+    });
     noteEl.addEventListener("input", () => {
       if (focusStage < 1) setStage(1);
     });
     setupNoteAutoSave(noteEl, q.id, document.getElementById("focusNotesMeta"));
   }
+
+  function handleReveal() {
+    setStage(2);
+    const rBtn = document.getElementById("revealBtn");
+    const qkActions = document.getElementById("focusQuickActions");
+    const actions = document.getElementById("focusActions");
+    const box = document.getElementById("answerBox");
+
+    if (rBtn) rBtn.classList.add("hidden");
+    if (qkActions) qkActions.classList.add("hidden");
+
+    if (q.answer) {
+      if (box) {
+        box.innerHTML = buildAnswerContentHTML(q);
+        box.classList.add("open");
+        attachAnswerEventListeners(q, "focus");
+      }
+    } else {
+      const miss = document.getElementById("answerMissing");
+      if (miss) miss.classList.add("open");
+    }
+
+    if (actions) actions.classList.remove("hidden");
+    setTimeout(() => setStage(3), 300);
+  }
+
+  const rBtn = document.getElementById("revealBtn");
+  if (rBtn) rBtn.onclick = handleReveal;
+
+  const qkConf = document.getElementById("quickConfidentBtn");
+  if (qkConf) qkConf.onclick = () => resolveFocus(q.id, "confident");
+  const qkSkip = document.getElementById("quickSkipBtn");
+  if (qkSkip) qkSkip.onclick = () => focusNextQuestion(q.id);
 
   document.getElementById("btnConfident").onclick = () => resolveFocus(q.id, "confident");
   document.getElementById("btnReviewing").onclick = () => resolveFocus(q.id, "reviewing");
@@ -4308,18 +4396,28 @@ function renderFocus(targetQId = null, animClass = "") {
   const nextBtn = document.getElementById("focusNextBtn");
   if (nextBtn) nextBtn.onclick = () => focusNextQuestion(q.id);
 
-  document.getElementById("revealBtn").onclick = () => {
-    setStage(2);
-    if (q.answer) {
-      const box = document.getElementById("answerBox");
-      box.innerHTML = buildAnswerContentHTML(q);
-      box.classList.add("open");
-      attachAnswerEventListeners(q, "focus");
-    } else {
-      document.getElementById("answerMissing").classList.add("open");
-    }
-    setTimeout(() => setStage(3), 400);
-  };
+  if (!window._focusKeyBound) {
+    window._focusKeyBound = true;
+    window.addEventListener("keydown", (e) => {
+      if (currentView !== "focus") return;
+      const tag = (e.target && e.target.tagName) || "";
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        focusPrevQuestion();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        const nBtn = document.getElementById("focusNextBtn");
+        if (nBtn) nBtn.click();
+      } else if (e.key === " " || e.key === "Enter") {
+        const rvBtn = document.getElementById("revealBtn");
+        if (rvBtn && !rvBtn.classList.contains("hidden")) {
+          e.preventDefault();
+          rvBtn.click();
+        }
+      }
+    });
+  }
 }
 
 function attachFocusScopeListeners() {
