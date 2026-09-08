@@ -184,34 +184,13 @@
   }
 
   .app-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    font-size: 14.5px;
-    color: var(--text-main);
-    letter-spacing: -0.01em;
-  }
-
-  .brand-icon {
-    width: 28px;
-    height: 28px;
-    background: var(--surface-subtle);
-    color: var(--teal-text);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
+    display: none;
   }
 
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 
   .a11y-bar {
@@ -223,25 +202,58 @@
   .a11y-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 11px;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
     background: var(--surface-subtle);
     border: 1px solid var(--border);
     border-radius: var(--radius-full);
     color: var(--text-secondary);
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
     user-select: none;
-    min-height: 32px;
   }
 
   .a11y-btn:hover {
     background: var(--surface-highlight);
     border-color: var(--border-strong);
     color: var(--text-main);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .focus-scope-select {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    padding: 4px 10px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .focus-scope-select:hover, .focus-scope-select:focus {
+    border-color: var(--teal);
+    color: var(--text-main);
+    background: var(--surface);
   }
 
   .a11y-icon {
@@ -4108,23 +4120,7 @@ function buildCrossSubjectResumeBanner() {
 }
 
 function buildFocusScopeBarHTML() {
-  const subj = getActiveSubject();
-  let tierOpts = "";
-  subj.tiers.forEach(t => {
-    tierOpts += `<option value="${t.tier}" ${focusScope === t.tier ? "selected" : ""}>${t.tier}: ${t.title}</option>`;
-  });
-
-  return `
-    <div class="focus-scope-bar">
-      <span class="focus-scope-lbl">Study Scope:</span>
-      <button class="scope-pill ${focusScope === 'all' ? 'active' : ''}" data-scope="all">All Questions</button>
-      <button class="scope-pill ${focusScope === 'custom' ? 'active' : ''}" data-scope="custom">⭐ My Custom (${customQuestions.length})</button>
-      <select class="scope-select" id="focusTierSelect">
-        <option value="all" ${focusScope === 'all' ? 'selected' : ''}>Filter by Tier…</option>
-        ${tierOpts}
-      </select>
-    </div>
-  `;
+  return ""; // Replaced with inline scope dropdown inside card header
 }
 
 // ==========================================
@@ -4234,12 +4230,23 @@ function renderFocus(targetQId = null, animClass = "") {
   if (!picked) {
     currentFocusQId = null;
     const upcoming = nextUpcomingReview();
+    const subj = getActiveSubject();
+    let tierOpts = "";
+    subj.tiers.forEach(t => {
+      tierOpts += `<option value="${t.tier}" ${focusScope === t.tier ? "selected" : ""}>Tier ${t.tier}: ${t.title}</option>`;
+    });
     el.innerHTML = `
-      ${buildFocusScopeBarHTML()}
       <div class="focus-card focus-empty">
         <div class="celebrate">🎉 Everything's confident in this scope and none are due for review yet.
         ${upcoming ? `<br><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);margin-top:6px;display:inline-block;">Next spaced review unlocks ${upcoming.toLocaleDateString()}.</span>` : ""}
-        <br><span style="color:var(--text-muted);font-size:13px;margin-top:8px;display:inline-block;">Switch scope or switch to <b>All Questions</b> to revisit questions any time.</span></div>
+        <br><span style="color:var(--text-muted);font-size:13px;margin-top:8px;display:inline-block;">Switch scope to revisit questions anytime:</span></div>
+        <div style="margin-top:14px;">
+          <select class="focus-scope-select" id="focusTierSelect" style="padding:6px 12px;font-size:12px;">
+            <option value="all">Scope: All Questions</option>
+            <option value="custom">⭐ My Custom (${customQuestions.length})</option>
+            ${tierOpts}
+          </select>
+        </div>
       </div>`;
     attachFocusScopeListeners();
     return;
@@ -4257,14 +4264,18 @@ function renderFocus(targetQId = null, animClass = "") {
   const qIndex = allQuestions.findIndex(item => item.id === q.id);
   const totalQuestions = allQuestions.length;
 
+  const subj = getActiveSubject();
+  let tierOpts = "";
+  subj.tiers.forEach(t => {
+    tierOpts += `<option value="${t.tier}" ${focusScope === t.tier ? "selected" : ""}>Tier ${t.tier}: ${t.title}</option>`;
+  });
+
   const resumeBannerHtml = buildResumeHeroBannerHTML(q.id);
   const crossSubjBannerHtml = buildCrossSubjectResumeBanner();
-  const scopeBarHtml = buildFocusScopeBarHTML();
 
   el.innerHTML = `
     ${crossSubjBannerHtml}
     ${resumeBannerHtml}
-    ${scopeBarHtml}
     <div class="focus-card ${animClass}" id="currentFocusCard">
       <div class="focus-top-meta">
         <div class="focus-badge-group">
@@ -4272,7 +4283,13 @@ function renderFocus(targetQId = null, animClass = "") {
           ${isReview ? `<span class="due-tag">🔁 Spaced Review</span>` : `<span class="tier-tag">${q.tier} · ${q.tierTitle}</span>`}
           ${q.isCustom ? `<span class="tier-tag" style="background:var(--amber-soft);color:var(--amber-text);border-color:var(--amber-border);">⭐ My Question</span>` : ""}
         </div>
-        <span class="queue-pill">${remainingCount()} left to confident</span>
+        <div class="focus-scope-wrap">
+          <select class="focus-scope-select" id="focusTierSelect" title="Filter Study Scope">
+            <option value="all" ${focusScope === 'all' ? 'selected' : ''}>Scope: All (${totalQuestions})</option>
+            <option value="custom" ${focusScope === 'custom' ? 'selected' : ''}>⭐ My Custom (${customQuestions.length})</option>
+            ${tierOpts}
+          </select>
+        </div>
       </div>
 
       <div class="focus-hero">
@@ -5725,11 +5742,11 @@ function updateSyncStatusUI(status) {
   if (!pill) return;
 
   pill.className = "stat-pill cloud-pill " + status;
-  const shortName = syncUserId ? (syncUserId.length > 11 ? syncUserId.substring(0, 10) + "…" : syncUserId) : "Sync";
+  pill.title = "Cloud Sync: " + (status === "synced" ? "Connected (Room: " + (syncUserId || "") + ")" : status) + " · Tap to manage pairing";
 
   if (status === "synced") {
     if (icon) icon.textContent = "☁️";
-    if (text) text.innerHTML = `Room: <b>${escapeHtml(shortName)}</b><span class="sync-live-dot"></span>`;
+    if (text) text.innerHTML = `Synced<span class="sync-live-dot"></span>`;
     if (msg) {
       msg.textContent = "🟢 Live real-time sync connected · Code: " + syncUserId;
       msg.style.color = "var(--teal-text)";
@@ -5743,7 +5760,7 @@ function updateSyncStatusUI(status) {
     }
   } else {
     if (icon) icon.textContent = "☁️";
-    if (text) text.innerHTML = `Room: <b>${escapeHtml(shortName)}</b>`;
+    if (text) text.innerHTML = `Offline`;
     if (msg) {
       msg.textContent = "⚪ Local storage active (Offline ready)";
       msg.style.color = "var(--text-muted)";
