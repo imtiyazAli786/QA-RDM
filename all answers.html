@@ -1165,8 +1165,8 @@
   /* Studio Question Item (Sidebar Tabs) */
   .studio-q-item {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    flex-direction: column;
+    gap: 6px;
     padding: 10px 12px;
     background: var(--surface);
     border: 1px solid var(--border-subtle);
@@ -1187,28 +1187,36 @@
     box-shadow: 0 1px 4px rgba(45, 122, 104, 0.08);
   }
 
-  .studio-q-num {
+  .studio-q-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .studio-q-tier-tag {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     color: var(--text-muted);
-    background: var(--surface-highlight);
+    background: var(--surface-subtle);
     border: 1px solid var(--border);
     padding: 2px 7px;
     border-radius: var(--radius-sm);
-    white-space: nowrap;
-    line-height: 1.2;
+    letter-spacing: 0.03em;
   }
 
-  .studio-q-item.active .studio-q-num {
-    background: var(--teal);
-    color: #ffffff;
-    border-color: var(--teal-dark);
+  .studio-q-tier-tag.custom {
+    background: var(--amber-soft);
+    border-color: var(--amber-border);
+    color: var(--amber-text);
   }
 
-  .studio-q-info {
-    flex: 1;
-    min-width: 0;
+  .studio-q-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.45;
   }
 
   .studio-q-title-preview {
@@ -1272,16 +1280,25 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
     border-bottom: 1px solid var(--border-subtle);
     flex-wrap: wrap;
   }
 
-  .studio-nav-group {
+  .studio-top-left {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .studio-top-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    flex-wrap: wrap;
   }
 
   .studio-nav-btn {
@@ -4728,42 +4745,37 @@ function renderStudioDetail() {
   const totalInFilter = filtered.length;
 
   mainEl.innerHTML = `
-    <div class="studio-detail-topbar">
+    <div class="studio-main-top">
       <button class="studio-mobile-back" id="studioMobileBack">← Back to List</button>
-      <div class="studio-nav-group">
-        <span class="due-tag" style="font-size:11px;background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);">Q#${currentIndex + 1} of ${totalInFilter}</span>
+      <div class="studio-top-left">
+        <span class="due-tag" style="font-size:11.5px;background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);">Q#${currentIndex + 1} of ${totalInFilter}</span>
         <select class="studio-status-select" id="studioDetailStatus">
           <option value="notstarted" ${s.status === "notstarted" ? "selected" : ""}>○ Not Started</option>
           <option value="reviewing" ${s.status === "reviewing" ? "selected" : ""}>↻ Still Learning</option>
           <option value="confident" ${s.status === "confident" ? "selected" : ""}>✓ Confident</option>
         </select>
-        <button class="studio-nav-btn" id="studioPrevBtn" ${currentIndex <= 0 ? "disabled style='opacity:0.4;cursor:default;'" : ""}>‹ Prev</button>
-        <button class="studio-nav-btn" id="studioNextBtn" ${currentIndex >= totalInFilter - 1 ? "disabled style='opacity:0.4;cursor:default;'" : ""}>Next ›</button>
-        <button class="studio-nav-btn" id="studioRandBtn" title="Jump to a random question">🎲 Random</button>
-        <button class="studio-nav-btn" id="studioStudyFocusBtn" title="Study this question in Resume / Focus view" style="margin-left:auto;color:var(--teal-text);border-color:var(--teal-border);background:var(--teal-soft);font-weight:600;font-size:11px;padding:3px 9px;">🎯 Study in Resume</button>
 
         ${q.isCustom ? `
-          <button class="studio-nav-btn" id="studioEditBtn" style="font-size:11px;color:var(--teal-text);padding:3px 8px;" title="Edit custom question & answer">✏️ Edit</button>
-          <button class="delete-q-btn" id="studioDeleteBtn" data-delete="${q.id}" style="margin-left:4px;font-size:12px;color:var(--red);" title="Delete custom question">🗑</button>
+          <button class="studio-nav-btn" id="studioEditBtn" style="font-size:11.5px;color:var(--teal-text);padding:3px 9px;" title="Edit custom question & answer">✏️ Edit</button>
+          <button class="delete-q-btn" id="studioDeleteBtn" data-delete="${q.id}" style="margin-left:4px;font-size:13px;color:var(--red);" title="Delete custom question">🗑</button>
         ` : ""}
+      </div>
+      <div class="studio-top-right">
+        <div class="lang-toggle">
+          <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">🇬🇧 English</button>
+          <button class="lang-btn ${currentLang === 'hi' ? 'active' : ''}" data-lang="hi">🇮🇳 Hinglish</button>
+        </div>
+        <div class="audio-control-wrap">
+          <button class="audio-btn ${isSpeaking ? 'playing' : ''}" id="studioAudioPlayBtn" title="Listen to Answer Audio">
+            <span class="audio-icon">${isSpeaking ? '⏸' : '🔊'}</span>
+            <span>${isSpeaking ? 'Stop' : 'Listen'}</span>
+          </button>
+          <button class="speed-btn" id="studioAudioSpeedBtn" title="Change Audio Speed">${speechRate}x</button>
+        </div>
       </div>
     </div>
 
     <h1 class="studio-q-hero-title">${escapeHtml(q.text)}</h1>
-
-    <div class="answer-top-bar" style="margin-top: 4px; margin-bottom: 14px;">
-      <div class="lang-toggle">
-        <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">🇬🇧 English</button>
-        <button class="lang-btn ${currentLang === 'hi' ? 'active' : ''}" data-lang="hi">🇮🇳 Hinglish</button>
-      </div>
-      <div class="audio-control-wrap">
-        <button class="audio-btn ${isSpeaking ? 'playing' : ''}" id="studioAudioPlayBtn" title="Listen to Answer Audio">
-          <span class="audio-icon">${isSpeaking ? '⏸' : '🔊'}</span>
-          <span>${isSpeaking ? 'Stop' : 'Listen'}</span>
-        </button>
-        <button class="speed-btn" id="studioAudioSpeedBtn" title="Change Audio Speed">${speechRate}x</button>
-      </div>
-    </div>
 
     ${parsed && parsed.key && parsed.key.length ? `
       <div class="studio-card pitch">
@@ -4834,47 +4846,7 @@ function renderStudioDetail() {
     });
   }
 
-  const prevBtn = document.getElementById("studioPrevBtn");
-  if (prevBtn && currentIndex > 0) {
-    prevBtn.addEventListener("click", () => {
-      selectedStudioQId = filtered[currentIndex - 1].id;
-      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
-      renderStudio();
-      updateUrlHash(false);
-      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
-    });
-  }
 
-  const nextBtn = document.getElementById("studioNextBtn");
-  if (nextBtn && currentIndex < totalInFilter - 1) {
-    nextBtn.addEventListener("click", () => {
-      selectedStudioQId = filtered[currentIndex + 1].id;
-      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
-      renderStudio();
-      updateUrlHash(false);
-      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
-    });
-  }
-
-  const randBtn = document.getElementById("studioRandBtn");
-  if (randBtn && totalInFilter > 1) {
-    randBtn.addEventListener("click", () => {
-      let randIdx = Math.floor(Math.random() * totalInFilter);
-      if (randIdx === currentIndex) randIdx = (randIdx + 1) % totalInFilter;
-      selectedStudioQId = filtered[randIdx].id;
-      localStorage.setItem("qa_selected_studio_qid_" + currentSubjectId, selectedStudioQId);
-      renderStudio();
-      updateUrlHash(false);
-      setTimeout(scrollSelectedStudioQuestionIntoView, 60);
-    });
-  }
-
-  const studyFocusBtn = document.getElementById("studioStudyFocusBtn");
-  if (studyFocusBtn) {
-    studyFocusBtn.onclick = () => {
-      switchView("focus", q.id, true);
-    };
-  }
 
   const editBtn = document.getElementById("studioEditBtn");
   if (editBtn) {
