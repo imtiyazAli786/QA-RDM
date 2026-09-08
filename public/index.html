@@ -1076,8 +1076,8 @@
   /* ALL QUESTIONS / STUDIO DUAL-PANE VIEW */
   .studio-layout {
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 20px;
+    grid-template-columns: 280px 1fr;
+    gap: 16px;
     align-items: start;
   }
 
@@ -1271,11 +1271,12 @@
   }
 
   /* Main Detail Pane */
+  /* Main Detail Pane */
   .studio-main {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 26px 28px;
+    padding: 22px 24px;
     box-shadow: var(--shadow-sm);
     min-height: 480px;
     touch-action: pan-y;
@@ -1286,26 +1287,26 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 8px;
     margin-bottom: 14px;
     padding-bottom: 12px;
     border-bottom: 1px solid var(--border-subtle);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .studio-top-left {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 6px;
+    flex-shrink: 0;
   }
 
   .studio-top-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     margin-left: auto;
-    flex-wrap: wrap;
+    flex-shrink: 0;
   }
 
   .studio-nav-btn {
@@ -1331,10 +1332,30 @@
     border-color: var(--border-strong);
   }
 
-  /* Studio Detail Toolbar Buttons */
+  /* Studio Detail Toolbar Buttons - Unified 28px pill metrics */
+  .studio-q-num-pill {
+    height: 28px;
+    box-sizing: border-box;
+    padding: 0 9px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--surface-subtle);
+    color: var(--text-secondary);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+    white-space: nowrap;
+  }
+
   .studio-status-select {
     height: 28px;
-    padding: 0 24px 0 10px;
+    box-sizing: border-box;
+    padding: 0 22px 0 9px;
     border-radius: var(--radius-full);
     border: 1px solid var(--border);
     background-color: var(--surface-subtle);
@@ -1345,11 +1366,14 @@
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 7px center;
     outline: none;
     transition: all 0.15s ease;
+    margin: 0;
+    line-height: 26px;
+    white-space: nowrap;
   }
 
   .studio-status-select:hover {
@@ -1368,7 +1392,8 @@
     justify-content: center;
     gap: 4px;
     height: 28px;
-    padding: 0 12px;
+    box-sizing: border-box;
+    padding: 0 11px;
     background: var(--teal-soft);
     border: 1px solid var(--teal-border);
     border-radius: var(--radius-full);
@@ -1377,6 +1402,9 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
     transition: all 0.15s ease;
   }
 
@@ -1390,19 +1418,54 @@
     align-items: center;
     justify-content: center;
     height: 28px;
-    padding: 0 10px;
+    box-sizing: border-box;
+    padding: 0 9px;
     background: var(--red-soft);
     border: 1px solid var(--red-border);
     border-radius: var(--radius-full);
     color: var(--red);
-    font-size: 13px;
+    font-size: 12.5px;
     cursor: pointer;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
     transition: all 0.15s ease;
   }
 
   .studio-delete-pill-btn:hover {
     filter: brightness(1.15);
     border-color: var(--red);
+  }
+
+  .studio-top-right .lang-toggle {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .studio-top-right .lang-btn {
+    padding: 0 9px;
+    font-size: 11.5px;
+    height: 24px;
+    min-height: 24px;
+    line-height: 1;
+  }
+
+  .studio-top-right .audio-btn {
+    padding: 0 10px;
+    font-size: 11.5px;
+    height: 28px;
+    min-height: 28px;
+    line-height: 1;
+    box-sizing: border-box;
+  }
+
+  .studio-top-right .speed-btn {
+    padding: 0 8px;
+    font-size: 11px;
+    height: 28px;
+    min-height: 28px;
+    line-height: 1;
+    box-sizing: border-box;
   }
 
   .studio-q-hero-title {
@@ -1583,18 +1646,24 @@
     }
     .studio-main-top {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 10px;
+      flex-wrap: wrap;
     }
-    .studio-nav-group {
+    .studio-top-left {
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: flex-start;
       gap: 6px;
     }
-    .studio-detail-status {
-      flex: 1;
-      max-width: 150px;
+    .studio-top-right {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-left: 0;
+      gap: 6px;
     }
   }
 
@@ -4826,7 +4895,7 @@ function renderStudioDetail() {
     <div class="studio-main-top">
       <button class="studio-mobile-back" id="studioMobileBack">← Back to List</button>
       <div class="studio-top-left">
-        <span class="due-tag" style="font-size:11.5px;background:var(--surface-subtle);color:var(--text-secondary);border-color:var(--border);height:28px;display:inline-flex;align-items:center;">Q#${currentIndex + 1} of ${totalInFilter}</span>
+        <span class="studio-q-num-pill">Q#${currentIndex + 1} of ${totalInFilter}</span>
         <select class="studio-status-select" id="studioDetailStatus">
           <option value="notstarted" ${s.status === "notstarted" ? "selected" : ""}>○ Not Started</option>
           <option value="reviewing" ${s.status === "reviewing" ? "selected" : ""}>↻ Still Learning</option>
