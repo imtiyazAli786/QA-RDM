@@ -224,6 +224,79 @@
     color: var(--text-main);
   }
 
+  .a11y-btn.active {
+    background: var(--surface-highlight);
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+
+  .cal-icon-badge {
+    position: relative;
+    width: 21px;
+    height: 21px;
+    background: var(--surface);
+    border: 1.5px solid var(--border-strong);
+    border-radius: 5px;
+    display: inline-flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    pointer-events: none;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .a11y-btn:hover .cal-icon-badge {
+    border-color: var(--text-muted);
+    transform: scale(1.04);
+  }
+
+  .a11y-btn.active .cal-icon-badge {
+    border-color: var(--teal);
+  }
+
+  .cal-icon-header {
+    height: 6.5px;
+    background: #e11d48;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .cal-icon-month {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 5px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.4px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .cal-icon-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+  }
+
+  html[data-theme="dark"] .cal-icon-body {
+    background: var(--surface-subtle);
+  }
+
+  .cal-icon-day {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1;
+    margin-top: -0.5px;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;
@@ -2815,7 +2888,14 @@
         </div>
         <div class="a11y-bar">
           <button class="a11y-btn" id="calendarToggleBtn" title="Toggle Clock &amp; Calendar" aria-label="Toggle Clock &amp; Calendar">
-            <span class="a11y-icon">📅</span>
+            <span class="cal-icon-badge" aria-hidden="true">
+              <span class="cal-icon-header">
+                <span class="cal-icon-month" id="calIconMonth">SEP</span>
+              </span>
+              <span class="cal-icon-body">
+                <span class="cal-icon-day" id="calIconDay">9</span>
+              </span>
+            </span>
           </button>
           <button class="a11y-btn" id="fontScaleBtn" title="Change Text Size (Normal / Large / Extra Large)" aria-label="Change Text Size">
             <span class="a11y-icon">Aa</span>
@@ -5773,6 +5853,7 @@ function adjustPopoverPosition() {
 }
 
 function setupDraggableClock() {
+  updateCalendarIcon();
   const clockWrap = document.getElementById("clockWrap");
   const clockEl = document.querySelector(".clock");
   if (!clockWrap) return;
@@ -5958,16 +6039,45 @@ function setupCalendarEvents() {
   });
 }
 
+function updateCalendarIcon() {
+  const d = new Date();
+  const day = d.getDate();
+  const month = d.toLocaleDateString('en-US', { month: 'short' }).slice(0, 3).toUpperCase();
+
+  const dayEl = document.getElementById("calIconDay");
+  const monthEl = document.getElementById("calIconMonth");
+  if (dayEl && dayEl.textContent !== String(day)) {
+    dayEl.textContent = day;
+  }
+  if (monthEl && monthEl.textContent !== month) {
+    monthEl.textContent = month;
+  }
+
+  const btn = document.getElementById("calendarToggleBtn");
+  if (btn) {
+    const fullDate = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+    btn.title = `Toggle Clock & Calendar (${fullDate})`;
+    btn.setAttribute("aria-label", `Toggle Clock & Calendar (${fullDate})`);
+  }
+}
+
 (function tickClock(){
   const d = new Date();
   const s = d.getSeconds(), m = d.getMinutes() + s/60, h = (d.getHours()%12) + m/60;
-  document.getElementById("clkSec").setAttribute("transform", `rotate(${s*6} 50 50)`);
-  document.getElementById("clkMin").setAttribute("transform", `rotate(${m*6} 50 50)`);
-  document.getElementById("clkHour").setAttribute("transform", `rotate(${h*30} 50 50)`);
-  document.getElementById("clockDate").innerHTML =
-    `<span class="clock-prefix">${d.toLocaleDateString(undefined, { weekday: 'short' })}</span>` +
-    ` <span class="clock-day">${d.getDate()}</span> ` +
-    `<span class="clock-suffix">${d.toLocaleDateString(undefined, { month: 'short' })}</span>`;
+  const secEl = document.getElementById("clkSec");
+  if (secEl) secEl.setAttribute("transform", `rotate(${s*6} 50 50)`);
+  const minEl = document.getElementById("clkMin");
+  if (minEl) minEl.setAttribute("transform", `rotate(${m*6} 50 50)`);
+  const hourEl = document.getElementById("clkHour");
+  if (hourEl) hourEl.setAttribute("transform", `rotate(${h*30} 50 50)`);
+  const clockDateEl = document.getElementById("clockDate");
+  if (clockDateEl) {
+    clockDateEl.innerHTML =
+      `<span class="clock-prefix">${d.toLocaleDateString(undefined, { weekday: 'short' })}</span>` +
+      ` <span class="clock-day">${d.getDate()}</span> ` +
+      `<span class="clock-suffix">${d.toLocaleDateString(undefined, { month: 'short' })}</span>`;
+  }
+  updateCalendarIcon();
   setTimeout(tickClock, 1000);
 })();
 
