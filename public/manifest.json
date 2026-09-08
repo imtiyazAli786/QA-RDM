@@ -1,0 +1,18 @@
+{
+  "name": "QA Interview Prep & Roadmap",
+  "short_name": "QA Prep",
+  "description": "Progressive QA Engineering & English Fluency Interview Tracker and Flashcard Study App",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F9FB",
+  "theme_color": "#F7F9FB",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -10,6 +10,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bgG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23F0FDF4'/%3E%3Cstop offset='100%25' stop-color='%23DCFCE7'/%3E%3C/linearGradient%3E%3ClinearGradient id='strokeG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310B981'/%3E%3Cstop offset='100%25' stop-color='%23059669'/%3E%3C/linearGradient%3E%3Cfilter id='glow' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='1.5' stdDeviation='1.5' flood-color='%23059669' flood-opacity='0.2'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='60' height='60' rx='16' fill='url(%23bgG)' stroke='%2386EFAC' stroke-width='2'/%3E%3Ccircle cx='16' cy='33' r='3.5' fill='%2334D399'/%3E%3Ccircle cx='48' cy='19' r='3.5' fill='%23059669'/%3E%3Cpath d='M16 33L27.5 44.5L48 19' fill='none' stroke='url(%23strokeG)' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' filter='url(%23glow)'/%3E%3C/svg%3E">
 <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bgG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23F0FDF4'/%3E%3Cstop offset='100%25' stop-color='%23DCFCE7'/%3E%3C/linearGradient%3E%3ClinearGradient id='strokeG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310B981'/%3E%3Cstop offset='100%25' stop-color='%23059669'/%3E%3C/linearGradient%3E%3Cfilter id='glow' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='1.5' stdDeviation='1.5' flood-color='%23059669' flood-opacity='0.2'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='60' height='60' rx='16' fill='url(%23bgG)' stroke='%2386EFAC' stroke-width='2'/%3E%3Ccircle cx='16' cy='33' r='3.5' fill='%2334D399'/%3E%3Ccircle cx='48' cy='19' r='3.5' fill='%23059669'/%3E%3Cpath d='M16 33L27.5 44.5L48 19' fill='none' stroke='url(%23strokeG)' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' filter='url(%23glow)'/%3E%3C/svg%3E">
+<link rel="manifest" href="/manifest.json">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
@@ -18,6 +19,7 @@
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
     touch-action: manipulation;
+    overflow-x: hidden;
   }
 
   /* Ultra-Soft, Premium Light Mode Palette (Calming pastels, Zero harsh glare) */
@@ -143,6 +145,7 @@
     padding-bottom: max(80px, env(safe-area-inset-bottom) + 60px);
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
+    overflow-x: hidden;
     line-height: 1.55;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -643,6 +646,20 @@
     margin-bottom: 14px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+  }
+
+  .focus-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .focus-scope-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
   /* Focus Question Hero */
@@ -1838,6 +1855,7 @@
       align-items: center;
       justify-content: flex-start;
       gap: 6px;
+      flex-wrap: wrap;
     }
     .studio-top-right {
       width: 100%;
@@ -1846,6 +1864,7 @@
       justify-content: space-between;
       margin-left: 0;
       gap: 6px;
+      flex-wrap: wrap;
     }
   }
 
@@ -2372,7 +2391,25 @@
   }
 
   @media (max-width: 960px) {
-    .clock-wrap { display: none; }
+    .clock-wrap {
+      top: 68px;
+      right: 12px;
+      transform: scale(0.92);
+      transform-origin: top right;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .clock-wrap {
+      top: 60px;
+      right: 8px;
+      transform: scale(0.85);
+      transform-origin: top right;
+    }
+    .calendar-popover {
+      width: 196px;
+      max-width: calc(100vw - 20px);
+    }
   }
 
   @media (max-width: 880px) {
@@ -2396,16 +2433,28 @@
   }
 
   @media (max-width: 768px) {
-    body { padding: 14px 10px; }
+    body {
+      padding: max(12px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(40px, env(safe-area-inset-bottom) + 16px) max(10px, env(safe-area-inset-left));
+    }
     .focus-card { padding: 20px 16px; }
-    .focus-q { font-size: 19px; line-height: 1.4; }
+    .focus-q { font-size: 18.5px; line-height: 1.4; }
     .focus-why { font-size: 13.5px; }
     .stepper-container { padding: 10px 12px; }
     .step-dot { font-size: 11px; padding: 3px 8px; }
     .stepper-text { font-size: 13px; }
-    .fa-btn { min-height: 42px; font-size: 13px; }
-    .reveal-btn { min-height: 42px; font-size: 13px; }
+    .fa-btn { min-height: 44px; font-size: 13.5px; }
+    .reveal-btn { min-height: 44px; font-size: 13.5px; }
     input, textarea, select { font-size: 16px !important; }
+    .focus-arrow-btn { min-height: 38px; padding: 7px 14px; }
+  }
+
+  @media (max-width: 640px), (hover: none) and (pointer: coarse) {
+    .kbd-hint {
+      display: none !important;
+    }
+    .focus-arrow-hint {
+      font-size: 11px;
+    }
   }
 
   @media (max-width: 520px) {
@@ -2413,10 +2462,23 @@
     .fa-btn { width: 100%; min-height: 46px; font-size: 13.5px; }
     .fa-btn.skip { flex: 1; }
     .brand-title { display: none; }
-    .subject-pill-text { max-width: 115px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .stat-pill { font-size: 11px; padding: 2px 6px; }
+    .subject-pill-text { max-width: 105px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .stat-pill { font-size: 11px; padding: 3px 7px; min-height: 28px; }
+    #cloudSyncText { display: none; }
+    .stat-pill.cloud-pill { padding: 3px 8px; }
     .nav-stats { gap: 4px; }
-    .focus-top-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .focus-top-meta { flex-direction: column; align-items: stretch; gap: 10px; }
+    .focus-meta-left { width: 100%; justify-content: flex-start; }
+    .focus-scope-wrap { width: 100%; display: flex; }
+    .focus-scope-select { flex: 1; min-width: 0; }
+    .studio-q-hero-title { font-size: 18px; line-height: 1.38; margin-bottom: 12px; }
+  }
+
+  @media (max-width: 400px) {
+    .nav-bar { padding: 8px 10px; }
+    .subject-pill-text { max-width: 85px; }
+    .view-btn { padding: 6px 8px; font-size: 11.5px; }
+    .roadmap-tier { padding: 16px 14px; }
   }
 
   /* Cloud Sync Modal & Pill */
