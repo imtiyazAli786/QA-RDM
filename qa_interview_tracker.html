@@ -13,17 +13,11 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
-  /* Base Accessibility Font Scale */
+  /* Base Font Scale (Default: Normal 16px) */
   html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
     touch-action: manipulation;
-  }
-  html[data-font-size="large"] {
-    font-size: 18px;
-  }
-  html[data-font-size="xlarge"] {
-    font-size: 20px;
   }
 
   /* Ultra-Soft, Premium Light Mode Palette (Calming pastels, Zero harsh glare) */
@@ -2896,10 +2890,6 @@
                 <span class="cal-icon-day" id="calIconDay">9</span>
               </span>
             </span>
-          </button>
-          <button class="a11y-btn" id="fontScaleBtn" title="Change Text Size (Normal / Large / Extra Large)" aria-label="Change Text Size">
-            <span class="a11y-icon">Aa</span>
-            <span id="fontScaleLabel" class="sr-only">Size: Normal</span>
           </button>
           <button class="a11y-btn" id="themeToggleBtn" title="Toggle Light / Dark &amp; High-Contrast Mode" aria-label="Toggle High-Contrast Mode">
             <span class="a11y-icon" id="themeIcon">☀️</span>
@@ -6085,11 +6075,11 @@ function updateCalendarIcon() {
 // ACCESSIBILITY CONTROLS
 // ==========================================
 let currentTheme = localStorage.getItem("qa_a11y_theme") || "light";
-let currentFontSize = localStorage.getItem("qa_a11y_fontsize") || "normal";
+try { localStorage.removeItem("qa_a11y_fontsize"); } catch(e) {}
 
 function applyA11ySettings() {
   document.documentElement.setAttribute("data-theme", currentTheme);
-  document.documentElement.setAttribute("data-font-size", currentFontSize);
+  document.documentElement.removeAttribute("data-font-size");
 
   const themeIcon = document.getElementById("themeIcon");
   const themeLabel = document.getElementById("themeLabel");
@@ -6102,13 +6092,6 @@ function applyA11ySettings() {
       themeLabel.textContent = "Light";
     }
   }
-
-  const fontLabel = document.getElementById("fontScaleLabel");
-  if (fontLabel) {
-    if (currentFontSize === "large") fontLabel.textContent = "Size: Large";
-    else if (currentFontSize === "xlarge") fontLabel.textContent = "Size: XL";
-    else fontLabel.textContent = "Size: Normal";
-  }
 }
 
 function toggleTheme() {
@@ -6117,20 +6100,10 @@ function toggleTheme() {
   applyA11ySettings();
 }
 
-function toggleFontSize() {
-  if (currentFontSize === "normal") currentFontSize = "large";
-  else if (currentFontSize === "large") currentFontSize = "xlarge";
-  else currentFontSize = "normal";
-  localStorage.setItem("qa_a11y_fontsize", currentFontSize);
-  applyA11ySettings();
-}
-
 function setupA11yControls() {
   applyA11ySettings();
   const themeBtn = document.getElementById("themeToggleBtn");
-  const fontBtn = document.getElementById("fontScaleBtn");
   if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
-  if (fontBtn) fontBtn.addEventListener("click", toggleFontSize);
 }
 
 // ==========================================
