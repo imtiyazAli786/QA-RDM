@@ -1084,8 +1084,8 @@
   .studio-sidebar-header {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 2px;
+    gap: 10px;
+    margin-bottom: 4px;
   }
 
   .studio-sidebar {
@@ -1110,39 +1110,61 @@
 
   .studio-select {
     width: 100%;
-    padding: 8px 12px;
-    border: 1.5px solid var(--border);
+    height: 38px;
+    padding: 0 32px 0 12px;
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: var(--surface-subtle);
+    background-color: var(--surface-subtle);
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13.5px;
+    font-size: 13px;
+    font-weight: 500;
     color: var(--text-main);
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    outline: none;
+    box-sizing: border-box;
     transition: all 0.15s ease;
   }
 
+  .studio-select:hover {
+    background-color: var(--surface-highlight);
+    border-color: var(--border-strong);
+  }
+
   .studio-select:focus {
-    outline: none;
     border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(45, 122, 104, 0.15);
+    box-shadow: 0 0 0 3px rgba(45, 122, 104, 0.12);
+    background-color: var(--surface);
   }
 
   .studio-search-input {
     width: 100%;
-    padding: 8px 12px;
-    border: 1.5px solid var(--border);
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--text-main);
+    box-sizing: border-box;
+    outline: none;
     transition: all 0.15s ease;
   }
 
+  .studio-search-input:hover {
+    background-color: var(--surface-highlight);
+    border-color: var(--border-strong);
+  }
+
   .studio-search-input:focus {
-    outline: none;
     border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(45, 122, 104, 0.15);
+    box-shadow: 0 0 0 3px rgba(45, 122, 104, 0.12);
+    background-color: var(--surface);
   }
 
   .studio-q-list {
@@ -2727,20 +2749,17 @@
         <div class="studio-sidebar-header">
           <input type="text" class="studio-search-input" id="studioSearchInput" placeholder="🔍 Search questions, terms…">
 
-          <div style="display:flex; flex-direction:column; gap:4px;">
-            <label class="studio-label">Select Topic Track</label>
-            <select class="studio-select" id="studioTrackSelect">
-              <option value="all">All Tracks</option>
-              <option value="Tier 0">Tier 0: Must-Know Vocabulary</option>
-              <option value="Tier 1">Tier 1: Core Fundamentals</option>
-              <option value="Tier 2">Tier 2: Applied Senior Skills</option>
-              <option value="Tier 3">Tier 3: Senior & Leadership</option>
-              <option value="Tier 4">Tier 4: Specialized & 2026</option>
-              <option value="Tier 5">Tier 5: Practical / Live Round Prep</option>
-              <option value="Tier 6">Tier 6: HR & Behavioral Mastery</option>
-              <option value="Custom">My Custom Additions</option>
-            </select>
-          </div>
+          <select class="studio-select" id="studioTrackSelect">
+            <option value="all">All Tracks</option>
+            <option value="Tier 0">Tier 0: Must-Know Vocabulary</option>
+            <option value="Tier 1">Tier 1: Core Fundamentals</option>
+            <option value="Tier 2">Tier 2: Applied Senior Skills</option>
+            <option value="Tier 3">Tier 3: Senior & Leadership</option>
+            <option value="Tier 4">Tier 4: Specialized & 2026</option>
+            <option value="Tier 5">Tier 5: Practical / Live Round Prep</option>
+            <option value="Tier 6">Tier 6: HR & Behavioral Mastery</option>
+            <option value="Custom">My Custom Additions</option>
+          </select>
 
           <select class="studio-select" id="studioStatusSelect">
             <option value="all">All Statuses</option>
