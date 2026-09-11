@@ -43,7 +43,7 @@ An interactive, multi-subject roadmap and active recall interview preparation we
 ## 📁 Project Structure
 
 ```text
-QA-RDM/
+RoadmapsAndProgressTracker/
 ├── public/
 │   ├── index.html              # Main web application & live sync engine
 │   └── favicon.svg             # App favicon
