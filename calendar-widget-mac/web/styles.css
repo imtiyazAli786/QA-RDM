@@ -256,28 +256,6 @@ html[data-theme="light"] .clock .sec {
   fill: var(--text-main);
 }
 
-/* Live Clock Target Countdown Badge inside Clock Face */
-.clock-target-badge {
-  position: absolute;
-  top: 24px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  font-weight: 700;
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  line-height: 1;
-  letter-spacing: 0.04em;
-  pointer-events: none;
-  z-index: 1;
-  box-shadow: none;
-  transition: color 0.2s ease;
-  white-space: nowrap;
-  opacity: 0.85;
-}
-
 /* Chime visual ripple effect */
 .clock.chime-pulse {
   animation: chimePulse 1.2s ease-out;

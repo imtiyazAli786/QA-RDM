@@ -532,36 +532,7 @@ function formatShortDate(d) {
   return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
 }
 
-function updateClockTargetBadge() {
-  const badge = document.getElementById("clockTargetBadge");
-  if (!badge) return;
-
-  const targetDateStr = pinnedTargetDate || DEFAULT_TARGET_DATE;
-  badge.classList.remove("hidden");
-
-  const [py, pm, pd] = targetDateStr.split("-").map(Number);
-  const targetZero = new Date(py, pm - 1, pd).getTime();
-  const today = new Date();
-  const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-  
-  // Year/Target Days Left
-  const diffDaysYear = Math.round((targetZero - todayZero) / (1000 * 60 * 60 * 24));
-
-  if (diffDaysYear === 0) {
-    badge.textContent = "0d";
-  } else if (diffDaysYear > 0) {
-    badge.textContent = `${diffDaysYear}d`;
-  } else {
-    badge.textContent = "0d";
-  }
-
-  const targetObj = new Date(py, pm - 1, pd);
-  const targetFormatted = targetObj.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
-  badge.title = `${diffDaysYear} days left until ${targetFormatted}`;
-}
-
 function updateCountdownBar() {
-  updateClockTargetBadge();
   const monthPill = document.getElementById("monthPill");
   const monthPillText = document.getElementById("monthPillText");
   const yearPill = document.getElementById("yearPill");
@@ -956,7 +927,6 @@ window.startPomodoro = function(mins = 25) {
 // =========================================================================
 document.addEventListener("DOMContentLoaded", () => {
   tickClock();
-  updateClockTargetBadge();
   renderCalendar();
   setupCalendarEvents();
   setupModeEvents();

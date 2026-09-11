@@ -2,14 +2,27 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"
 
-if [ ! -d "/Applications/CalendarWidget.app" ]; then
-    ./build.sh
+TARGET_APP="/Applications/CalendarWidget.app"
+if [ ! -d "$TARGET_APP" ] || [ -d "$HOME/Applications/CalendarWidget.app" ]; then
+    if [ -d "$HOME/Applications/CalendarWidget.app" ]; then
+        TARGET_APP="$HOME/Applications/CalendarWidget.app"
+    elif [ -d "$DIR/CalendarWidget.app" ]; then
+        TARGET_APP="$DIR/CalendarWidget.app"
+    fi
 fi
 
-echo "🚀 Launching CalendarWidget from /Applications..."
-# Kill any existing instances to ensure only 1 instance runs
+if [ ! -d "$TARGET_APP" ]; then
+    ./build.sh
+    if [ -d "$HOME/Applications/CalendarWidget.app" ]; then
+        TARGET_APP="$HOME/Applications/CalendarWidget.app"
+    elif [ -d "$DIR/CalendarWidget.app" ]; then
+        TARGET_APP="$DIR/CalendarWidget.app"
+    fi
+fi
+
+echo "🚀 Launching CalendarWidget from $TARGET_APP..."
 pkill -9 -f "CalendarWidget" 2>/dev/null || true
 sleep 0.3
 
-open /Applications/CalendarWidget.app 2>/dev/null || ("/Applications/CalendarWidget.app/Contents/MacOS/CalendarWidget" &)
+open "$TARGET_APP" 2>/dev/null || ("$TARGET_APP/Contents/MacOS/CalendarWidget" &)
 echo "✨ Calendar Widget is now floating on your screen with 1 single Menu Bar icon!"

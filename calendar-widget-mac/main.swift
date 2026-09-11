@@ -1,5 +1,63 @@
 import Cocoa
 import WebKit
+import ServiceManagement
+
+class LaunchAtLoginHelper {
+    static var isEnabled: Bool {
+        if #available(macOS 13.0, *) {
+            return SMAppService.mainApp.status == .enabled
+        }
+        let script = "tell application \"System Events\" to get name of every login item"
+        if let appleScript = NSAppleScript(source: script) {
+            var errorInfo: NSDictionary?
+            let result = appleScript.executeAndReturnError(&errorInfo)
+            if errorInfo == nil {
+                let text = result.stringValue ?? ""
+                if text.contains("CalendarWidget") || text.contains("Calendar Widget") {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    static func setEnabled(_ enabled: Bool) {
+        if #available(macOS 13.0, *) {
+            do {
+                if enabled {
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
+                }
+                return
+            } catch {
+                print("SMAppService registration note: \(error), attempting fallback")
+            }
+        }
+
+        let bundlePath = Bundle.main.bundlePath
+        let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "CalendarWidget"
+        if enabled {
+            let script = """
+            tell application "System Events"
+                if not (exists (login item "\(appName)")) then
+                    make new login item at end with properties {path:"\(bundlePath)", hidden:false}
+                end if
+            end tell
+            """
+            NSAppleScript(source: script)?.executeAndReturnError(nil)
+        } else {
+            let script = """
+            tell application "System Events"
+                if exists (login item "\(appName)") then
+                    delete login item "\(appName)"
+                end if
+            end tell
+            """
+            NSAppleScript(source: script)?.executeAndReturnError(nil)
+        }
+    }
+}
 
 class FloatingPanel: NSPanel {
     override var canBecomeKey: Bool {
@@ -164,6 +222,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNa
         themeItem.submenu = themeMenu
         menu.addItem(themeItem)
 
+        // Launch at Login Menu Item
+        let launchAtLoginItem = NSMenuItem(title: "Launch at Login", action: #selector(toggleLaunchAtLoginAction), keyEquivalent: "")
+        launchAtLoginItem.state = LaunchAtLoginHelper.isEnabled ? .on : .off
+        menu.addItem(launchAtLoginItem)
+
         menu.addItem(NSMenuItem.separator())
 
         menu.addItem(NSMenuItem(title: "Quit Calendar Widget", action: #selector(quitApp), keyEquivalent: "q"))
@@ -206,6 +269,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNa
     @objc func toggleHourlyChimeAction(_ sender: NSMenuItem) {
         sender.state = sender.state == .on ? .off : .on
         webView.evaluateJavaScript("window.toggleHourlyChime();", completionHandler: nil)
+    }
+
+    @objc func toggleLaunchAtLoginAction(_ sender: NSMenuItem) {
+        let shouldEnable = (sender.state != .on)
+        LaunchAtLoginHelper.setEnabled(shouldEnable)
+        sender.state = LaunchAtLoginHelper.isEnabled ? .on : .off
     }
     @objc func toggleVisibility() {
         if panel.isVisible {

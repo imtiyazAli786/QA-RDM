@@ -1,7 +1,10 @@
+# macOS & Build artifacts
 .DS_Store
+*.app
+build_cache/
+calendar-widget-mac/build_cache/
 .venv/
 __pycache__/
 *.pyc
 .firebase/
-calendar-widget-mac/build_cache/
 *.log

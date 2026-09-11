@@ -17,6 +17,7 @@ A native, ultra-lightweight, floating macOS desktop widget that stays visible ev
   - 🔒 **Lock / Unlock Position**
   - 📍 **Reset Position to Top-Right**
   - 🎨 **Appearance**: System / Dark Theme / Light Theme
+  - 🚀 **Launch at Login**: Automatic 1-click startup toggle
   - ⏏️ **Quit Calendar Widget**
 - **Zero Overhead**: Built directly with native macOS Swift + Cocoa + WebKit. Consumes ~15MB RAM and 0% CPU when idle.
 
@@ -37,9 +38,10 @@ To make it permanently accessible in Launchpad and Spotlight:
 cp -r CalendarWidget.app /Applications/
 ```
 
-### 3. Launch at Login (Optional)
-1. Open **System Settings** → **General** → **Login Items**.
-2. Click the **+** button under "Open at Login" and select `CalendarWidget.app`.
+### 3. Launch at Login (Automatic Start on Mac Startup)
+You can enable automatic startup in two easy ways:
+- **Option A (Instant)**: Click the **🗓️** icon in the macOS top Menu Bar → Click **"Launch at Login"** (a checkmark appears).
+- **Option B (macOS System Settings)**: Open **System Settings** → **General** → **Login Items** → Click **+** under "Open at Login" and choose `/Applications/CalendarWidget.app`.
 
 ---
 
@@ -52,6 +54,7 @@ cp -r CalendarWidget.app /Applications/
 | **Move Widget** | Drag the Clock face anywhere |
 | **Lock Position** | Menu Bar 🗓️ → Lock Position |
 | **Reset to Screen Corner** | Menu Bar 🗓️ → Reset Position to Top-Right |
+| **Launch at Login** | Menu Bar 🗓️ → Launch at Login |
 | **Quit App** | Menu Bar 🗓️ → Quit Calendar Widget |
 
 ---
